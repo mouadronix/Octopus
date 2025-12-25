@@ -26,7 +26,7 @@
 
     <button type="button" class="next-day" (click)="nextDay()">
       Next Day
-      <span aria-hidden="true">≫</span>
+      <span aria-hidden="true">&raquo;</span>
     </button>
 
     <button type="button" class="notification" aria-label="Notifications">
@@ -37,7 +37,7 @@
       <span>3</span>
     </button>
 
-    <div class="user-menu">
+    <div class="user-menu" *ngIf="currentSession$ | async as session">
       <div class="avatar" aria-hidden="true">
         <svg viewBox="0 0 24 24">
           <path d="M20 21a8 8 0 0 0-16 0" />
@@ -45,10 +45,16 @@
         </svg>
       </div>
       <span>
-        <strong>Scheduler</strong>
-        <small>BlueHarbor Terminal</small>
+        <strong>{{ session.fullName }}</strong>
+        <small>{{ session.role }} &middot; BlueHarbor Terminal</small>
       </span>
-      <a routerLink="/login" aria-label="Logout">⌄</a>
+      <button type="button" class="logout-button" aria-label="Logout" title="Logout" (click)="logout()">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <path d="M16 17l5-5-5-5" />
+          <path d="M21 12H9" />
+        </svg>
+      </button>
     </div>
   </section>
 </header>
