@@ -5,7 +5,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<AppDbContext>();
 builder.Services.AddSingleton<ShipService>();
@@ -28,11 +27,6 @@ var app = builder.Build();
 var db = app.Services.GetRequiredService<AppDbContext>();
 SeedData.Initialize(db);
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
 app.UseCors("OctopusUi");
 app.MapControllers();

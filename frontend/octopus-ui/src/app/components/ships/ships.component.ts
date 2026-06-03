@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { ShipService } from '../../services/ship.service';
 
@@ -21,7 +21,6 @@ import { ShipService } from '../../services/ship.service';
   `
 })
 export class ShipsComponent {
+  private readonly ships = inject(ShipService);
   ships$ = this.ships.getShips();
-
-  constructor(private readonly ships: ShipService) {}
 }

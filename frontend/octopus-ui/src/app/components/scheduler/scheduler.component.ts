@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { AssignmentService } from '../../services/assignment.service';
 
@@ -21,7 +21,6 @@ import { AssignmentService } from '../../services/assignment.service';
   `
 })
 export class SchedulerComponent {
+  private readonly assignments = inject(AssignmentService);
   assignments$ = this.assignments.getAssignments();
-
-  constructor(private readonly assignments: AssignmentService) {}
 }
