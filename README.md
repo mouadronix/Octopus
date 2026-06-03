@@ -1,2 +1,2 @@
-# FMF-project
+# OCTOPUS
 
