@@ -1,21 +1,38 @@
+# Build output
 bin/
 obj/
 *.user
 *.suo
 .vs/
 
+# Node / Angular
 node_modules/
 dist/
 .angular/
 npm-debug.log*
+yarn.lock
+package-lock.json
 
-database/*.db-shm
-database/*.db-wal
+# Database files
+*.db
+*.db-shm
+*.db-wal
+database/*.db*
 
+# OS junk
 .DS_Store
 Thumbs.db
 
-LEAN-CTF.md
+# Claude Code / lean-ctx
+.claude/
+LEAN-CTX.md
 AGENTS.md
 
-.claude/
+# Docker
+docker-compose.override.yml
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
