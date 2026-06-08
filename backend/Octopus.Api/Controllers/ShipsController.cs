@@ -1,27 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
-using Octopus.Api.Models;
 using Octopus.Api.Services;
 
 namespace Octopus.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public sealed class ShipsController(ShipService ships) : ControllerBase
+[Route("api/ships")]
+public class ShipsController : ControllerBase
 {
-    [HttpGet]
-    public ActionResult<IReadOnlyList<Ship>> GetAll() => Ok(ships.GetAll());
+    private readonly ShipService _shipService;
 
-    [HttpGet("{id:int}")]
-    public ActionResult<Ship> GetById(int id)
+    public ShipsController(ShipService shipService)
     {
-        var ship = ships.GetById(id);
-        return ship is null ? NotFound() : Ok(ship);
+        _shipService = shipService;
     }
 
-    [HttpPost]
-    public ActionResult<Ship> Create(Ship ship)
+    [HttpGet]
+    public IActionResult GetAll()
     {
-        var created = ships.Create(ship);
-        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+        return Ok(_shipService.GetAll());
     }
 }

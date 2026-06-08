@@ -3,16 +3,17 @@ using Octopus.Api.Models;
 
 namespace Octopus.Api.Services;
 
-public sealed class ShipService(AppDbContext db)
+public class ShipService
 {
-    public IReadOnlyList<Ship> GetAll() => db.Ships;
+    private readonly AppDbContext _context;
 
-    public Ship? GetById(int id) => db.Ships.FirstOrDefault(ship => ship.Id == id);
-
-    public Ship Create(Ship ship)
+    public ShipService(AppDbContext context)
     {
-        ship.Id = db.Ships.Count == 0 ? 1 : db.Ships.Max(existing => existing.Id) + 1;
-        db.Ships.Add(ship);
-        return ship;
+        _context = context;
+    }
+
+    public List<Ship> GetAll()
+    {
+        return _context.Ships.ToList();
     }
 }

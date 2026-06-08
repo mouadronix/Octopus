@@ -3,14 +3,17 @@ using Octopus.Api.Models;
 
 namespace Octopus.Api.Services;
 
-public sealed class AssignmentService(AppDbContext db)
+public class AssignmentService
 {
-    public IReadOnlyList<Assignment> GetAll() => db.Assignments;
+    private readonly AppDbContext _context;
 
-    public Assignment Create(Assignment assignment)
+    public AssignmentService(AppDbContext context)
     {
-        assignment.Id = db.Assignments.Count == 0 ? 1 : db.Assignments.Max(existing => existing.Id) + 1;
-        db.Assignments.Add(assignment);
-        return assignment;
+        _context = context;
+    }
+
+    public List<Assignment> GetAll()
+    {
+        return _context.Assignments.ToList();
     }
 }

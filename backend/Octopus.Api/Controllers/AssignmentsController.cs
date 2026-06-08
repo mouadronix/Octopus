@@ -1,20 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
-using Octopus.Api.Models;
 using Octopus.Api.Services;
 
 namespace Octopus.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public sealed class AssignmentsController(AssignmentService assignments) : ControllerBase
+[Route("api/assignments")]
+public class AssignmentsController : ControllerBase
 {
-    [HttpGet]
-    public ActionResult<IReadOnlyList<Assignment>> GetAll() => Ok(assignments.GetAll());
+    private readonly AssignmentService _assignmentService;
 
-    [HttpPost]
-    public ActionResult<Assignment> Create(Assignment assignment)
+    public AssignmentsController(AssignmentService assignmentService)
     {
-        var created = assignments.Create(assignment);
-        return CreatedAtAction(nameof(GetAll), new { id = created.Id }, created);
+        _assignmentService = assignmentService;
+    }
+
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        return Ok(_assignmentService.GetAll());
     }
 }

@@ -1,20 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
-using Octopus.Api.Models;
 using Octopus.Api.Services;
 
 namespace Octopus.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public sealed class BerthsController(BerthService berths) : ControllerBase
+[Route("api/docks")]
+public class BerthsController : ControllerBase
 {
-    [HttpGet]
-    public ActionResult<IReadOnlyList<Berth>> GetAll() => Ok(berths.GetAll());
+    private readonly DockService _dockService;
 
-    [HttpGet("{id:int}")]
-    public ActionResult<Berth> GetById(int id)
+    public BerthsController(DockService dockService)
     {
-        var berth = berths.GetById(id);
-        return berth is null ? NotFound() : Ok(berth);
+        _dockService = dockService;
+    }
+
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        return Ok(_dockService.GetAll());
     }
 }

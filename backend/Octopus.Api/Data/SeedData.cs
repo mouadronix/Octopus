@@ -4,42 +4,44 @@ namespace Octopus.Api.Data;
 
 public static class SeedData
 {
-    public static void Initialize(AppDbContext db)
+    public static void Initialize(AppDbContext context)
     {
-        if (db.Ships.Count > 0 || db.Berths.Count > 0)
+        // Already seeded
+        if (context.Docks.Any()) return;
+
+        // Seed TerminalState
+        var terminalState = new TerminalState
         {
-            return;
-        }
+            CurrentDay = 1,
+            PlanningHorizon = 30
+        };
+        context.TerminalStates.Add(terminalState);
 
-        db.Ships.AddRange([
-            new Ship
-            {
-                Id = 1,
-                Name = "Aegean Star",
-                ImoNumber = "IMO-1000001",
-                CargoType = "Containers",
-                EstimatedArrival = DateTime.UtcNow.AddHours(6)
-            },
-            new Ship
-            {
-                Id = 2,
-                Name = "Harbor Light",
-                ImoNumber = "IMO-1000002",
-                CargoType = "Bulk",
-                EstimatedArrival = DateTime.UtcNow.AddHours(12)
-            }]);
-
-        db.Berths.AddRange([
-            new Berth { Id = 1, Name = "Berth A", MaxDraftMeters = 14.5m },
-            new Berth { Id = 2, Name = "Berth B", MaxDraftMeters = 11.0m }]);
-
-        db.Assignments.Add(new Assignment
+        // Seed Docks: 1 XL, 1 L, 2 M, 4 S
+        var docks = new List<Dock>
         {
-            Id = 1,
-            ShipId = 1,
-            BerthId = 1,
-            StartsAt = DateTime.UtcNow.AddHours(7),
-            Status = "Planned"
-        });
+            new Dock { Name = "Dock XL-1", Size = ShipSize.XL },
+            new Dock { Name = "Dock L-1",  Size = ShipSize.L  },
+            new Dock { Name = "Dock M-1",  Size = ShipSize.M  },
+            new Dock { Name = "Dock M-2",  Size = ShipSize.M  },
+            new Dock { Name = "Dock S-1",  Size = ShipSize.S  },
+            new Dock { Name = "Dock S-2",  Size = ShipSize.S  },
+            new Dock { Name = "Dock S-3",  Size = ShipSize.S  },
+            new Dock { Name = "Dock S-4",  Size = ShipSize.S  },
+        };
+        context.Docks.AddRange(docks);
+
+        // Seed sample Ships
+        var ships = new List<Ship>
+        {
+            new Ship { Name = "MSC Aurora",    Size = ShipSize.XL, Status = ShipStatus.Pending,  ArrivalDay = 3,  Duration = 10, Notes = "Priority cargo" },
+            new Ship { Name = "Costa Marina",  Size = ShipSize.L,  Status = ShipStatus.Pending,  ArrivalDay = 5,  Duration = 7,  Notes = "" },
+            new Ship { Name = "Ever Glory",    Size = ShipSize.M,  Status = ShipStatus.Pending,  ArrivalDay = 2,  Duration = 6,  Notes = "Refrigerated" },
+            new Ship { Name = "Pacific Star",  Size = ShipSize.S,  Status = ShipStatus.Assigned, ArrivalDay = 1,  Duration = 4,  Notes = "" },
+            new Ship { Name = "MSC Helena",    Size = ShipSize.M,  Status = ShipStatus.Departed, ArrivalDay = 1,  Duration = 5,  Notes = "" },
+        };
+        context.Ships.AddRange(ships);
+
+        context.SaveChanges();
     }
 }
