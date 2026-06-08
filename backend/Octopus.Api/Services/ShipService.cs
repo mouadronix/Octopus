@@ -15,4 +15,20 @@ public sealed class ShipService(AppDbContext db)
         db.Ships.Add(ship);
         return ship;
     }
+
+    public Ship? Update(int id, Action<Ship> apply)
+    {
+        var ship = GetById(id);
+        if (ship is null) return null;
+        apply(ship);
+        return ship;
+    }
+
+    public bool Delete(int id)
+    {
+        var ship = GetById(id);
+        if (ship is null) return false;
+        db.Ships.Remove(ship);
+        return true;
+    }
 }
