@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { SystemService } from '../../services/system.service';
 
@@ -22,7 +22,6 @@ import { SystemService } from '../../services/system.service';
   `
 })
 export class OperatorComponent {
+  private readonly system = inject(SystemService);
   state$ = this.system.getState();
-
-  constructor(private readonly system: SystemService) {}
 }

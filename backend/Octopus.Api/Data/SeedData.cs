@@ -11,8 +11,7 @@ public static class SeedData
             return;
         }
 
-        db.Ships.AddRange(
-        [
+        db.Ships.AddRange([
             new Ship
             {
                 Id = 1,
@@ -28,14 +27,11 @@ public static class SeedData
                 ImoNumber = "IMO-1000002",
                 CargoType = "Bulk",
                 EstimatedArrival = DateTime.UtcNow.AddHours(12)
-            }
-        ]);
+            }]);
 
-        db.Berths.AddRange(
-        [
+        db.Berths.AddRange([
             new Berth { Id = 1, Name = "Berth A", MaxDraftMeters = 14.5m },
-            new Berth { Id = 2, Name = "Berth B", MaxDraftMeters = 11.0m }
-        ]);
+            new Berth { Id = 2, Name = "Berth B", MaxDraftMeters = 11.0m }]);
 
         db.Assignments.Add(new Assignment
         {
