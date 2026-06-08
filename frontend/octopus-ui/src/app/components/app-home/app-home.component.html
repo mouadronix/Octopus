@@ -1,0 +1,72 @@
+<section class="home-shell">
+  <header class="home-header">
+    <div class="header-left">
+      <span class="logo-mark">BH</span>
+      <div>
+        <p class="terminal-label">Terminal operations system</p>
+        <h2>BlueHarbor</h2>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <span class="day-label">Current day</span>
+      <strong>Day 1</strong>
+    </div>
+
+    <div class="header-right">
+      <span class="role-badge">Development</span>
+    </div>
+  </header>
+
+  <div class="home-body">
+    <aside class="home-sidebar">
+      <div class="nav-section">
+        <span class="nav-section-title">Navigation</span>
+        @for (item of navigation; track item.path) {
+          <a class="nav-btn" [routerLink]="item.path">
+            <span>{{ item.label }}</span>
+            <small>{{ item.description }}</small>
+          </a>
+        }
+      </div>
+
+      <div class="sidebar-stats">
+        @for (metric of metrics; track metric.label) {
+          <div class="stat-chip">
+            <span class="stat-value">{{ metric.value }}</span>
+            <span class="stat-label">{{ metric.label }}</span>
+          </div>
+        }
+      </div>
+    </aside>
+
+    <main class="home-content">
+      <div class="view-header">
+        <div>
+          <p class="terminal-label">Octopus dashboard</p>
+          <h1>This is the page of Home</h1>
+        </div>
+      </div>
+
+      <section class="hero-panel">
+        <div>
+          <h3>BlueHarbor Registro Terminal</h3>
+          <p>
+            This Angular home page uses the BlueHarbor visual direction while keeping
+            the Octopus routing and project structure ready for real backend integration.
+          </p>
+        </div>
+      </section>
+
+      <section class="cards-grid" aria-label="Application areas">
+        @for (item of navigation; track item.path) {
+          <a class="area-card" [routerLink]="item.path">
+            <span class="area-kicker">{{ item.label }}</span>
+            <strong>This is the page of {{ item.label }}</strong>
+            <p>{{ item.description }}</p>
+          </a>
+        }
+      </section>
+    </main>
+  </div>
+</section>

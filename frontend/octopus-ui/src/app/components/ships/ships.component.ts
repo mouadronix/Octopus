@@ -1,26 +1,17 @@
-import { Component, inject } from '@angular/core';
-import { AsyncPipe, DatePipe } from '@angular/common';
-import { ShipService } from '../../services/ship.service';
+import { Component } from '@angular/core';
+import { PagePlaceholderComponent } from '../shared/page-placeholder/page-placeholder.component';
 
 @Component({
   selector: 'app-ships',
   standalone: true,
-  imports: [AsyncPipe, DatePipe],
+  imports: [PagePlaceholderComponent],
   template: `
-    <section class="page">
-      <h2>Ships</h2>
-      <div class="panel">
-        @for (ship of ships$ | async; track ship.id) {
-          <p>
-            <strong>{{ ship.name }}</strong>
-            {{ ship.imoNumber }} - {{ ship.cargoType }} - ETA {{ ship.estimatedArrival | date:'short' }}
-          </p>
-        }
-      </div>
-    </section>
+    <app-page-placeholder
+      pageName="Ships"
+      sectionLabel="Ship registry"
+      description="This page will display all ships, their size, arrival day, duration, and status."
+      nextStep="Next implementation: connect the ship list to GET /api/ships."
+    />
   `
 })
-export class ShipsComponent {
-  private readonly ships = inject(ShipService);
-  ships$ = this.ships.getShips();
-}
+export class ShipsComponent {}

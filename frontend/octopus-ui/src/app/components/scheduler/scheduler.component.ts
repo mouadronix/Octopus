@@ -1,26 +1,17 @@
-import { Component, inject } from '@angular/core';
-import { AsyncPipe, DatePipe } from '@angular/common';
-import { AssignmentService } from '../../services/assignment.service';
+import { Component } from '@angular/core';
+import { PagePlaceholderComponent } from '../shared/page-placeholder/page-placeholder.component';
 
 @Component({
   selector: 'app-scheduler',
   standalone: true,
-  imports: [AsyncPipe, DatePipe],
+  imports: [PagePlaceholderComponent],
   template: `
-    <section class="page">
-      <h2>Scheduler</h2>
-      <div class="panel">
-        @for (assignment of assignments$ | async; track assignment.id) {
-          <p>
-            Ship {{ assignment.shipId }} assigned to berth {{ assignment.berthId }}
-            from {{ assignment.startsAt | date:'short' }} - {{ assignment.status }}
-          </p>
-        }
-      </div>
-    </section>
+    <app-page-placeholder
+      pageName="Scheduler"
+      sectionLabel="Scheduler area"
+      description="This page will help schedulers assign pending ships to compatible berths."
+      nextStep="Next implementation: show pending ships and create assignments through POST /api/assignments."
+    />
   `
 })
-export class SchedulerComponent {
-  private readonly assignments = inject(AssignmentService);
-  assignments$ = this.assignments.getAssignments();
-}
+export class SchedulerComponent {}

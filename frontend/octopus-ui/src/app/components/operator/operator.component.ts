@@ -1,27 +1,17 @@
-import { Component, inject } from '@angular/core';
-import { AsyncPipe, DatePipe } from '@angular/common';
-import { SystemService } from '../../services/system.service';
+import { Component } from '@angular/core';
+import { PagePlaceholderComponent } from '../shared/page-placeholder/page-placeholder.component';
 
 @Component({
   selector: 'app-operator',
   standalone: true,
-  imports: [AsyncPipe, DatePipe],
+  imports: [PagePlaceholderComponent],
   template: `
-    <section class="page">
-      <h2>Operator Console</h2>
-      @if (state$ | async; as state) {
-        <div class="panel">
-          <p>Environment: {{ state.environment }}</p>
-          <p>Server time: {{ state.serverTimeUtc | date:'medium' }}</p>
-          <p>Ships: {{ state.shipCount }}</p>
-          <p>Berths: {{ state.berthCount }}</p>
-          <p>Active assignments: {{ state.activeAssignmentCount }}</p>
-        </div>
-      }
-    </section>
+    <app-page-placeholder
+      pageName="Operator"
+      sectionLabel="Operator area"
+      description="This page will let operators register ships and review terminal state."
+      nextStep="Next implementation: create the ship form and connect it to POST /api/ships."
+    />
   `
 })
-export class OperatorComponent {
-  private readonly system = inject(SystemService);
-  state$ = this.system.getState();
-}
+export class OperatorComponent {}

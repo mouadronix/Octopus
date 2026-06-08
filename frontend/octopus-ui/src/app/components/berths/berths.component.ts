@@ -1,27 +1,17 @@
-import { Component, inject } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
-import { BerthService } from '../../services/berth.service';
+import { Component } from '@angular/core';
+import { PagePlaceholderComponent } from '../shared/page-placeholder/page-placeholder.component';
 
 @Component({
   selector: 'app-berths',
   standalone: true,
-  imports: [AsyncPipe],
+  imports: [PagePlaceholderComponent],
   template: `
-    <section class="page">
-      <h2>Berths</h2>
-      <div class="panel">
-        @for (berth of berths$ | async; track berth.id) {
-          <p>
-            <strong>{{ berth.name }}</strong>
-            max draft {{ berth.maxDraftMeters }}m -
-            {{ berth.isAvailable ? 'Available' : 'Occupied' }}
-          </p>
-        }
-      </div>
-    </section>
+    <app-page-placeholder
+      pageName="Berths"
+      sectionLabel="Berth board"
+      description="This page will show fixed BlueHarbor berths and their occupancy windows."
+      nextStep="Next implementation: connect the berth board to GET /api/berths."
+    />
   `
 })
-export class BerthsComponent {
-  private readonly berths = inject(BerthService);
-  berths$ = this.berths.getBerths();
-}
+export class BerthsComponent {}
