@@ -8,6 +8,15 @@ Octopus is a port operations starter architecture with an Angular frontend and a
 - `backend/Octopus.Api` - ASP.NET Core API with controllers, models, services, and seed data.
 - `database` - Local SQLite database location and database notes.
 - `docs` - Architecture and data model documentation.
+- `.github` - Pull request template and CI workflow.
+
+## Sprint 1 Scope
+
+- GitHub repository workflow and branch guidance.
+- Project architecture and documentation.
+- ASP.NET Core API with Swagger, CORS, and dependency injection.
+- EF Core SQLite database context and first migration.
+- Ship, Berth, Assignment, and SystemState models.
 
 ## Quick Start
 
@@ -20,6 +29,8 @@ dotnet run
 ```
 
 The API listens on `http://localhost:5000` by default.
+
+Swagger is available at `http://localhost:5000/swagger` in development.
 
 ### Frontend
 

@@ -2,9 +2,6 @@ namespace Octopus.Api.Models;
 
 public sealed class SystemState
 {
-    public string Environment { get; set; } = "Development";
-    public DateTime ServerTimeUtc { get; set; } = DateTime.UtcNow;
-    public int ShipCount { get; set; }
-    public int BerthCount { get; set; }
-    public int ActiveAssignmentCount { get; set; }
+    public int Id { get; set; }
+    public int CurrentDay { get; set; } = 1;
 }

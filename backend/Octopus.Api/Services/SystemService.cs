@@ -3,14 +3,19 @@ using Octopus.Api.Models;
 
 namespace Octopus.Api.Services;
 
-public sealed class SystemService(AppDbContext db, IWebHostEnvironment environment)
+public sealed class SystemService(AppDbContext db)
 {
-    public SystemState GetState() => new()
+    public SystemState GetState()
     {
-        Environment = environment.EnvironmentName,
-        ServerTimeUtc = DateTime.UtcNow,
-        ShipCount = db.Ships.Count,
-        BerthCount = db.Berths.Count,
-        ActiveAssignmentCount = db.Assignments.Count(assignment => assignment.EndsAt is null)
-    };
+        var state = db.SystemStates.FirstOrDefault();
+        if (state is not null)
+        {
+            return state;
+        }
+
+        state = new SystemState { CurrentDay = 1 };
+        db.SystemStates.Add(state);
+        db.SaveChanges();
+        return state;
+    }
 }

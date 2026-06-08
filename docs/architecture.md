@@ -28,5 +28,33 @@ The API lives in `backend/Octopus.Api`.
 1. Angular routes render operator, scheduler, ships, and berths views.
 2. Angular services call `/api/*` endpoints.
 3. Controllers delegate to services.
-4. Services read from the starter `AppDbContext`.
-5. `SeedData` initializes sample ships, berths, and assignments.
+4. Services read and write through EF Core.
+5. SQLite persists ships, berths, assignments, and system state.
+6. `SeedData` initializes fixed berths and the starting system day.
+
+## Architecture Diagram
+
+```mermaid
+flowchart LR
+    User["Port operator / scheduler"] --> Angular["Angular UI"]
+    Angular --> Services["Angular API services"]
+    Services --> Controllers["ASP.NET Core controllers"]
+    Controllers --> Domain["Backend services"]
+    Domain --> EF["EF Core AppDbContext"]
+    EF --> SQLite["SQLite octopus.db"]
+
+    Controllers --> Swagger["Swagger API docs"]
+```
+
+## Backend Architecture
+
+The backend follows a simple controller-service-data structure for Sprint 1:
+
+- Controllers expose HTTP endpoints.
+- Services hold application behavior and persistence calls.
+- EF Core maps domain models to SQLite.
+- Seed data creates fixed berths and initializes `CurrentDay`.
+
+## Database Architecture
+
+SQLite is configured through the `OctopusDb` connection string. EF Core migrations live in `backend/Octopus.Api/Data/Migrations`.

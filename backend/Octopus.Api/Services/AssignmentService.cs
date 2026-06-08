@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Octopus.Api.Data;
 using Octopus.Api.Models;
 
@@ -5,12 +6,18 @@ namespace Octopus.Api.Services;
 
 public sealed class AssignmentService(AppDbContext db)
 {
-    public IReadOnlyList<Assignment> GetAll() => db.Assignments;
+    public IReadOnlyList<Assignment> GetAll() =>
+        db.Assignments
+            .Include(assignment => assignment.Ship)
+            .Include(assignment => assignment.Berth)
+            .OrderBy(assignment => assignment.StartDay)
+            .AsNoTracking()
+            .ToList();
 
     public Assignment Create(Assignment assignment)
     {
-        assignment.Id = db.Assignments.Count == 0 ? 1 : db.Assignments.Max(existing => existing.Id) + 1;
         db.Assignments.Add(assignment);
+        db.SaveChanges();
         return assignment;
     }
 }

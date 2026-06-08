@@ -4,31 +4,27 @@
 
 - `id` - Unique ship identifier.
 - `name` - Vessel name.
-- `imoNumber` - External IMO-style identifier.
-- `cargoType` - Cargo classification.
-- `estimatedArrival` - Expected arrival time in UTC.
-- `status` - Current operational status.
+- `notes` - Optional operator notes.
+- `size` - `Small`, `Medium`, or `Large`.
+- `arrivalDay` - Day the ship enters the system.
+- `occupationDurationDays` - Number of days the ship needs a berth.
+- `status` - `Pending`, `Assigned`, or `Departed`.
 
 ## Berth
 
 - `id` - Unique berth identifier.
 - `name` - Berth label.
-- `maxDraftMeters` - Maximum supported vessel draft.
-- `isAvailable` - Whether the berth is available.
+- `size` - `Small`, `Medium`, or `Large`.
 
 ## Assignment
 
 - `id` - Unique assignment identifier.
 - `shipId` - Assigned ship.
 - `berthId` - Assigned berth.
-- `startsAt` - Assignment start time in UTC.
-- `endsAt` - Optional completion time.
-- `status` - Assignment state.
+- `startDay` - First occupied day.
+- `endDay` - Last occupied day.
 
 ## SystemState
 
-- `environment` - Runtime environment name.
-- `serverTimeUtc` - API server time.
-- `shipCount` - Number of known ships.
-- `berthCount` - Number of known berths.
-- `activeAssignmentCount` - Assignments without an end time.
+- `id` - Unique state identifier.
+- `currentDay` - Current simulation day. Initial value is `1`.
