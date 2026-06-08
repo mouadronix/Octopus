@@ -17,11 +17,17 @@ public class ShipService
         return _context.Ships.ToList();
     }
 
+    public Ship? GetById(int id)
+    {
+        return _context.Ships.FirstOrDefault(ship => ship.Id == id);
+    }
+
     public Ship? Update(int id, Action<Ship> apply)
     {
         var ship = GetById(id);
         if (ship is null) return null;
         apply(ship);
+        _context.SaveChanges();
         return ship;
     }
 
@@ -29,7 +35,8 @@ public class ShipService
     {
         var ship = GetById(id);
         if (ship is null) return false;
-        db.Ships.Remove(ship);
+        _context.Ships.Remove(ship);
+        _context.SaveChanges();
         return true;
     }
 }
