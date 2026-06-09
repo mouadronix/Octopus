@@ -6,7 +6,7 @@ namespace Octopus.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public sealed class SystemController(SystemService system) : ControllerBase
+public sealed class SystemController(ISystemService system) : ControllerBase
 {
     [HttpGet("state")]
     public ActionResult<SystemState> GetState() => Ok(system.GetState());

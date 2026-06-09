@@ -1,34 +1,42 @@
+using Microsoft.EntityFrameworkCore;
 using Octopus.Api.Data;
 using Octopus.Api.Models;
 
 namespace Octopus.Api.Services;
 
-public sealed class BerthService(AppDbContext db)
+public sealed class BerthService(AppDbContext db, ILogger<BerthService> logger) : IBerthService
 {
-    public IReadOnlyList<Berth> GetAll() => db.Berths;
+    public async Task<IReadOnlyList<Berth>> GetAllAsync(CancellationToken ct = default)
+        => await db.Berths.AsNoTracking().ToListAsync(ct);
 
-    public Berth? GetById(int id) => db.Berths.FirstOrDefault(berth => berth.Id == id);
+    public async Task<Berth?> GetByIdAsync(int id, CancellationToken ct = default)
+        => await db.Berths.FindAsync([id], ct);
 
-    public Berth Create(Berth berth)
+    public async Task<Berth> CreateAsync(Berth berth, CancellationToken ct = default)
     {
-        berth.Id = db.Berths.Count == 0 ? 1 : db.Berths.Max(existing => existing.Id) + 1;
         db.Berths.Add(berth);
+        await db.SaveChangesAsync(ct);
+        logger.LogInformation("Created berth {BerthId} ({Name})", berth.Id, berth.Name);
         return berth;
     }
 
-    public Berth? Update(int id, Action<Berth> apply)
+    public async Task<Berth?> UpdateAsync(int id, Action<Berth> apply, CancellationToken ct = default)
     {
-        var berth = GetById(id);
+        var berth = await db.Berths.FindAsync([id], ct);
         if (berth is null) return null;
         apply(berth);
+        await db.SaveChangesAsync(ct);
+        logger.LogInformation("Updated berth {BerthId}", id);
         return berth;
     }
 
-    public bool Delete(int id)
+    public async Task<bool> DeleteAsync(int id, CancellationToken ct = default)
     {
-        var berth = GetById(id);
+        var berth = await db.Berths.FindAsync([id], ct);
         if (berth is null) return false;
         db.Berths.Remove(berth);
+        await db.SaveChangesAsync(ct);
+        logger.LogInformation("Deleted berth {BerthId}", id);
         return true;
     }
 }

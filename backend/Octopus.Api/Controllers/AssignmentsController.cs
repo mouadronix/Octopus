@@ -7,20 +7,21 @@ namespace Octopus.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public sealed class AssignmentsController(AssignmentService assignments) : ControllerBase
+public sealed class AssignmentsController(IAssignmentService assignments) : ControllerBase
 {
     [HttpGet]
-    public ActionResult<IReadOnlyList<Assignment>> GetAll() => Ok(assignments.GetAll());
+    public async Task<ActionResult<IReadOnlyList<Assignment>>> GetAll(CancellationToken ct)
+        => Ok(await assignments.GetAllAsync(ct));
 
     [HttpGet("{id:int}")]
-    public ActionResult<Assignment> GetById(int id)
+    public async Task<ActionResult<Assignment>> GetById(int id, CancellationToken ct)
     {
-        var assignment = assignments.GetById(id);
+        var assignment = await assignments.GetByIdAsync(id, ct);
         return assignment is null ? NotFound() : Ok(assignment);
     }
 
     [HttpPost]
-    public ActionResult<Assignment> Create([FromBody] CreateAssignmentRequest request)
+    public async Task<ActionResult<Assignment>> Create([FromBody] CreateAssignmentRequest request, CancellationToken ct)
     {
         if (!ModelState.IsValid) return ValidationProblem(ModelState);
 
@@ -32,30 +33,30 @@ public sealed class AssignmentsController(AssignmentService assignments) : Contr
             Status = request.Status
         };
 
-        var created = assignments.Create(assignment);
+        var created = await assignments.CreateAsync(assignment, ct);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
     [HttpPut("{id:int}")]
-    public ActionResult<Assignment> Update(int id, [FromBody] UpdateAssignmentRequest request)
+    public async Task<ActionResult<Assignment>> Update(int id, [FromBody] UpdateAssignmentRequest request, CancellationToken ct)
     {
         if (!ModelState.IsValid) return ValidationProblem(ModelState);
 
-        var updated = assignments.Update(id, assignment =>
+        var updated = await assignments.UpdateAsync(id, assignment =>
         {
             if (request.ShipId.HasValue) assignment.ShipId = request.ShipId.Value;
             if (request.BerthId.HasValue) assignment.BerthId = request.BerthId.Value;
             if (request.StartsAt.HasValue) assignment.StartsAt = request.StartsAt.Value;
             if (request.EndsAt.HasValue) assignment.EndsAt = request.EndsAt.Value;
             if (request.Status is not null) assignment.Status = request.Status;
-        });
+        }, ct);
 
         return updated is null ? NotFound() : Ok(updated);
     }
 
     [HttpDelete("{id:int}")]
-    public ActionResult Delete(int id)
+    public async Task<ActionResult> Delete(int id, CancellationToken ct)
     {
-        return assignments.Delete(id) ? NoContent() : NotFound();
+        return await assignments.DeleteAsync(id, ct) ? NoContent() : NotFound();
     }
 }

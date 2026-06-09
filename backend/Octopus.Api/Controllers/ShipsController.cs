@@ -7,20 +7,21 @@ namespace Octopus.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public sealed class ShipsController(ShipService ships) : ControllerBase
+public sealed class ShipsController(IShipService ships) : ControllerBase
 {
     [HttpGet]
-    public ActionResult<IReadOnlyList<Ship>> GetAll() => Ok(ships.GetAll());
+    public async Task<ActionResult<IReadOnlyList<Ship>>> GetAll(CancellationToken ct)
+        => Ok(await ships.GetAllAsync(ct));
 
     [HttpGet("{id:int}")]
-    public ActionResult<Ship> GetById(int id)
+    public async Task<ActionResult<Ship>> GetById(int id, CancellationToken ct)
     {
-        var ship = ships.GetById(id);
+        var ship = await ships.GetByIdAsync(id, ct);
         return ship is null ? NotFound() : Ok(ship);
     }
 
     [HttpPost]
-    public ActionResult<Ship> Create([FromBody] CreateShipRequest request)
+    public async Task<ActionResult<Ship>> Create([FromBody] CreateShipRequest request, CancellationToken ct)
     {
         if (!ModelState.IsValid) return ValidationProblem(ModelState);
 
@@ -32,30 +33,30 @@ public sealed class ShipsController(ShipService ships) : ControllerBase
             EstimatedArrival = request.EstimatedArrival
         };
 
-        var created = ships.Create(ship);
+        var created = await ships.CreateAsync(ship, ct);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
     [HttpPut("{id:int}")]
-    public ActionResult<Ship> Update(int id, [FromBody] UpdateShipRequest request)
+    public async Task<ActionResult<Ship>> Update(int id, [FromBody] UpdateShipRequest request, CancellationToken ct)
     {
         if (!ModelState.IsValid) return ValidationProblem(ModelState);
 
-        var updated = ships.Update(id, ship =>
+        var updated = await ships.UpdateAsync(id, ship =>
         {
             if (request.Name is not null) ship.Name = request.Name;
             if (request.ImoNumber is not null) ship.ImoNumber = request.ImoNumber;
             if (request.CargoType is not null) ship.CargoType = request.CargoType;
             if (request.EstimatedArrival.HasValue) ship.EstimatedArrival = request.EstimatedArrival.Value;
             if (request.Status is not null) ship.Status = request.Status;
-        });
+        }, ct);
 
         return updated is null ? NotFound() : Ok(updated);
     }
 
     [HttpDelete("{id:int}")]
-    public ActionResult Delete(int id)
+    public async Task<ActionResult> Delete(int id, CancellationToken ct)
     {
-        return ships.Delete(id) ? NoContent() : NotFound();
+        return await ships.DeleteAsync(id, ct) ? NoContent() : NotFound();
     }
 }
