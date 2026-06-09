@@ -19,13 +19,34 @@ public class ShipService
 
     public Ship? GetById(int id)
     {
-        return _context.Ships.FirstOrDefault(ship => ship.Id == id);
+        return _context.Ships.Find(id);
+    }
+
+    public Ship Create(string name, string notes)
+    {
+        var terminal = _context.TerminalStates.First();
+        var random = new Random();
+        var sizes = Enum.GetValues<ShipSize>();
+
+        var ship = new Ship
+        {
+            Name = name,
+            Notes = notes,
+            Size = sizes[random.Next(sizes.Length)],
+            ArrivalDay = terminal.CurrentDay + random.Next(0, 31),
+            Duration = random.Next(3, 16),
+            Status = ShipStatus.Pending
+        };
+
+        _context.Ships.Add(ship);
+        _context.SaveChanges();
+        return ship;
     }
 
     public Ship? Update(int id, Action<Ship> apply)
     {
         var ship = GetById(id);
-        if (ship is null) return null;
+        if (ship == null) return null;
         apply(ship);
         _context.SaveChanges();
         return ship;
@@ -34,7 +55,7 @@ public class ShipService
     public bool Delete(int id)
     {
         var ship = GetById(id);
-        if (ship is null) return false;
+        if (ship == null) return false;
         _context.Ships.Remove(ship);
         _context.SaveChanges();
         return true;

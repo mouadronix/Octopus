@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Octopus.Api.DTOs;
+using Octopus.Api.Models;
 using Octopus.Api.Services;
 
 namespace Octopus.Api.Controllers;
@@ -17,9 +19,12 @@ public class ShipsController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public IActionResult GetAll([FromQuery] string? status)
     {
-        return Ok(_shipService.GetAll());
+        var ships = _shipService.GetAll();
+        if (status != null && Enum.TryParse<ShipStatus>(status, true, out var parsedStatus))
+            ships = ships.Where(s => s.Status == parsedStatus).ToList();
+        return Ok(ships);
     }
 
     [HttpGet("{id:int}")]
@@ -28,6 +33,14 @@ public class ShipsController : ControllerBase
         var ship = _shipService.GetById(id);
         if (ship == null) return NotFound();
         return Ok(ship);
+    }
+
+    [HttpPost]
+    public IActionResult Create([FromBody] CreateShipRequest request)
+    {
+        if (!ModelState.IsValid) return ValidationProblem(ModelState);
+        var ship = _shipService.Create(request.Name, request.Notes);
+        return CreatedAtAction(nameof(GetById), new { id = ship.Id }, ship);
     }
 
     [HttpGet("{id:int}/suggestion")]
