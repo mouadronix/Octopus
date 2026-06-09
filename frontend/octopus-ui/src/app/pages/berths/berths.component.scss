@@ -1,0 +1,55 @@
+.simple-view {
+  display: grid;
+  gap: var(--sp-lg);
+  padding: 32px 28px;
+}
+
+h1 {
+  color: var(--c-text);
+  font-family: var(--font-display);
+  font-size: 1.72rem;
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+
+.berths-grid {
+  display: grid;
+  gap: var(--sp-md);
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+
+.berth-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border2);
+  border-radius: var(--radius-md);
+  display: grid;
+  gap: var(--sp-md);
+  padding: var(--sp-md);
+}
+
+.berth-card div {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+strong {
+  color: var(--c-text);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  letter-spacing: 0.08em;
+}
+
+span {
+  border: 1px solid var(--c-accent);
+  border-radius: var(--radius-sm);
+  color: var(--c-accent);
+  font-family: var(--font-mono);
+  padding: 2px 8px;
+}
+
+p {
+  color: var(--c-success);
+  font-family: var(--font-mono);
+  margin: 0;
+}

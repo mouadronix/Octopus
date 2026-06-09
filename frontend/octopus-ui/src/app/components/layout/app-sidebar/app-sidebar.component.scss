@@ -1,0 +1,130 @@
+.sidebar {
+  background: var(--c-surface);
+  border-right: 1px solid var(--c-border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  min-height: 0;
+  padding: 26px 10px 0;
+  width: 250px;
+}
+
+.nav-section {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.nav-section-title {
+  color: var(--c-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.28em;
+  line-height: 1;
+  padding: 0 10px 8px;
+  text-transform: uppercase;
+}
+
+.nav-btn {
+  align-items: center;
+  border-left: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  color: #6f8caf;
+  display: flex;
+  gap: 12px;
+  font-size: 0.94rem;
+  min-height: 43px;
+  padding: 0 14px;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.nav-btn:hover {
+  background: rgba(0, 180, 216, 0.08);
+  color: var(--c-text);
+}
+
+.nav-btn.active {
+  background: rgba(0, 180, 216, 0.17);
+  border-left-color: var(--c-accent);
+  color: var(--c-accent);
+}
+
+.nav-icon {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 20px;
+  font-family: var(--font-mono);
+  font-size: 1.35rem;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1;
+  width: 20px;
+}
+
+.ship-icon {
+  color: #f2f7ff;
+  font-size: 0.95rem;
+  position: relative;
+}
+
+.ship-icon::before {
+  border-bottom: 3px solid var(--c-accent);
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  bottom: 2px;
+  content: "";
+  height: 0;
+  left: 1px;
+  position: absolute;
+  width: 14px;
+}
+
+.plus-icon {
+  color: #865eff;
+  font-size: 1.8rem;
+}
+
+.sidebar-stats {
+  border-top: 1px solid var(--c-border);
+  display: flex;
+  flex-direction: column;
+  gap: 23px;
+  margin: auto -10px 0;
+  padding: 18px 28px 34px;
+}
+
+.stat-chip {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.stat-val {
+  color: var(--c-accent);
+  font-family: var(--font-mono);
+  font-size: 1.48rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stat-lbl {
+  color: #315476;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    border-bottom: 1px solid var(--c-border);
+    border-right: none;
+    width: 100%;
+  }
+
+  .sidebar-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

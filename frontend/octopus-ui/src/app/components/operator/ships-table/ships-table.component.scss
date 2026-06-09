@@ -1,0 +1,40 @@
+.table-container {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border2);
+  border-radius: var(--radius-md);
+  flex: 1;
+  min-height: 520px;
+  overflow: hidden;
+}
+
+.data-table {
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  width: 100%;
+}
+
+th {
+  background: var(--c-surface2);
+  border-bottom: 1px solid var(--c-border2);
+  color: #315476;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  padding: 14px 17px;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+td {
+  color: var(--c-text);
+  padding: 15px 17px;
+}
+
+.empty-row td {
+  color: #355b7e;
+  font-size: 0.78rem;
+  height: 142px;
+  letter-spacing: 0.22em;
+  text-align: center;
+}

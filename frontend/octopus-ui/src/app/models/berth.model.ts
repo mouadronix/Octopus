@@ -1,6 +1,12 @@
+import { ShipSize } from './ship.model';
+
 export interface Berth {
   id: number;
   name: string;
-  maxDraftMeters: number;
-  isAvailable: boolean;
+  size: ShipSize;
+}
+
+export interface CreateBerthRequest {
+  name: string;
+  size: ShipSize;
 }
