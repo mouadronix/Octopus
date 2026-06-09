@@ -1,0 +1,172 @@
+<section class="operator-view">
+  <header class="view-header">
+    <div>
+      <h1>Registro Navi</h1>
+      <p>{{ filteredShips.length }} visibili / {{ ships.length }} registrate</p>
+    </div>
+
+    <div class="view-actions">
+      <button
+        *ngFor="let status of statusOptions; trackBy: trackByValue"
+        class="filter-pill"
+        type="button"
+        [class.active]="selectedStatus === status"
+        (click)="selectedStatus = status"
+      >
+        {{ status === 'ALL' ? 'Tutte' : status }}
+      </button>
+    </div>
+  </header>
+
+  <section class="control-strip">
+    <label>
+      <span>Cerca</span>
+      <input
+        type="search"
+        placeholder="Nome o ID..."
+        [(ngModel)]="searchTerm"
+      />
+    </label>
+
+    <label>
+      <span>Dimensione</span>
+      <select [(ngModel)]="selectedSize">
+        <option
+          *ngFor="let size of sizeOptions; trackBy: trackByValue"
+          [ngValue]="size"
+        >
+          {{ size }}
+        </option>
+      </select>
+    </label>
+
+    <label>
+      <span>Disponibilita</span>
+      <select [(ngModel)]="selectedAvailability">
+        <option
+          *ngFor="let availability of availabilityOptions; trackBy: trackByValue"
+          [ngValue]="availability"
+        >
+          {{ availability }}
+        </option>
+      </select>
+    </label>
+
+    <label class="toggle-filter">
+      <input type="checkbox" [(ngModel)]="showUnavailable" />
+      <span class="toggle-track"></span>
+      <span>Mostra non disponibili</span>
+    </label>
+
+    <div class="control-buttons">
+      <button type="button" class="ghost-btn" (click)="resetFilters()">
+        Reset
+      </button>
+      <button type="button" class="primary-btn" (click)="openCreatePanel()">
+        + Nuova Nave
+      </button>
+      <button type="button" class="ghost-btn" (click)="focusPendingShips()">
+        Pending
+      </button>
+    </div>
+  </section>
+
+  <section class="state-bar" *ngIf="isLoading || errorMessage">
+    <span *ngIf="isLoading">Caricamento dati porto...</span>
+    <span *ngIf="!isLoading && errorMessage">{{ errorMessage }}</span>
+  </section>
+
+  <section class="status-grid" aria-label="Ship status counters">
+    <article
+      *ngFor="let card of summaryCards; trackBy: trackByLabel"
+      class="metric-card"
+    >
+      <span class="metric-label">{{ card.label }}</span>
+      <strong [style.color]="card.color">{{ card.value }}</strong>
+    </article>
+  </section>
+
+  <section class="ships-panel">
+    <table>
+      <thead>
+        <tr>
+          <th>Nave</th>
+          <th>Dim</th>
+          <th>Arrivo</th>
+          <th>Durata</th>
+          <th>Stato</th>
+          <th>Banchina</th>
+          <th>Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ship of filteredShips; trackBy: trackByShipId">
+          <td>
+            <strong>{{ ship.name }}</strong>
+            <span>{{ ship.id }}</span>
+          </td>
+          <td>{{ ship.size }}</td>
+          <td>Giorno {{ ship.arrivalDay }}</td>
+          <td>{{ ship.duration }} giorni</td>
+          <td>
+            <span class="status-chip" [ngClass]="ship.status">
+              {{ ship.statusLabel }}
+            </span>
+          </td>
+          <td>{{ ship.berthLabel }}</td>
+          <td>{{ ship.notes || '-' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="filteredShips.length === 0" class="empty-state">
+      Nessuna nave registrata.
+    </div>
+  </section>
+
+  <section
+    *ngIf="isCreatePanelOpen"
+    class="create-panel-backdrop"
+    aria-label="Create ship panel"
+  >
+    <form class="create-panel" (ngSubmit)="createShip()">
+      <header>
+        <div>
+          <strong>Nuova Nave</strong>
+          <span>Registra una nave in stato pending</span>
+        </div>
+        <button type="button" (click)="closeCreatePanel()">x</button>
+      </header>
+
+      <label>
+        Nome nave
+        <input
+          name="shipName"
+          type="text"
+          placeholder="Esempio: MSC Aurora"
+          [(ngModel)]="createForm.name"
+          required
+        />
+      </label>
+
+      <label>
+        Note
+        <textarea
+          name="shipNotes"
+          rows="4"
+          placeholder="Cargo, priorita, vincoli..."
+          [(ngModel)]="createForm.notes"
+        ></textarea>
+      </label>
+
+      <footer>
+        <button type="button" class="ghost-btn" (click)="closeCreatePanel()">
+          Annulla
+        </button>
+        <button type="submit" class="primary-btn">
+          Crea Nave
+        </button>
+      </footer>
+    </form>
+  </section>
+</section>

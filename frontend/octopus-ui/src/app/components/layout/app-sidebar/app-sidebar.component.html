@@ -1,0 +1,30 @@
+<aside class="sidebar">
+  <nav class="nav-section" aria-label="Operator navigation">
+    <span class="nav-section-title">Operatore</span>
+
+    <a
+      class="nav-btn"
+      routerLink="/operator"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <span class="nav-icon ship-icon" aria-hidden="true"></span>
+      <span>Navi</span>
+    </a>
+
+    <a class="nav-btn" routerLink="/ships" routerLinkActive="active">
+      <span class="nav-icon plus-icon" aria-hidden="true">+</span>
+      <span>Nuova Nave</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-stats" aria-label="Ship status counters">
+    <div
+      *ngFor="let stat of stats; trackBy: trackByStatLabel"
+      class="stat-chip"
+    >
+      <span class="stat-val">{{ stat.value }}</span>
+      <span class="stat-lbl">{{ stat.label }}</span>
+    </div>
+  </div>
+</aside>
