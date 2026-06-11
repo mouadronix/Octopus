@@ -37,5 +37,3 @@ docker-compose.override.yml
 *.swp
 *.swo
 *~
-
-
