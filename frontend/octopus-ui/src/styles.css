@@ -1,8 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500;700&family=Inter:wght@300;400;500;700&display=swap');
+
 :root {
-  color-scheme: light;
-  font-family: Inter, "Segoe UI", Arial, sans-serif;
-  background: #f5f7fb;
-  color: #182230;
+  color-scheme: dark;
+
+  --c-bg: #0a0e14;
+  --c-surface: #111820;
+  --c-surface2: #1a2330;
+  --c-border: #1e2d3d;
+  --c-border2: #2a3f55;
+
+  --c-text: #c8d8e8;
+  --c-text-dim: #5a7a9a;
+  --c-text-muted: #3a5570;
+
+  --c-accent: #00b4d8;
+  --c-gold: #ffd54a;
+  --c-success: #3ab870;
+  --c-warning: #e0a030;
+  --c-danger: #e05050;
+
+  --font-display: "Bebas Neue", "Arial Narrow", sans-serif;
+  --font-mono: "DM Mono", Consolas, monospace;
+  --font-body: Inter, "Segoe UI", Arial, sans-serif;
+
+  --sp-xs: 4px;
+  --sp-sm: 8px;
+  --sp-md: 16px;
+  --sp-lg: 24px;
+  --sp-xl: 40px;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: var(--font-body);
 }
 
 * {
@@ -10,7 +42,10 @@
 }
 
 body {
+  background: var(--c-bg);
   margin: 0;
+  min-height: 100vh;
+  overflow: hidden;
 }
 
 a {
@@ -24,8 +59,14 @@ a {
 }
 
 .panel {
-  background: #ffffff;
-  border: 1px solid #dbe3ef;
-  border-radius: 8px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border2);
+  border-radius: var(--radius-md);
   padding: 1rem;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
 }

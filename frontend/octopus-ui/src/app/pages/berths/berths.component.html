@@ -1,0 +1,18 @@
+<section class="simple-view">
+  <header class="view-header">
+    <h1>STATO BANCHINE</h1>
+  </header>
+
+  <div class="berths-grid">
+    <article
+      *ngFor="let berth of berths; trackBy: trackByBerthName"
+      class="berth-card"
+    >
+      <div>
+        <strong>{{ berth.name }}</strong>
+        <span>{{ berth.size }}</span>
+      </div>
+      <p>Libera</p>
+    </article>
+  </div>
+</section>

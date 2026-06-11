@@ -1,0 +1,32 @@
+<main class="home-screen">
+  <section class="login-card">
+    <div class="brand-mark" aria-hidden="true">
+      <span></span>
+    </div>
+
+    <h1>BLUE<span>HARBOR</span></h1>
+    <p class="subtitle">Terminal Operations System</p>
+
+    <section class="role-section" aria-label="Seleziona ruolo">
+      <span class="section-label">Seleziona ruolo</span>
+
+      <div class="role-grid">
+        <button
+          *ngFor="let role of roles; trackBy: trackByRole"
+          type="button"
+          class="role-card"
+          [class.active]="selectedRole === role.route"
+          (click)="selectRole(role.route)"
+        >
+          <span class="role-icon" [class]="role.icon" aria-hidden="true"></span>
+          <strong>{{ role.label }}</strong>
+          <small>{{ role.description }}</small>
+        </button>
+      </div>
+    </section>
+
+    <button class="enter-btn" type="button" (click)="enterSystem()">
+      Accedi al sistema
+    </button>
+  </section>
+</main>
