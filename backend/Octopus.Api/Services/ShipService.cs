@@ -1,4 +1,5 @@
 using Octopus.Api.Data;
+using Octopus.Api.DTOs;
 using Octopus.Api.Models;
 
 namespace Octopus.Api.Services;
@@ -22,19 +23,15 @@ public class ShipService
         return _context.Ships.Find(id);
     }
 
-    public Ship Create(string name, string notes)
+    public Ship Create(CreateShipRequest request)
     {
-        var terminal = _context.TerminalStates.First();
-        var random = new Random();
-        var sizes = Enum.GetValues<ShipSize>();
-
         var ship = new Ship
         {
-            Name = name,
-            Notes = notes,
-            Size = sizes[random.Next(sizes.Length)],
-            ArrivalDay = terminal.CurrentDay + random.Next(0, 31),
-            Duration = random.Next(3, 16),
+            Name = request.Name,
+            Notes = request.Notes,
+            Size = request.Size,
+            ArrivalDay = request.ArrivalDay,
+            Duration = request.Duration,
             Status = ShipStatus.Pending
         };
 

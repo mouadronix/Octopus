@@ -8,7 +8,7 @@ public sealed class CreateAssignmentRequest
     public int ShipId { get; init; }
 
     [Required, Range(1, int.MaxValue)]
-    public int BerthId { get; init; }
+    public int DockId { get; init; }
 
     [Required]
     public DateTime StartsAt { get; init; }
@@ -23,7 +23,7 @@ public sealed class UpdateAssignmentRequest
     public int? ShipId { get; init; }
 
     [Range(1, int.MaxValue)]
-    public int? BerthId { get; init; }
+    public int? DockId { get; init; }
 
     public DateTime? StartsAt { get; init; }
 

@@ -12,8 +12,16 @@ public class SystemService
         _context = context;
     }
 
-    public TerminalState? GetState()
+    public SystemState GetState()
     {
-        return _context.TerminalStates.FirstOrDefault();
+        var terminal = _context.TerminalStates.FirstOrDefault();
+        return new SystemState
+        {
+            Environment = "Development",
+            ServerTimeUtc = DateTime.UtcNow,
+            ShipCount = _context.Ships.Count(),
+            BerthCount = _context.Docks.Count(),
+            ActiveAssignmentCount = _context.Assignments.Count()
+        };
     }
 }

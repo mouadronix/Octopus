@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Octopus.Api.Models;
 
 namespace Octopus.Api.DTOs;
 
@@ -10,4 +11,13 @@ public class CreateShipRequest
 
     [MaxLength(500)]
     public string Notes { get; set; } = string.Empty;
+
+    [Required]
+    public ShipSize Size { get; set; }
+
+    [Range(1, 365)]
+    public int ArrivalDay { get; set; } = 1;
+
+    [Range(1, 90)]
+    public int Duration { get; set; } = 1;
 }

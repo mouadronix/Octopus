@@ -39,7 +39,7 @@ public class ShipsController : ControllerBase
     public IActionResult Create([FromBody] CreateShipRequest request)
     {
         if (!ModelState.IsValid) return ValidationProblem(ModelState);
-        var ship = _shipService.Create(request.Name, request.Notes);
+        var ship = _shipService.Create(request);
         return CreatedAtAction(nameof(GetById), new { id = ship.Id }, ship);
     }
 
