@@ -37,4 +37,7 @@ docker-compose.override.yml
 *.swp
 *.swo
 *~
-backend/Octopus.Api/blueharbor.db
+
+
+
+
