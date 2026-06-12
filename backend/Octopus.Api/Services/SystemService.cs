@@ -12,21 +12,31 @@ public class SystemService
         _context = context;
     }
 
-
-
-// Returns the current system state and statistics
-    public SystemState GetState()
+    public int GetCurrentDay()
     {
-        var terminal = _context.TerminalStates.FirstOrDefault();
-        return new SystemState
+        return _context.TerminalStates.First().CurrentDay;
+    }
+
+    public int AdvanceDay()
+    {
+        var state = _context.TerminalStates.First();
+        state.CurrentDay++;
+
+        var assignedShips = _context.Ships
+            .Where(s => s.Status == ShipStatus.Assigned)
+            .ToList();
+
+        foreach (var ship in assignedShips)
         {
-            Environment = "Development",
-            ServerTimeUtc = DateTime.UtcNow,
-            CurrentDay = terminal?.CurrentDay ?? 1,
-            ShipCount = _context.Ships.Count(),
-            BerthCount = _context.Docks.Count(),
-            ActiveAssignmentCount = _context.Assignments.Count()
-        };
+            var assignment = _context.Assignments.FirstOrDefault(a => a.ShipId == ship.Id);
+            if (assignment != null && assignment.EndDay < state.CurrentDay)
+            {
+                ship.Status = ShipStatus.Departed;
+            }
+        }
+
+        _context.SaveChanges();
+        return state.CurrentDay;
     }
 
     public SystemState AdvanceDay()
