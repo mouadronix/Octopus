@@ -11,7 +11,7 @@ public class ShipService
     public ShipService(AppDbContext context)
     {
         _context = context;
-    }
+    } 
 
     public List<Ship> GetAll()
     {
