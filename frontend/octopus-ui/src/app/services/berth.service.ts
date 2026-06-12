@@ -10,6 +10,8 @@ export class BerthService {
 
   constructor(private readonly http: HttpClient) {}
 
+
+  //get all berths
   getBerths(): Observable<Berth[]> {
     return this.http.get<Berth[]>(this.apiUrl);
   }

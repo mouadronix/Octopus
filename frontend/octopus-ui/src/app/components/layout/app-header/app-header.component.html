@@ -1,20 +1,54 @@
 <header class="app-header">
-  <a class="header-left" routerLink="/operator" aria-label="BlueHarbor home">
-    <span class="logo-anchor" aria-hidden="true"></span>
-    <span class="app-title">BLUEHARBOR</span>
-    <span class="app-subtitle">Terminal Ops</span>
+  <a class="brand" routerLink="/operator" aria-label="Octopus dashboard">
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M24 18a8 8 0 0 1 16 0v8a8 8 0 0 1-16 0z" />
+      <path d="M24 28c-8 2-14 8-14 17M40 28c8 2 14 8 14 17" />
+      <path d="M29 34c-7 5-10 12-9 21M35 34c7 5 10 12 9 21M32 36v20" />
+      <circle cx="29" cy="20" r="1.8" />
+      <circle cx="35" cy="20" r="1.8" />
+    </svg>
+    <span>
+      <strong>Octopus</strong>
+      <small>Port &amp; Berth Management System</small>
+    </span>
   </a>
 
-  <div class="header-center">
-    <div class="day-display">
-      <span class="day-label">Giorno selezionato</span>
-      <span class="day-value">1</span>
+  <section class="header-actions" aria-label="Terminal controls">
+    <div class="day-block">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8 2v4M16 2v4M3 10h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" />
+      </svg>
+      <span>
+        <small>Current Day</small>
+        <strong>Day {{ currentDay }}</strong>
+      </span>
     </div>
-    <input class="date-input" type="date" aria-label="Selected day" />
-  </div>
 
-  <div class="header-right">
-    <span class="role-badge">Operatore</span>
-    <a class="exit-link" routerLink="/operator">&lt;- Esci</a>
-  </div>
+    <button type="button" class="next-day" (click)="nextDay()">
+      Next Day
+      <span aria-hidden="true">≫</span>
+    </button>
+
+    <button type="button" class="notification" aria-label="Notifications">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
+        <path d="M10 21h4" />
+      </svg>
+      <span>3</span>
+    </button>
+
+    <div class="user-menu">
+      <div class="avatar" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M20 21a8 8 0 0 0-16 0" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+      </div>
+      <span>
+        <strong>Scheduler</strong>
+        <small>BlueHarbor Terminal</small>
+      </span>
+      <a routerLink="/login" aria-label="Logout">⌄</a>
+    </div>
+  </section>
 </header>
