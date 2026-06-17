@@ -23,7 +23,7 @@ public class TerminalController : ControllerBase
     [HttpPost("next-day")]
     public IActionResult NextDay()
     {
-        var newDay = _systemService.AdvanceDay();
-        return Ok(new { currentDay = newDay });
+        var state = _systemService.AdvanceDay();
+        return Ok(new { currentDay = state.CurrentDay });
     }
 }

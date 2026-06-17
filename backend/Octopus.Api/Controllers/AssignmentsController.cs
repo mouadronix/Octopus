@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Octopus.Api.DTOs;
+using Octopus.Api.Models;
 using Octopus.Api.Services;
 
 namespace Octopus.Api.Controllers;
@@ -20,7 +21,7 @@ public class AssignmentsController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        return Ok(_assignmentService.GetAll());
+        return Ok(_assignmentService.GetAll().Select(ToDto));
     }
 
     [HttpPost]
@@ -34,6 +35,30 @@ public class AssignmentsController : ControllerBase
             return BadRequest(new { message = "Ship or dock not found, or the selected dock is occupied for this time range." });
         }
 
-        return CreatedAtAction(nameof(GetAll), new { id = assignment.Id }, assignment);
+        return CreatedAtAction(nameof(GetAll), new { id = assignment.Id }, ToDto(assignment));
+    }
+
+    private static object ToDto(Assignment assignment)
+    {
+        return new
+        {
+            assignment.Id,
+            assignment.ShipId,
+            assignment.DockId,
+            assignment.StartDay,
+            assignment.EndDay,
+            Ship = assignment.Ship is null
+                ? null
+                : new
+                {
+                    assignment.Ship.Id,
+                    assignment.Ship.Name,
+                    assignment.Ship.Notes,
+                    assignment.Ship.Size,
+                    assignment.Ship.Status,
+                    assignment.Ship.ArrivalDay,
+                    assignment.Ship.Duration
+                }
+        };
     }
 }

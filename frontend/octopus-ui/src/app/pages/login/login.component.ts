@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthResponse, AuthService } from '../../services/auth.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 interface FeatureCard {
   title: string;
@@ -20,8 +20,6 @@ type AuthMode = 'login' | 'register';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  private readonly sessionStorageKey = 'octopus-session';
-
   mode: AuthMode = 'login';
   fullName = '';
   username = '';
@@ -59,8 +57,13 @@ export class LoginComponent {
 
   constructor(
     private readonly router: Router,
+    private readonly route: ActivatedRoute,
     private readonly authService: AuthService
-  ) {}
+  ) {
+    if (this.authService.isAuthenticated()) {
+      void this.router.navigateByUrl(this.returnUrl);
+    }
+  }
 
   get isRegisterMode(): boolean {
     return this.mode === 'register';
@@ -102,8 +105,8 @@ export class LoginComponent {
     this.isSubmitting = true;
     this.authService.login(username, password).subscribe({
       next: (user) => {
-        this.saveSession(user, this.rememberMe);
-        void this.router.navigate(['operator']);
+        this.authService.saveSession(user, this.rememberMe);
+        void this.router.navigateByUrl(this.returnUrl);
       },
       error: (error) => {
         this.isSubmitting = false;
@@ -116,8 +119,8 @@ export class LoginComponent {
     this.isSubmitting = true;
     this.authService.login('guest', 'guest').subscribe({
       next: (user) => {
-        this.saveSession(user, false);
-        void this.router.navigate(['operator']);
+        this.authService.saveSession(user, false);
+        void this.router.navigateByUrl(this.returnUrl);
       },
       error: () => {
         this.isSubmitting = false;
@@ -159,9 +162,9 @@ export class LoginComponent {
     this.isSubmitting = true;
     this.authService.register({ fullName, username, password }).subscribe({
       next: (user) => {
-        this.saveSession(user, this.rememberMe);
+        this.authService.saveSession(user, this.rememberMe);
         this.setSuccess('Account created. Opening the operator dashboard.');
-        void this.router.navigate(['operator']);
+        void this.router.navigateByUrl(this.returnUrl);
       },
       error: (error) => {
         this.isSubmitting = false;
@@ -170,22 +173,9 @@ export class LoginComponent {
     });
   }
 
-  private saveSession(user: AuthResponse, persist: boolean): void {
-    const session = JSON.stringify({
-      id: user.id,
-      fullName: user.fullName,
-      username: user.username,
-      role: user.role,
-      signedInAt: user.signedInAtUtc
-    });
-
-    sessionStorage.setItem(this.sessionStorageKey, session);
-
-    if (persist) {
-      localStorage.setItem(this.sessionStorageKey, session);
-    } else {
-      localStorage.removeItem(this.sessionStorageKey);
-    }
+  private get returnUrl(): string {
+    const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+    return returnUrl && returnUrl.startsWith('/') ? returnUrl : '/operator';
   }
 
   private setError(message: string): void {

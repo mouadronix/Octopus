@@ -17,9 +17,30 @@ public class SystemService
         return _context.TerminalStates.First().CurrentDay;
     }
 
-    public int AdvanceDay()
+    public SystemState GetState()
     {
-        var state = _context.TerminalStates.First();
+        var terminal = _context.TerminalStates.FirstOrDefault();
+
+        return new SystemState
+        {
+            Environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development",
+            ServerTimeUtc = DateTime.UtcNow,
+            CurrentDay = terminal?.CurrentDay ?? 1,
+            ShipCount = _context.Ships.Count(),
+            BerthCount = _context.Docks.Count(),
+            ActiveAssignmentCount = _context.Assignments.Count()
+        };
+    }
+
+    public SystemState AdvanceDay()
+    {
+        var state = _context.TerminalStates.FirstOrDefault();
+        if (state is null)
+        {
+            state = new TerminalState { CurrentDay = 1, PlanningHorizon = 30 };
+            _context.TerminalStates.Add(state);
+        }
+
         state.CurrentDay++;
 
         var assignedShips = _context.Ships
@@ -35,20 +56,6 @@ public class SystemService
             }
         }
 
-        _context.SaveChanges();
-        return state.CurrentDay;
-    }
-
-    public SystemState AdvanceDay()
-    {
-        var terminal = _context.TerminalStates.FirstOrDefault();
-        if (terminal == null)
-        {
-            terminal = new TerminalState { CurrentDay = 1, PlanningHorizon = 30 };
-            _context.TerminalStates.Add(terminal);
-        }
-
-        terminal.CurrentDay += 1;
         _context.SaveChanges();
         return GetState();
     }
