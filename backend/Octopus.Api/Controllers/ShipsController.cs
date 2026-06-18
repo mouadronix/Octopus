@@ -34,7 +34,7 @@ public sealed class ShipsController(ShipService ships) : ControllerBase
 
         var created = ships.Create(ship);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
-    }
+    } 
 
     [HttpPut("{id:int}")]
     public ActionResult<Ship> Update(int id, [FromBody] UpdateShipRequest request)
