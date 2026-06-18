@@ -6,9 +6,19 @@ import { SystemState } from '../models/system-state.model';
 
 @Injectable({ providedIn: 'root' })
 export class SystemService {
+  private readonly apiUrl = `${environment.apiBaseUrl}/system`;
+
   constructor(private readonly http: HttpClient) {}
 
+
+  //get current system state
   getState(): Observable<SystemState> {
-    return this.http.get<SystemState>(`${environment.apiBaseUrl}/system/state`);
+    return this.http.get<SystemState>(`${this.apiUrl}/state`);
+  }
+
+
+  //advance to the next day
+  nextDay(): Observable<SystemState> {
+    return this.http.post<SystemState>(`${this.apiUrl}/advance-day`, {});
   }
 }

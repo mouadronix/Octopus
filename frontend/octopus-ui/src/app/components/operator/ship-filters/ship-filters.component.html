@@ -1,0 +1,10 @@
+<div class="view-filters" aria-label="Ship status filters">
+  <button
+    *ngFor="let filter of filters; trackBy: trackByFilter"
+    class="filter-btn"
+    [class.active]="filter === activeFilter"
+    type="button"
+  >
+    {{ filter }}
+  </button>
+</div>

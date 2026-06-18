@@ -1,0 +1,28 @@
+<aside class="sidebar">
+  <nav class="nav-section" aria-label="Terminal navigation">
+    <a
+      *ngFor="let item of navItems; trackBy: trackByNavLabel"
+      class="nav-btn"
+      [routerLink]="item.route"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: item.label === 'Berth Board' }"
+      [class.featured]="item.label === 'Berth Board'"
+    >
+      <span class="nav-icon" [class]="item.icon" aria-hidden="true"></span>
+      <span>{{ item.label }}</span>
+    </a>
+  </nav>
+
+  <button type="button" class="collapse-btn">
+    <span aria-hidden="true">&lsaquo;</span>
+    Collapse
+  </button>
+
+  <section class="terminal-status" aria-label="Terminal status">
+    <h2>Terminal Status</h2>
+    <div *ngFor="let stat of stats; trackBy: trackByStatLabel" class="status-row">
+      <span class="dot" [class]="stat.color"></span>
+      <span>{{ stat.value }} {{ stat.label }}</span>
+    </div>
+  </section>
+</aside>

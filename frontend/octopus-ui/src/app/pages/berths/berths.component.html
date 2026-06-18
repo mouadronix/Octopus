@@ -1,0 +1,189 @@
+<section class="planning-page">
+  <header class="planning-hero">
+    <div>
+      <h1>Planning Calendar</h1>
+      <p>Visualize berth occupancy and plan future allocations. Drag and drop ships to adjust schedules.</p>
+    </div>
+  </header>
+
+  <p *ngIf="errorMessage" class="state-message error">{{ errorMessage }}</p>
+  <p *ngIf="isLoading && !errorMessage" class="state-message">Loading planning calendar...</p>
+
+  <section class="planning-toolbar" aria-label="Planning controls">
+    <div class="calendar-actions">
+      <button type="button" class="today-button" (click)="goToday()">
+        <span>[ ]</span>
+        Today
+      </button>
+      <button type="button" class="icon-button" aria-label="Previous week" (click)="previousWeek()">&lt;</button>
+      <button type="button" class="icon-button" aria-label="Next week" (click)="nextWeek()">&gt;</button>
+    </div>
+
+    <label>
+      <span>View</span>
+      <select [(ngModel)]="viewDays">
+        <option [ngValue]="7">7 Days</option>
+      </select>
+    </label>
+
+    <label>
+      <span>Group By</span>
+      <select [(ngModel)]="groupBy">
+        <option>Berth Size</option>
+      </select>
+    </label>
+
+    <div class="status-legend" aria-label="Calendar legend">
+      <span><i class="assigned"></i> Assigned</span>
+      <span><i class="pending"></i> Pending</span>
+      <span><i class="departed"></i> Departed</span>
+      <span><i class="available"></i> Available</span>
+    </div>
+  </section>
+
+  <div class="planning-layout">
+    <main class="calendar-panel">
+      <div class="timeline-scroll">
+        <div class="calendar-grid" [style.--day-count]="days.length">
+          <div class="month-cell">{{ getMonthLabel() }}</div>
+          <div
+            *ngFor="let day of days; let dayIndex = index"
+            class="day-cell"
+            [class.current]="day === currentDay"
+          >
+            <strong>{{ day }}</strong>
+            <span>{{ getDayLabel(dayIndex) }}</span>
+          </div>
+
+          <ng-container *ngFor="let group of berthGroups; trackBy: trackByGroupSize">
+            <div class="group-row" [class]="group.size.toLowerCase()">
+              <span>{{ group.size }} Berths</span>
+            </div>
+
+            <ng-container *ngFor="let berth of group.berths; trackBy: trackByBerthId">
+              <div class="berth-label">
+                <span>{{ berth.name }}</span>
+                <small>{{ getBerthAssignmentsCount(berth) ? getBerthAssignmentsCount(berth) + ' planned' : 'Free' }}</small>
+              </div>
+
+              <div class="berth-track">
+                <span *ngFor="let day of days" class="track-day"></span>
+
+                <article
+                  *ngFor="let assignment of rowAssignments(berth); trackBy: trackByAssignmentId"
+                  class="assignment-bar"
+                  [class]="getAssignmentClass(assignment)"
+                  [style.grid-column]="getGridColumn(assignment)"
+                >
+                  <span class="ship-icon">SHIP</span>
+                  <strong>{{ getShipName(assignment) }} ({{ getShipSize(assignment) }})</strong>
+                  <small>{{ getRangeLabel(assignment) }}</small>
+                </article>
+
+                <div *ngIf="!hasAssignments(berth)" class="available-bar">
+                  Available
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+
+      <footer class="calendar-footer">
+        <div class="size-legend">
+          <span><i class="xl"></i> XL (Extra Large)</span>
+          <span><i class="l"></i> L (Large)</span>
+          <span><i class="m"></i> M (Medium)</span>
+          <span><i class="s"></i> S (Small)</span>
+        </div>
+        <span class="drag-note">Drag and drop to reschedule</span>
+      </footer>
+    </main>
+
+    <aside class="planning-aside">
+      <section class="side-panel mini-calendar">
+        <header>
+          <h2>Calendar</h2>
+          <div>
+            <button type="button" aria-label="Previous month">&lt;</button>
+            <strong>{{ getMonthLabel() }}</strong>
+            <button type="button" aria-label="Next month">&gt;</button>
+          </div>
+        </header>
+
+        <div class="week-header">
+          <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+        </div>
+
+        <div class="month-grid">
+          <button
+            *ngFor="let day of monthDays"
+            type="button"
+            [class.active]="day === currentDay"
+            [class.in-week]="days.includes(day)"
+            (click)="currentDay = day"
+          >
+            {{ day }}
+          </button>
+        </div>
+      </section>
+
+      <section class="side-panel filters-panel">
+        <h2>Filters</h2>
+
+        <label>
+          <span>Berth Size</span>
+          <select [(ngModel)]="selectedSize">
+            <option *ngFor="let size of sizeOptions" [ngValue]="size">{{ size }}</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Berth</span>
+          <select [(ngModel)]="berthFilter">
+            <option value="All">All</option>
+            <option *ngFor="let berth of berths" [value]="berth.name">{{ berth.name }}</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Status</span>
+          <select [(ngModel)]="selectedStatus">
+            <option *ngFor="let status of statusOptions" [ngValue]="status">{{ status === 'All' ? 'All Ships' : status }}</option>
+          </select>
+        </label>
+
+        <button type="button" class="outline-button" (click)="resetFilters()">Reset Filters</button>
+      </section>
+
+      <section class="side-panel summary-panel">
+        <h2>Summary (Day {{ days[0] }} - Day {{ days[days.length - 1] }})</h2>
+        <dl>
+          <div>
+            <dt>Total Assignments</dt>
+            <dd>{{ totalAssignments }}</dd>
+          </div>
+          <div>
+            <dt>Occupied Days</dt>
+            <dd>{{ occupiedDays }}</dd>
+          </div>
+          <div>
+            <dt>Available Days</dt>
+            <dd>{{ availableDays }}</dd>
+          </div>
+          <div>
+            <dt>Utilization</dt>
+            <dd>{{ utilization }}%</dd>
+          </div>
+        </dl>
+        <div class="progress-track">
+          <span [style.width.%]="utilization"></span>
+        </div>
+      </section>
+
+      <button type="button" class="export-button" (click)="exportCalendar()">Export Calendar</button>
+    </aside>
+  </div>
+
+  <footer class="page-footer">&copy; 2025 OCTOPUS Port &amp; Berth Management System. All rights reserved.</footer>
+</section>

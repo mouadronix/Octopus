@@ -6,56 +6,83 @@ using Octopus.Api.Services;
 namespace Octopus.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public sealed class ShipsController(ShipService ships) : ControllerBase
+[Route("api/ships")]
+public class ShipsController : ControllerBase
 {
+
+    // Services
+    private readonly ShipService _shipService;
+    private readonly AssignmentService _assignmentService;
+
+    public ShipsController(ShipService shipService, AssignmentService assignmentService)
+    {
+        _shipService = shipService;
+        _assignmentService = assignmentService;
+    }
+
+
+    // GET: api/ships?status=Available
     [HttpGet]
-    public ActionResult<IReadOnlyList<Ship>> GetAll() => Ok(ships.GetAll());
+    public IActionResult GetAll([FromQuery] string? status)
+    {
+        var ships = _shipService.GetAll();
+        if (status != null && Enum.TryParse<ShipStatus>(status, true, out var parsedStatus))
+            ships = ships.Where(s => s.Status == parsedStatus).ToList();
+        return Ok(ships.Select(ToListItem));
+    }
 
+
+    // GET: api/ships/1
     [HttpGet("{id:int}")]
-    public ActionResult<Ship> GetById(int id)
+    public IActionResult GetById(int id)
     {
-        var ship = ships.GetById(id);
-        return ship is null ? NotFound() : Ok(ship);
+        var ship = _shipService.GetById(id);
+        if (ship == null) return NotFound();
+        return Ok(ToListItem(ship));
     }
 
+
+
+    // POST: api/ships
     [HttpPost]
-    public ActionResult<Ship> Create([FromBody] CreateShipRequest request)
+    public IActionResult Create([FromBody] CreateShipRequest request)
     {
         if (!ModelState.IsValid) return ValidationProblem(ModelState);
-
-        var ship = new Ship
-        {
-            Name = request.Name,
-            ImoNumber = request.ImoNumber,
-            CargoType = request.CargoType,
-            EstimatedArrival = request.EstimatedArrival
-        };
-
-        var created = ships.Create(ship);
-        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
-    }
-
-    [HttpPut("{id:int}")]
-    public ActionResult<Ship> Update(int id, [FromBody] UpdateShipRequest request)
-    {
-        if (!ModelState.IsValid) return ValidationProblem(ModelState);
-
-        var updated = ships.Update(id, ship =>
-        {
-            if (request.Name is not null) ship.Name = request.Name;
-            if (request.ImoNumber is not null) ship.ImoNumber = request.ImoNumber;
-            if (request.CargoType is not null) ship.CargoType = request.CargoType;
-            if (request.EstimatedArrival.HasValue) ship.EstimatedArrival = request.EstimatedArrival.Value;
-            if (request.Status is not null) ship.Status = request.Status;
-        });
-
-        return updated is null ? NotFound() : Ok(updated);
+        var ship = _shipService.Create(request);
+        return CreatedAtAction(nameof(GetById), new { id = ship.Id }, ToListItem(ship));
     }
 
     [HttpDelete("{id:int}")]
-    public ActionResult Delete(int id)
+    public IActionResult Delete(int id)
     {
-        return ships.Delete(id) ? NoContent() : NotFound();
+        return _shipService.Delete(id) ? NoContent() : NotFound();
+    }
+
+
+    // GET: api/ships/1/suggestion
+    [HttpGet("{id:int}/suggestion")]
+    public IActionResult GetSuggestion(int id)
+    {
+        var suggestion = _assignmentService.GetSuggestion(id);
+        if (suggestion == null) return NotFound(new { message = "No dock available for this ship" });
+        return Ok(suggestion);
+    }
+
+    private static ShipListItem ToListItem(Ship ship)
+    {
+        return new ShipListItem
+        {
+            Id = ship.Id,
+            Name = ship.Name,
+            Notes = ship.Notes,
+            Size = ship.Size,
+            Status = ship.Status,
+            ArrivalDay = ship.ArrivalDay,
+            Duration = ship.Duration,
+            BerthName = ship.Assignment?.Dock?.Name,
+            AssignmentId = ship.Assignment?.Id,
+            AssignmentStartDay = ship.Assignment?.StartDay,
+            AssignmentEndDay = ship.Assignment?.EndDay
+        };
     }
 }

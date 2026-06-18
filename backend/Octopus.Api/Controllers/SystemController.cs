@@ -8,6 +8,12 @@ namespace Octopus.Api.Controllers;
 [Route("api/[controller]")]
 public sealed class SystemController(SystemService system) : ControllerBase
 {
+
+
+    // GET: api/system/state
     [HttpGet("state")]
     public ActionResult<SystemState> GetState() => Ok(system.GetState());
+
+    [HttpPost("advance-day")]
+    public ActionResult<SystemState> AdvanceDay() => Ok(system.AdvanceDay());
 }

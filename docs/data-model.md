@@ -32,3 +32,4 @@
 - `shipCount` - Number of known ships.
 - `berthCount` - Number of known berths.
 - `activeAssignmentCount` - Assignments without an end time.
+    

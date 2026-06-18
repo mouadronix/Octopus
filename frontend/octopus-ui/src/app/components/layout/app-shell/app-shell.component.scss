@@ -1,0 +1,34 @@
+.terminal-shell {
+  background: #020814;
+  color: var(--c-text);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.content-area {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  position: relative;
+}
+
+@media (max-width: 900px) {
+  .terminal-shell {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .app-body {
+    flex-direction: column;
+    overflow: visible;
+  }
+}

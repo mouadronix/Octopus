@@ -6,56 +6,59 @@ using Octopus.Api.Services;
 namespace Octopus.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public sealed class AssignmentsController(AssignmentService assignments) : ControllerBase
+[Route("api/assignments")]
+public class AssignmentsController : ControllerBase
 {
-    [HttpGet]
-    public ActionResult<IReadOnlyList<Assignment>> GetAll() => Ok(assignments.GetAll());
+     // Service
+    private readonly AssignmentService _assignmentService;
 
-    [HttpGet("{id:int}")]
-    public ActionResult<Assignment> GetById(int id)
+    public AssignmentsController(AssignmentService assignmentService)
     {
-        var assignment = assignments.GetById(id);
-        return assignment is null ? NotFound() : Ok(assignment);
+        _assignmentService = assignmentService;
+    }
+
+    // GET: api/assignments
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        return Ok(_assignmentService.GetAll().Select(ToDto));
     }
 
     [HttpPost]
-    public ActionResult<Assignment> Create([FromBody] CreateAssignmentRequest request)
+    public IActionResult Create([FromBody] AssignShipRequest request)
     {
         if (!ModelState.IsValid) return ValidationProblem(ModelState);
 
-        var assignment = new Assignment
+        var assignment = _assignmentService.AssignShip(request.ShipId, request.DockId);
+        if (assignment == null)
         {
-            ShipId = request.ShipId,
-            BerthId = request.BerthId,
-            StartsAt = request.StartsAt,
-            Status = request.Status
+            return BadRequest(new { message = "Ship or dock not found, or the selected dock is occupied for this time range." });
+        }
+
+        return CreatedAtAction(nameof(GetAll), new { id = assignment.Id }, ToDto(assignment));
+    }
+
+    private static object ToDto(Assignment assignment)
+    {
+        return new
+        {
+            assignment.Id,
+            assignment.ShipId,
+            assignment.DockId,
+            assignment.StartDay,
+            assignment.EndDay,
+            Ship = assignment.Ship is null
+                ? null
+                : new
+                {
+                    assignment.Ship.Id,
+                    assignment.Ship.Name,
+                    assignment.Ship.Notes,
+                    assignment.Ship.Size,
+                    assignment.Ship.Status,
+                    assignment.Ship.ArrivalDay,
+                    assignment.Ship.Duration
+                }
         };
-
-        var created = assignments.Create(assignment);
-        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
-    }
-
-    [HttpPut("{id:int}")]
-    public ActionResult<Assignment> Update(int id, [FromBody] UpdateAssignmentRequest request)
-    {
-        if (!ModelState.IsValid) return ValidationProblem(ModelState);
-
-        var updated = assignments.Update(id, assignment =>
-        {
-            if (request.ShipId.HasValue) assignment.ShipId = request.ShipId.Value;
-            if (request.BerthId.HasValue) assignment.BerthId = request.BerthId.Value;
-            if (request.StartsAt.HasValue) assignment.StartsAt = request.StartsAt.Value;
-            if (request.EndsAt.HasValue) assignment.EndsAt = request.EndsAt.Value;
-            if (request.Status is not null) assignment.Status = request.Status;
-        });
-
-        return updated is null ? NotFound() : Ok(updated);
-    }
-
-    [HttpDelete("{id:int}")]
-    public ActionResult Delete(int id)
-    {
-        return assignments.Delete(id) ? NoContent() : NotFound();
     }
 }

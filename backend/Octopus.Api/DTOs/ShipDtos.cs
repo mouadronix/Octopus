@@ -1,35 +1,18 @@
-using System.ComponentModel.DataAnnotations;
+using Octopus.Api.Models;
 
 namespace Octopus.Api.DTOs;
 
-public sealed class CreateShipRequest
+public class ShipListItem
 {
-    [Required, StringLength(200, MinimumLength = 1)]
-    public required string Name { get; init; }
-
-    [Required, RegularExpression(@"^IMO-\d{7}$", ErrorMessage = "ImoNumber must match format IMO-XXXXXXX")]
-    public required string ImoNumber { get; init; }
-
-    [Required, StringLength(100, MinimumLength = 1)]
-    public required string CargoType { get; init; }
-
-    [Required]
-    public DateTime EstimatedArrival { get; init; }
-}
-
-public sealed class UpdateShipRequest
-{
-    [StringLength(200, MinimumLength = 1)]
-    public string? Name { get; init; }
-
-    [RegularExpression(@"^IMO-\d{7}$", ErrorMessage = "ImoNumber must match format IMO-XXXXXXX")]
-    public string? ImoNumber { get; init; }
-
-    [StringLength(100, MinimumLength = 1)]
-    public string? CargoType { get; init; }
-
-    public DateTime? EstimatedArrival { get; init; }
-
-    [StringLength(50)]
-    public string? Status { get; init; }
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Notes { get; set; } = string.Empty;
+    public ShipSize Size { get; set; }
+    public ShipStatus Status { get; set; }
+    public int ArrivalDay { get; set; }
+    public int Duration { get; set; }
+    public string? BerthName { get; set; }
+    public int? AssignmentId { get; set; }
+    public int? AssignmentStartDay { get; set; }
+    public int? AssignmentEndDay { get; set; }
 }

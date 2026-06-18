@@ -1,0 +1,60 @@
+<header class="app-header">
+  <a class="brand" routerLink="/operator" aria-label="Octopus dashboard">
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M24 18a8 8 0 0 1 16 0v8a8 8 0 0 1-16 0z" />
+      <path d="M24 28c-8 2-14 8-14 17M40 28c8 2 14 8 14 17" />
+      <path d="M29 34c-7 5-10 12-9 21M35 34c7 5 10 12 9 21M32 36v20" />
+      <circle cx="29" cy="20" r="1.8" />
+      <circle cx="35" cy="20" r="1.8" />
+    </svg>
+    <span>
+      <strong>Octopus</strong>
+      <small>Port &amp; Berth Management System</small>
+    </span>
+  </a>
+
+  <section class="header-actions" aria-label="Terminal controls">
+    <div class="day-block">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8 2v4M16 2v4M3 10h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" />
+      </svg>
+      <span>
+        <small>Current Day</small>
+        <strong>Day {{ currentDay }}</strong>
+      </span>
+    </div>
+
+    <button type="button" class="next-day" (click)="nextDay()">
+      Next Day
+      <span aria-hidden="true">&raquo;</span>
+    </button>
+
+    <button type="button" class="notification" aria-label="Notifications">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
+        <path d="M10 21h4" />
+      </svg>
+      <span>3</span>
+    </button>
+
+    <div class="user-menu" *ngIf="currentSession$ | async as session">
+      <div class="avatar" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M20 21a8 8 0 0 0-16 0" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+      </div>
+      <span>
+        <strong>{{ session.fullName }}</strong>
+        <small>{{ session.role }} &middot; BlueHarbor Terminal</small>
+      </span>
+      <button type="button" class="logout-button" aria-label="Logout" title="Logout" (click)="logout()">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <path d="M16 17l5-5-5-5" />
+          <path d="M21 12H9" />
+        </svg>
+      </button>
+    </div>
+  </section>
+</header>

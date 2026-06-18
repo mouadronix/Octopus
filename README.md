@@ -36,3 +36,9 @@ The UI listens on `http://localhost:4200`.
 ```powershell
 docker compose up --build
 ```
+## Structure
+
+- `frontend/octopus-ui` - Angular UI for operators, scheduling, ships, and berths.
+- `backend/Octopus.Api` - ASP.NET Core API with controllers, models, services, and seed data.
+- `database` - Local SQLite database location and database notes.
+- `docs` - Architecture and data model documentation.

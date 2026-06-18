@@ -12,6 +12,7 @@ dist/
 npm-debug.log*
 yarn.lock
 package-lock.json
+work-*.log
 
 # Database files
 *.db
@@ -36,3 +37,7 @@ docker-compose.override.yml
 *.swp
 *.swo
 *~
+
+
+
+

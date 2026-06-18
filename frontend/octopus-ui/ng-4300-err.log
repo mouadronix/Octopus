@@ -1,0 +1,408 @@
+[1m[33mPrebundling has been configured but will not be used because scripts optimization is enabled.[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2322: Type '{ message: string; meta: string; tone: string; }[]' is not assignable to type 'ActivityItem[]'.
+  Type '{ message: string; meta: string; tone: string; }' is not assignable to type 'ActivityItem'.
+    Types of property 'tone' are incompatible.
+      Type 'string' is not assignable to type '"purple" | "muted" | "success" | "warning" | "info"'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/dashboard/dashboard.component.ts:182:4:
+[37m      182 │     [32mreturn[37m [
+          ╵     [32m~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2322: Type '{ message: string; meta: string; tone: string; }[]' is not assignable to type 'ActivityItem[]'.
+  Type '{ message: string; meta: string; tone: string; }' is not assignable to type 'ActivityItem'.
+    Types of property 'tone' are incompatible.
+      Type 'string' is not assignable to type '"purple" | "muted" | "success" | "warning" | "info"'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/dashboard/dashboard.component.ts:183:4:
+[37m      183 │     [32mreturn[37m [
+          ╵     [32m~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:99:16:
+[37m      99 │ ...          [32m{{ getCompatibleBerths(ship).slice(0, 4).map(berth =>[37m...
+         ╵              [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:104:67:
+[37m      104 │ ...n-shortcut" (click)="[32m$event.stopPropagation(); selectShip(ship)[37m">
+          ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:110:15:
+[37m      110 │           <div [32m*ngIf="filteredShips.length === 0"[37m class="empty-st...
+          ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:115:36:
+[37m      115 │ ...t-footer">[32mShowing 1 to {{ filteredShips.length }} of {{ pendin[37m...
+          ╵              [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:118:35:
+[37m      118 │ ...ide class="preview-panel" [32m*ngIf="selectedShip; else noSelection"[37m>
+          ╵                              [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:122:51:
+[37m      122 │ ...="ship-badge large" [ngClass]="[32mnormalizeSize(selectedShip.size)[37m">
+          ╵                                   [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:130:16:
+[37m      130 │             <h3>[32m{{ selectedShip.name }} [37m<span>{{ normalizeSize(se...
+          ╵                 [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:130:46:
+[37m      130 │ ....name }} <span>[32m{{ normalizeSize(selectedShip.size) }}[37m</span></h3>
+          ╵                   [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:131:15:
+[37m      131 │             <p>[32mIMO: {{ getImo(selectedShip) }}[37m</p>
+          ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:138:16:
+[37m      138 │             <dd>[32m{{ selectedShip.arrivalDay }}[37m</dd>
+          ╵                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:142:16:
+[37m      142 │             <dd>[32m{{ selectedShip.duration }} Days[37m</dd>
+          ╵                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:146:16:
+[37m      146 │             <dd>[32m{{ normalizeSize(selectedShip.size) }}[37m</dd>
+          ╵                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:157:12:
+[37m      157 │             [32m*ngFor="let berth of selectedCompatibleBerths; trackB[37m...
+          ╵             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:160:28:
+[37m      160 │             [class.active]="[32mselectedBerthId === berth.id[37m"
+          ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:161:21:
+[37m      161 │             (click)="[32mselectBerth(berth.id)[37m"
+          ╵                      [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:163:37:
+[37m      163 │             <span class="berth-icon">[32m{{ berth.size }}[37m</span>
+          ╵                                      [32m~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:165:22:
+[37m      165 │               <strong>[32m{{ berth.name }}[37m</strong>
+          ╵                       [32m~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:166:21:
+[37m      166 │ ...   <small>[32m{{ berth.size }} berth · Available from Day {{ bert[37m...
+          ╵              [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:168:36:
+[37m      168 │ ...class="checkmark" [32m*ngIf="selectedBerthId === berth.id"[37m>✓</span>
+          ╵                      [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:171:13:
+[37m      171 │           <p [32m*ngIf="selectedCompatibleBerths.length === 0"[37m class=...
+          ╵              [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:176:44:
+[37m      176 │         <section class="allocation-summary" [32m*ngIf="selectedBerth"[37m>
+          ╵                                             [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:181:18:
+[37m      181 │               <dd>[32m{{ selectedBerth.name }}[37m</dd>
+          ╵                   [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:185:18:
+[37m      185 │               <dd>[32m{{ selectedBerth.availableFromDay }}[37m</dd>
+          ╵                   [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:189:18:
+[37m      189 │ ...      <dd>[32m{{ getEndDay(selectedShip) }} ({{ selectedShip.durat[37m...
+          ╵              [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:194:65:
+[37m      194 │ ...ton" [disabled]="[32misAssigning || !selectedBerth[37m" (click)="confi...
+          ╵                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 51 in [ {{ getCompatibleBerths(ship).slice(0, 4).map(berth => berth.name).join(', ') }} ] in C:/Users/mouaad.boustta/Documents/GitHub/Octopus/frontend/octopus-ui/src/app/pages/scheduler/scheduler.component.html@98:16[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/scheduler/scheduler.component.html:194:105:
+[37m      194 │ ...d]="isAssigning || !selectedBerth" (click)="[32mconfirmAssignment()[37m">
+          ╵                                                [32m~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SchedulerComponent.
+
+    src/app/pages/scheduler/scheduler.component.ts:36:15:
+[37m      36 │   templateUrl: [32m'./scheduler.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "./pages/berths/berths.component"[0m
+
+    src/app/app.routes.ts:8:32:
+[37m      8 │ import { BerthsComponent } from [32m'./pages/berths/berths.component'[37m;
+        ╵                                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module './pages/berths/berths.component' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.routes.ts:8:32:
+[37m      8 │ import { BerthsComponent } from [32m'./pages/berths/berths.component'[37m;
+        ╵                                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module './pages/berths/berths.component' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.routes.ts:8:32:
+[37m      8 │ import { BerthsComponent } from [32m'./pages/berths/berths.component'[37m;
+        ╵                                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module './pages/berths/berths.component' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.routes.ts:8:32:
+[37m      8 │ import { BerthsComponent } from [32m'./pages/berths/berths.component'[37m;
+        ╵                                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module './pages/berths/berths.component' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.routes.ts:8:32:
+[37m      8 │ import { BerthsComponent } from [32m'./pages/berths/berths.component'[37m;
+        ╵                                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module './pages/berths/berths.component' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.routes.ts:8:32:
+[37m      8 │ import { BerthsComponent } from [32m'./pages/berths/berths.component'[37m;
+        ╵                                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module './pages/berths/berths.component' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.routes.ts:8:32:
+[37m      8 │ import { BerthsComponent } from [32m'./pages/berths/berths.component'[37m;
+        ╵                                 [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m

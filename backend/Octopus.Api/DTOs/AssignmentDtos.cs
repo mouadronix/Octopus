@@ -8,7 +8,7 @@ public sealed class CreateAssignmentRequest
     public int ShipId { get; init; }
 
     [Required, Range(1, int.MaxValue)]
-    public int BerthId { get; init; }
+    public int DockId { get; init; }
 
     [Required]
     public DateTime StartsAt { get; init; }
@@ -17,13 +17,22 @@ public sealed class CreateAssignmentRequest
     public string Status { get; init; } = "Planned";
 }
 
+public sealed class AssignShipRequest
+{
+    [Required, Range(1, int.MaxValue)]
+    public int ShipId { get; init; }
+
+    [Required, Range(1, int.MaxValue)]
+    public int DockId { get; init; }
+}
+
 public sealed class UpdateAssignmentRequest
 {
     [Range(1, int.MaxValue)]
     public int? ShipId { get; init; }
 
     [Range(1, int.MaxValue)]
-    public int? BerthId { get; init; }
+    public int? DockId { get; init; }
 
     public DateTime? StartsAt { get; init; }
 

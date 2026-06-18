@@ -1,0 +1,166 @@
+<section class="berth-page">
+  <div class="page-background" aria-hidden="true"></div>
+
+  <section class="board-main">
+    <header class="hero">
+      <p>Berth Operations Center</p>
+      <h1>
+        <span>Smart berth</span>
+        <strong>allocation.</strong>
+      </h1>
+      <p class="hero-copy">
+        Monitor berth occupancy, assign incoming ships, and manage terminal capacity in real time.
+      </p>
+    </header>
+
+    <section *ngIf="isLoading || errorMessage" class="data-state">
+      <span *ngIf="isLoading">Loading berth operations from backend...</span>
+      <span *ngIf="!isLoading && errorMessage">{{ errorMessage }}</span>
+    </section>
+
+    <section class="metric-grid" aria-label="Berth metrics">
+      <article *ngFor="let metric of metrics; trackBy: trackByMetric" class="metric-card" [class]="metric.tone">
+        <div class="metric-icon" [ngSwitch]="metric.icon" aria-hidden="true">
+          <svg *ngSwitchCase="'ship'" viewBox="0 0 48 48">
+            <path d="M7 29h34l-5 10H12z" />
+            <path d="M16 29V15h16v14" />
+            <path d="M20 15V9h8v6" />
+          </svg>
+          <svg *ngSwitchCase="'crane'" viewBox="0 0 48 48">
+            <path d="M13 39h22M24 39V12M16 16h24l-8-6M38 16v8M18 39l6-27 6 27" />
+          </svg>
+          <svg *ngSwitchCase="'berth'" viewBox="0 0 48 48">
+            <path d="M8 34h32M12 16v18M36 16v18M12 24h24" />
+          </svg>
+          <svg *ngSwitchCase="'calendar'" viewBox="0 0 48 48">
+            <path d="M12 13h24a4 4 0 0 1 4 4v19a4 4 0 0 1-4 4H12a4 4 0 0 1-4-4V17a4 4 0 0 1 4-4z" />
+            <path d="M16 8v9M32 8v9M8 21h32" />
+          </svg>
+        </div>
+        <div>
+          <span>{{ metric.label }}</span>
+          <strong>{{ metric.value }}</strong>
+        </div>
+      </article>
+    </section>
+
+    <section class="berth-board" aria-label="Berth board">
+      <section
+        *ngFor="let group of berthGroups; trackBy: trackByGroup"
+        class="berth-group"
+        [class]="group.accent"
+      >
+        <h2>{{ group.label }}</h2>
+
+        <div class="berth-row">
+          <article
+            *ngFor="let berth of group.berths; trackBy: trackByBerth"
+            class="berth-slot"
+            [class.occupied]="berth.status === 'occupied'"
+            [class.selected]="selectedCompatibleBerth === berth.id"
+            (click)="selectCompatibleBerth(berth.id)"
+          >
+            <span class="berth-id">{{ berth.name }}</span>
+
+            <button
+              *ngIf="berth.status === 'available'"
+              type="button"
+              class="available-card"
+              [class.compatible]="compatibleBerths.includes(berth)"
+            >
+              <span>+</span>
+              Available
+            </button>
+
+            <button
+              *ngIf="berth.ship as ship"
+              type="button"
+              class="ship-card"
+              (click)="selectShip(ship); $event.stopPropagation()"
+            >
+              <svg viewBox="0 0 48 48" aria-hidden="true">
+                <path d="M7 29h34l-5 10H12z" />
+                <path d="M16 29V15h16v14" />
+                <path d="M20 15V9h8v6" />
+              </svg>
+              <div>
+                <strong>{{ ship.name }}</strong>
+                <span>Size: {{ ship.size }} &middot; Day {{ ship.arrivalDay }} &rarr; Day {{ ship.arrivalDay + ship.duration }}</span>
+                <small><i></i>{{ ship.status }}</small>
+              </div>
+            </button>
+          </article>
+        </div>
+      </section>
+    </section>
+  </section>
+
+  <aside class="ship-panel" aria-label="Selected ship">
+    <ng-container *ngIf="selectedShip as ship; else noShipSelected">
+      <p class="panel-label">Selected Ship</p>
+
+      <div class="selected-ship">
+        <div class="ship-avatar">
+          <svg viewBox="0 0 48 48" aria-hidden="true">
+            <path d="M7 29h34l-5 10H12z" />
+            <path d="M16 29V15h16v14" />
+            <path d="M20 15V9h8v6" />
+          </svg>
+        </div>
+        <div>
+          <h2>{{ ship.name }}</h2>
+          <span>IMO: {{ ship.imo }}</span>
+        </div>
+      </div>
+
+      <dl class="ship-details">
+        <div>
+          <dt>Size</dt>
+          <dd>{{ ship.size }}</dd>
+        </div>
+        <div>
+          <dt>Arrival Day</dt>
+          <dd>{{ ship.arrivalDay }}</dd>
+        </div>
+        <div>
+          <dt>Duration</dt>
+          <dd>{{ ship.duration }} Days</dd>
+        </div>
+        <div>
+          <dt>Status</dt>
+          <dd class="pending"><span></span>{{ ship.status }}</dd>
+        </div>
+      </dl>
+
+      <section class="compatible-list">
+        <h3>Compatible Berths <span>i</span></h3>
+        <button
+          *ngFor="let berth of compatibleBerths; trackBy: trackByBerth"
+          type="button"
+          [class.active]="selectedCompatibleBerth === berth.id"
+          [class.disabled]="berth.status === 'occupied'"
+          (click)="selectCompatibleBerth(berth.id)"
+        >
+          <span></span>
+          {{ berth.name }}
+        </button>
+      </section>
+
+      <p *ngIf="assignmentMessage" class="assignment-message">{{ assignmentMessage }}</p>
+
+      <button type="button" class="assign-button" (click)="assignSelectedShip()">
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <path d="M7 29h34l-5 10H12z" />
+          <path d="M16 29V15h16v14" />
+          <path d="M20 15V9h8v6" />
+        </svg>
+        Assign Ship
+      </button>
+    </ng-container>
+
+    <ng-template #noShipSelected>
+      <p class="panel-label">Selected Ship</p>
+      <p class="assignment-message">No ships available from the backend.</p>
+    </ng-template>
+  </aside>
+</section>

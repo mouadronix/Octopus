@@ -1,57 +1,52 @@
 using Microsoft.AspNetCore.Mvc;
-using Octopus.Api.DTOs;
-using Octopus.Api.Models;
 using Octopus.Api.Services;
 
 namespace Octopus.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public sealed class BerthsController(BerthService berths) : ControllerBase
+[Route("api/docks")]
+public class BerthsController : ControllerBase
 {
+
+
+    //Service
+    private readonly DockService _dockService;
+
+    public BerthsController(DockService dockService)
+    {
+        _dockService = dockService;
+    }
+
+
+    // GET: api/docks
     [HttpGet]
-    public ActionResult<IReadOnlyList<Berth>> GetAll() => Ok(berths.GetAll());
-
-    [HttpGet("{id:int}")]
-    public ActionResult<Berth> GetById(int id)
+    public IActionResult GetAll()
     {
-        var berth = berths.GetById(id);
-        return berth is null ? NotFound() : Ok(berth);
-    }
-
-    [HttpPost]
-    public ActionResult<Berth> Create([FromBody] CreateBerthRequest request)
-    {
-        if (!ModelState.IsValid) return ValidationProblem(ModelState);
-
-        var berth = new Berth
+        var docks = _dockService.GetAll().Select(d => new
         {
-            Name = request.Name,
-            MaxDraftMeters = request.MaxDraftMeters
-        };
-
-        var created = berths.Create(berth);
-        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
-    }
-
-    [HttpPut("{id:int}")]
-    public ActionResult<Berth> Update(int id, [FromBody] UpdateBerthRequest request)
-    {
-        if (!ModelState.IsValid) return ValidationProblem(ModelState);
-
-        var updated = berths.Update(id, berth =>
-        {
-            if (request.Name is not null) berth.Name = request.Name;
-            if (request.MaxDraftMeters.HasValue) berth.MaxDraftMeters = request.MaxDraftMeters.Value;
-            if (request.IsAvailable.HasValue) berth.IsAvailable = request.IsAvailable.Value;
+            d.Id,
+            d.Name,
+            d.Size,
+            Assignments = d.Assignments.Select(a => new
+            {
+                a.Id,
+                a.ShipId,
+                a.DockId,
+                a.StartDay,
+                a.EndDay,
+                Ship = new
+                {
+                    a.Ship.Id,
+                    a.Ship.Name,
+                    a.Ship.Notes,
+                    a.Ship.Size,
+                    a.Ship.Status,
+                    a.Ship.ArrivalDay,
+                    a.Ship.Duration
+                }
+            })
         });
 
-        return updated is null ? NotFound() : Ok(updated);
-    }
-
-    [HttpDelete("{id:int}")]
-    public ActionResult Delete(int id)
-    {
-        return berths.Delete(id) ? NoContent() : NotFound();
+        return Ok(docks);
     }
 }

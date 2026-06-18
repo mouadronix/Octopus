@@ -1,0 +1,2184 @@
+info: Microsoft.EntityFrameworkCore.Migrations[20411]
+      Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (21ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsLock' AND "type" = 'table';
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      INSERT OR IGNORE INTO "__EFMigrationsLock"("Id", "Timestamp") VALUES(1, '2026-06-17 07:47:28.5641667+00:00');
+      SELECT changes();
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+          "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+          "ProductVersion" TEXT NOT NULL
+      );
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "MigrationId", "ProductVersion"
+      FROM "__EFMigrationsHistory"
+      ORDER BY "MigrationId";
+info: Microsoft.EntityFrameworkCore.Migrations[20405]
+      No migrations were applied. The database is already up to date.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      DELETE FROM "__EFMigrationsLock";
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT EXISTS (
+          SELECT 1
+          FROM "Assignments" AS "a")
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT EXISTS (
+          SELECT 1
+          FROM "Docks" AS "d"
+          WHERE "d"."Name" = 'XL-02')
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT EXISTS (
+          SELECT 1
+          FROM "Ships" AS "s"
+          WHERE "s"."Name" = 'Ocean Star')
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT EXISTS (
+          SELECT 1
+          FROM "Users" AS "u"
+          WHERE "u"."Username" = 'admin')
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT EXISTS (
+          SELECT 1
+          FROM "Users" AS "u"
+          WHERE "u"."Username" = 'guest')
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (3ms) [Parameters=[@ship_Name='?' (Size = 14)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+      FROM "Ships" AS "s"
+      WHERE "s"."Name" = @ship_Name
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@ship_Name='?' (Size = 15)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+      FROM "Ships" AS "s"
+      WHERE "s"."Name" = @ship_Name
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@ship_Name='?' (Size = 10)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+      FROM "Ships" AS "s"
+      WHERE "s"."Name" = @ship_Name
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@ship_Name='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+      FROM "Ships" AS "s"
+      WHERE "s"."Name" = @ship_Name
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@ship_Name='?' (Size = 14)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+      FROM "Ships" AS "s"
+      WHERE "s"."Name" = @ship_Name
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@ship_Name='?' (Size = 10)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+      FROM "Ships" AS "s"
+      WHERE "s"."Name" = @ship_Name
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@ship_Name='?' (Size = 11)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+      FROM "Ships" AS "s"
+      WHERE "s"."Name" = @ship_Name
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@ship_Name='?' (Size = 11)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+      FROM "Ships" AS "s"
+      WHERE "s"."Name" = @ship_Name
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@ship_Name='?' (Size = 11)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+      FROM "Ships" AS "s"
+      WHERE "s"."Name" = @ship_Name
+      LIMIT 1
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5000
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: C:\Users\mouaad.boustta\Documents\GitHub\Octopus\backend\Octopus.Api
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Assignments" AS "a"
+      INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      INNER JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "a"."StartDay"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Assignments" AS "a"
+      INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      INNER JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "a"."StartDay"
+warn: Microsoft.EntityFrameworkCore.Query[10103]
+      The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (11ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Assignments" AS "a"
+      INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      INNER JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "a"."StartDay"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Assignments" AS "a"
+      INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      INNER JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "a"."StartDay"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Assignments" AS "a"
+      INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      INNER JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "a"."StartDay"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (18ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Assignments" AS "a"
+      INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      INNER JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "a"."StartDay"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (4ms) [Parameters=[@ToLower='?' (Size = 7)], CommandType='Text', CommandTimeout='30']
+      SELECT "u"."Id", "u"."CreatedAtUtc", "u"."FullName", "u"."PasswordHash", "u"."Role", "u"."Username"
+      FROM "Users" AS "u"
+      WHERE lower("u"."Username") = @ToLower
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@shipId='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      WHERE "s"."Id" = @shipId
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size"
+      FROM "Docks" AS "d"
+      WHERE "d"."Id" = @p
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@dockId='?' (DbType = Int32), @endDay='?' (DbType = Int32), @startDay='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT EXISTS (
+          SELECT 1
+          FROM "Assignments" AS "a"
+          WHERE "a"."DockId" = @dockId AND "a"."StartDay" <= @endDay AND "a"."EndDay" >= @startDay)
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (3ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = Int32), @p2='?' (DbType = Int32), @p3='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "Assignments" ("DockId", "EndDay", "ShipId", "StartDay")
+      VALUES (@p0, @p1, @p2, @p3)
+      RETURNING "Id";
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@p1='?' (DbType = Int32), @p0='?' (Size = 8)], CommandType='Text', CommandTimeout='30']
+      UPDATE "Ships" SET "Status" = @p0
+      WHERE "Id" = @p1
+      RETURNING 1;
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@shipId='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      WHERE "s"."Id" = @shipId
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size"
+      FROM "Docks" AS "d"
+      WHERE "d"."Id" = @p
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@dockId='?' (DbType = Int32), @endDay='?' (DbType = Int32), @startDay='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT EXISTS (
+          SELECT 1
+          FROM "Assignments" AS "a"
+          WHERE "a"."DockId" = @dockId AND "a"."StartDay" <= @endDay AND "a"."EndDay" >= @startDay)
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = Int32), @p2='?' (DbType = Int32), @p3='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "Assignments" ("DockId", "EndDay", "ShipId", "StartDay")
+      VALUES (@p0, @p1, @p2, @p3)
+      RETURNING "Id";
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p1='?' (DbType = Int32), @p0='?' (Size = 8)], CommandType='Text', CommandTimeout='30']
+      UPDATE "Ships" SET "Status" = @p0
+      WHERE "Id" = @p1
+      RETURNING 1;
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Assignments" AS "a"
+      INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      INNER JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "a"."StartDay"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[@ToLower='?' (Size = 5)], CommandType='Text', CommandTimeout='30']
+      SELECT "u"."Id", "u"."CreatedAtUtc", "u"."FullName", "u"."PasswordHash", "u"."Role", "u"."Username"
+      FROM "Users" AS "u"
+      WHERE lower("u"."Username") = @ToLower
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Assignments" AS "a"
+      INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      INNER JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "a"."StartDay"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Assignments" AS "a"
+      INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      INNER JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "a"."StartDay"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Assignments" AS "a"
+      INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      INNER JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "a"."StartDay"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Assignments" AS "a"
+      INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      INNER JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "a"."StartDay"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Assignments" AS "a"
+      INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      INNER JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "a"."StartDay"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Assignments" AS "a"
+      INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      INNER JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "a"."StartDay"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Assignments" AS "a"
+      INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      INNER JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "a"."StartDay"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Assignments" AS "a"
+      INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      INNER JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "a"."StartDay"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Assignments" AS "a"
+      INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      INNER JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "a"."StartDay"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Assignments" AS "a"
+      INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      INNER JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "a"."StartDay"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Assignments" AS "a"
+      INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      INNER JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "a"."StartDay"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Assignments" AS "a"
+      INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      INNER JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "a"."StartDay"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Assignments" AS "a"
+      INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      INNER JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "a"."StartDay"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Assignments" AS "a"
+      INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      INNER JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "a"."StartDay"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "d"."Id", "d"."Name", "d"."Size", "s0"."Id", "s0"."DockId", "s0"."EndDay", "s0"."ShipId", "s0"."StartDay", "s0"."Id0", "s0"."ArrivalDay", "s0"."Duration", "s0"."Name", "s0"."Notes", "s0"."Size", "s0"."Status"
+      FROM "Docks" AS "d"
+      LEFT JOIN (
+          SELECT "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "s"."Id" AS "Id0", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status"
+          FROM "Assignments" AS "a"
+          INNER JOIN "Ships" AS "s" ON "a"."ShipId" = "s"."Id"
+      ) AS "s0" ON "d"."Id" = "s0"."DockId"
+      ORDER BY "d"."Size", "d"."Name", "d"."Id", "s0"."Id"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."Id", "t"."CurrentDay", "t"."PlanningHorizon"
+      FROM "TerminalStates" AS "t"
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Ships" AS "s"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Docks" AS "d"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Assignments" AS "a"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Id", "s"."ArrivalDay", "s"."Duration", "s"."Name", "s"."Notes", "s"."Size", "s"."Status", "a"."Id", "a"."DockId", "a"."EndDay", "a"."ShipId", "a"."StartDay", "d"."Id", "d"."Name", "d"."Size"
+      FROM "Ships" AS "s"
+      LEFT JOIN "Assignments" AS "a" ON "s"."Id" = "a"."ShipId"
+      LEFT JOIN "Docks" AS "d" ON "a"."DockId" = "d"."Id"
+      ORDER BY "s"."ArrivalDay", "s"."Name"

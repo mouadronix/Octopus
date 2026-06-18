@@ -1,34 +1,77 @@
 using Octopus.Api.Data;
+using Octopus.Api.DTOs;
 using Octopus.Api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Octopus.Api.Services;
 
-public sealed class ShipService(AppDbContext db)
+public class ShipService
 {
-    public IReadOnlyList<Ship> GetAll() => db.Ships;
+    private readonly AppDbContext _context;
 
-    public Ship? GetById(int id) => db.Ships.FirstOrDefault(ship => ship.Id == id);
-
-    public Ship Create(Ship ship)
+    public ShipService(AppDbContext context)
     {
-        ship.Id = db.Ships.Count == 0 ? 1 : db.Ships.Max(existing => existing.Id) + 1;
-        db.Ships.Add(ship);
+        _context = context;
+    }
+
+    public List<Ship> GetAll()
+    {
+        return _context.Ships
+            .Include(s => s.Assignment!)
+                .ThenInclude(a => a.Dock)
+            .OrderBy(s => s.ArrivalDay)
+            .ThenBy(s => s.Name)
+            .ToList();
+    }
+
+    public Ship? GetById(int id)
+    {
+        return _context.Ships
+            .Include(s => s.Assignment!)
+                .ThenInclude(a => a.Dock)
+            .FirstOrDefault(s => s.Id == id);
+    }
+
+
+// Creates a new ship with Pending status
+    public Ship Create(CreateShipRequest request)
+    {
+        var ship = new Ship
+        {
+            Name = request.Name,
+            Notes = request.Notes,
+            Size = request.Size,
+            ArrivalDay = request.ArrivalDay,
+            Duration = request.Duration,
+            Status = ShipStatus.Pending
+        };
+
+        _context.Ships.Add(ship);
+        _context.SaveChanges();
         return ship;
     }
 
+
+
+// Updates an existing ship
     public Ship? Update(int id, Action<Ship> apply)
     {
         var ship = GetById(id);
-        if (ship is null) return null;
+        if (ship == null) return null;
         apply(ship);
+        _context.SaveChanges();
         return ship;
     }
 
+
+
+// Deletes a ship by id
     public bool Delete(int id)
     {
         var ship = GetById(id);
-        if (ship is null) return false;
-        db.Ships.Remove(ship);
+        if (ship == null) return false;
+        _context.Ships.Remove(ship);
+        _context.SaveChanges();
         return true;
     }
 }
