@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Octopus.Api.Data;
 using Octopus.Api.Models;
 
@@ -44,13 +45,13 @@ public class SystemService
         state.CurrentDay++;
 
         var assignedShips = _context.Ships
+            .Include(s => s.Assignment)
             .Where(s => s.Status == ShipStatus.Assigned)
             .ToList();
 
         foreach (var ship in assignedShips)
         {
-            var assignment = _context.Assignments.FirstOrDefault(a => a.ShipId == ship.Id);
-            if (assignment != null && assignment.EndDay < state.CurrentDay)
+            if (ship.Assignment is not null && ship.Assignment.EndDay < state.CurrentDay)
             {
                 ship.Status = ShipStatus.Departed;
             }

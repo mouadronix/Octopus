@@ -107,29 +107,39 @@ public class AssignmentService
         if (ship is null || terminal is null || ship.Status != ShipStatus.Pending)
             return null;
 
-        // First-fit: scan docks in natural order, take first that fits
         var compatibleDocks = _context.Docks
             .Where(d => d.Size == ship.Size)
-            .OrderBy(d => d.Id)
             .ToList();
 
+        // Find earliest assignable day for each compatible dock
+        var candidates = new List<(Dock Dock, int StartDay, int AssignmentCount)>();
         foreach (var dock in compatibleDocks)
         {
             var (canAssign, startDay) = CanAssign(ship, dock, terminal);
             if (canAssign)
             {
-                return new SuggestionResponse
-                {
-                    DockId = dock.Id,
-                    DockName = dock.Name,
-                    StartDay = startDay,
-                    Message = startDay <= ship.ArrivalDay
-                        ? $"Available from Day {startDay}"
-                        : $"Delayed: earliest slot Day {startDay}"
-                };
+                int count = _context.Assignments.Count(a => a.DockId == dock.Id);
+                candidates.Add((dock, startDay, count));
             }
         }
 
-        return null;
+        if (candidates.Count == 0)
+            return null;
+
+        // Pick earliest start day, tie-break by fewest existing assignments
+        var best = candidates
+            .OrderBy(c => c.StartDay)
+            .ThenBy(c => c.AssignmentCount)
+            .First();
+
+        return new SuggestionResponse
+        {
+            DockId = best.Dock.Id,
+            DockName = best.Dock.Name,
+            StartDay = best.StartDay,
+            Message = best.StartDay <= ship.ArrivalDay
+                ? $"Available from Day {best.StartDay}"
+                : $"Delayed: earliest slot Day {best.StartDay}"
+        };
     }
 }
