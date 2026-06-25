@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Octopus.Api.DTOs;
 
-public class CreateShipRequest
+public class EditShipRequest
 {
     [Required]
     [MaxLength(100)]

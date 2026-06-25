@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Octopus.Api.Common;
 using Octopus.Api.Data;
 using Octopus.Api.DTOs;
 using Octopus.Api.Models;
@@ -24,109 +23,60 @@ public class AssignmentService
             .ToList();
     }
 
+    /// <summary>
+    /// First-fit greedy: find the earliest day a ship can be assigned to a dock.
+    /// Scans existing assignments chronologically, finds the first gap that fits.
+    /// </summary>
     public (bool CanAssign, int StartDay) CanAssign(Ship ship, Dock dock, TerminalState terminal)
     {
-        if (ship.ArrivalDay < terminal.CurrentDay || !CanFitShip(dock.Size, ship.Size))
-        {
+        if (ship.ArrivalDay < terminal.CurrentDay)
             return (false, -1);
-        }
+
+        if (ship.Duration < 1)
+            return (false, -1);
 
         var assignments = _context.Assignments
             .Where(a => a.DockId == dock.Id)
             .OrderBy(a => a.StartDay)
             .ToList();
 
-        var candidate = Math.Max(ship.ArrivalDay, terminal.CurrentDay);
-        var maxDay = terminal.CurrentDay + terminal.PlanningHorizon;
+        int candidate = Math.Max(ship.ArrivalDay, terminal.CurrentDay);
+        int maxDay = terminal.CurrentDay + terminal.PlanningHorizon;
 
-        foreach (var assignment in assignments)
+        foreach (var a in assignments)
         {
-            var candidateEnd = candidate + ship.Duration - 1;
-            if (candidateEnd < assignment.StartDay)
-            {
+            int candidateEnd = candidate + ship.Duration - 1;
+
+            if (candidateEnd < a.StartDay)
                 return (true, candidate);
-            }
 
-            candidate = assignment.EndDay + 1;
+            candidate = a.EndDay + 1;
         }
 
-        return candidate + ship.Duration - 1 <= maxDay
-            ? (true, candidate)
-            : (false, -1);
+        int finalEnd = candidate + ship.Duration - 1;
+        return finalEnd <= maxDay ? (true, candidate) : (false, -1);
     }
 
-    public SuggestionResponse? GetSuggestion(int shipId)
-    {
-        var ship = _context.Ships.Find(shipId);
-        if (ship == null || ship.Status != ShipStatus.Pending)
-        {
-            return null;
-        }
-
-        var terminal = GetOrCreateTerminalState();
-
-        var best = _context.Docks
-            .AsEnumerable()
-            .Where(dock => CanFitShip(dock.Size, ship.Size))
-            .Select(dock => new
-            {
-                Dock = dock,
-                Result = CanAssign(ship, dock, terminal)
-            })
-            .Where(item => item.Result.CanAssign)
-            .OrderBy(item => item.Result.StartDay)
-            .ThenBy(item => SizeRank(item.Dock.Size))
-            .ThenBy(item => item.Dock.Name)
-            .FirstOrDefault();
-
-        if (best == null)
-        {
-            return null;
-        }
-
-        return new SuggestionResponse
-        {
-            DockId = best.Dock.Id,
-            DockName = best.Dock.Name,
-            StartDay = best.Result.StartDay,
-            Message = best.Result.StartDay <= ship.ArrivalDay
-                ? $"Available from Day {best.Result.StartDay}"
-                : $"Delayed: earliest slot Day {best.Result.StartDay}"
-        };
-    }
-
-    public Result<Assignment> AssignShip(int shipId, int dockId)
+    public Assignment? AssignShip(int shipId, int dockId)
     {
         var ship = _context.Ships
             .Include(s => s.Assignment)
             .FirstOrDefault(s => s.Id == shipId);
-        if (ship == null)
-        {
-            return Result<Assignment>.Fail("SHIP_NOT_FOUND", "Ship not found");
-        }
-
-        if (ship.Status != ShipStatus.Pending || ship.Assignment != null)
-        {
-            return Result<Assignment>.Fail("SHIP_NOT_PENDING", "Ship is not pending");
-        }
-
         var dock = _context.Docks.Find(dockId);
-        if (dock == null)
-        {
-            return Result<Assignment>.Fail("DOCK_NOT_FOUND", "Dock not found");
-        }
+        var terminal = _context.TerminalStates.FirstOrDefault();
 
-        if (!CanFitShip(dock.Size, ship.Size))
-        {
-            return Result<Assignment>.Fail("SIZE_MISMATCH", "Dock size does not fit ship size");
-        }
+        if (ship is null || dock is null || terminal is null)
+            return null;
 
-        var terminal = GetOrCreateTerminalState();
+        if (ship.Status != ShipStatus.Pending || ship.Assignment is not null)
+            return null;
+
+        if (dock.Size != ship.Size)
+            return null;
+
         var (canAssign, startDay) = CanAssign(ship, dock, terminal);
         if (!canAssign)
-        {
-            return Result<Assignment>.Fail("NO_SLOT", "No available slot for this ship");
-        }
+            return null;
 
         using var transaction = _context.Database.BeginTransaction();
         try
@@ -139,12 +89,12 @@ public class AssignmentService
                 EndDay = startDay + ship.Duration - 1
             };
 
-            _context.Assignments.Add(assignment);
             ship.Status = ShipStatus.Assigned;
+            _context.Assignments.Add(assignment);
             _context.SaveChanges();
             transaction.Commit();
 
-            return Result<Assignment>.Ok(assignment);
+            return assignment;
         }
         catch
         {
@@ -153,34 +103,47 @@ public class AssignmentService
         }
     }
 
-    private TerminalState GetOrCreateTerminalState()
+    public SuggestionResponse? GetSuggestion(int shipId)
     {
+        var ship = _context.Ships.Find(shipId);
         var terminal = _context.TerminalStates.FirstOrDefault();
-        if (terminal != null)
+
+        if (ship is null || terminal is null || ship.Status != ShipStatus.Pending)
+            return null;
+
+        var compatibleDocks = _context.Docks
+            .Where(d => d.Size == ship.Size)
+            .ToList();
+
+        // Find earliest assignable day for each compatible dock
+        var candidates = new List<(Dock Dock, int StartDay, int AssignmentCount)>();
+        foreach (var dock in compatibleDocks)
         {
-            return terminal;
+            var (canAssign, startDay) = CanAssign(ship, dock, terminal);
+            if (canAssign)
+            {
+                int count = _context.Assignments.Count(a => a.DockId == dock.Id);
+                candidates.Add((dock, startDay, count));
+            }
         }
 
-        terminal = new TerminalState { CurrentDay = 1, PlanningHorizon = 30 };
-        _context.TerminalStates.Add(terminal);
-        _context.SaveChanges();
-        return terminal;
-    }
+        if (candidates.Count == 0)
+            return null;
 
-    private static bool CanFitShip(ShipSize dockSize, ShipSize shipSize)
-    {
-        return SizeRank(dockSize) >= SizeRank(shipSize);
-    }
+        // Pick earliest start day, tie-break by fewest existing assignments
+        var best = candidates
+            .OrderBy(c => c.StartDay)
+            .ThenBy(c => c.AssignmentCount)
+            .First();
 
-    private static int SizeRank(ShipSize size)
-    {
-        return size switch
+        return new SuggestionResponse
         {
-            ShipSize.S => 1,
-            ShipSize.M => 2,
-            ShipSize.L => 3,
-            ShipSize.XL => 4,
-            _ => 0
+            DockId = best.Dock.Id,
+            DockName = best.Dock.Name,
+            StartDay = best.StartDay,
+            Message = best.StartDay <= ship.ArrivalDay
+                ? $"Available from Day {best.StartDay}"
+                : $"Delayed: earliest slot Day {best.StartDay}"
         };
     }
 }

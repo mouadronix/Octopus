@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Octopus.Api.Models;
 
 public class Ship
@@ -8,6 +10,7 @@ public class Ship
     public ShipSize Size { get; set; }
     public ShipStatus Status { get; set; } = ShipStatus.Pending;
     public int ArrivalDay { get; set; }
+    [Range(3, 15)]
     public int Duration { get; set; }
     public string ImageUrl { get; set; } = string.Empty;
 

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Octopus.Api.Data;
 using Octopus.Api.Models;
 
@@ -35,16 +36,16 @@ public class SystemService
     public SystemState AdvanceDay()
     {
         var terminal = GetOrCreateTerminalState();
-        terminal.CurrentDay += 1;
+        terminal.CurrentDay++;
 
         var assignedShips = _context.Ships
+            .Include(s => s.Assignment)
             .Where(s => s.Status == ShipStatus.Assigned)
             .ToList();
 
         foreach (var ship in assignedShips)
         {
-            var assignment = _context.Assignments.FirstOrDefault(a => a.ShipId == ship.Id);
-            if (assignment != null && assignment.EndDay < terminal.CurrentDay)
+            if (ship.Assignment is not null && ship.Assignment.EndDay < terminal.CurrentDay)
             {
                 ship.Status = ShipStatus.Departed;
             }
@@ -57,10 +58,8 @@ public class SystemService
     private TerminalState GetOrCreateTerminalState()
     {
         var terminal = _context.TerminalStates.FirstOrDefault();
-        if (terminal != null)
-        {
+        if (terminal is not null)
             return terminal;
-        }
 
         terminal = new TerminalState { CurrentDay = 1, PlanningHorizon = 30 };
         _context.TerminalStates.Add(terminal);

@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Octopus.Api.DTOs;
-using Octopus.Api.Models;
 using Octopus.Api.Services;
 
 namespace Octopus.Api.Controllers;
@@ -16,30 +14,14 @@ public class AssignmentsController : ControllerBase
         _assignmentService = assignmentService;
     }
 
+    // GET: api/assignments
     [HttpGet]
     public IActionResult GetAll()
     {
         return Ok(_assignmentService.GetAll().Select(ToDto));
     }
 
-    [HttpPost]
-    public IActionResult Create([FromBody] AssignShipRequest request)
-    {
-        if (!ModelState.IsValid)
-        {
-            return ValidationProblem(ModelState);
-        }
-
-        var result = _assignmentService.AssignShip(request.ShipId, request.DockId);
-        if (!result.IsSuccess || result.Value == null)
-        {
-            return BadRequest(new { code = result.ErrorCode, message = result.ErrorMessage });
-        }
-
-        return CreatedAtAction(nameof(GetAll), new { id = result.Value.Id }, ToDto(result.Value));
-    }
-
-    private static object ToDto(Assignment assignment)
+    private static object ToDto(Models.Assignment assignment)
     {
         return new
         {
