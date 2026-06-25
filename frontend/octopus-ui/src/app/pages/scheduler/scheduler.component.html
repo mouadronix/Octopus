@@ -95,7 +95,7 @@
 
             <div class="compatible-inline">
               <span>Compatible Berths</span>
-              <strong *ngIf="getCompatibleBerths(ship).length; else noBerths">
+              <strong *ngIf="getCompatibleBerthCount(ship) > 0; else noBerths">
                 {{ getCompatibleBerthNames(ship) }}
               </strong>
               <ng-template #noBerths><strong>None</strong></ng-template>
@@ -153,22 +153,23 @@
 
         <section class="compatible-list">
           <h3>Compatible Berths</h3>
+          <p *ngIf="isLoadingSuggestion" class="no-compatible">Loading compatible berths...</p>
           <button
-            *ngFor="let berth of selectedCompatibleBerths; trackBy: trackByBerth"
+            *ngFor="let berth of compatibleBerths; trackBy: trackByBerth"
             type="button"
             class="berth-option"
-            [class.active]="selectedBerthId === berth.id"
-            (click)="selectBerth(berth.id)"
+            [class.active]="selectedBerthId === berth.dockId"
+            (click)="selectBerth(berth.dockId)"
           >
             <span class="berth-icon">{{ berth.size }}</span>
             <span>
-              <strong>{{ berth.name }}</strong>
-              <small>{{ berth.size }} berth · Available from Day {{ berth.availableFromDay }}</small>
+              <strong>{{ berth.dockName }}</strong>
+              <small>{{ berth.size }} berth · Available from Day {{ berth.startDay }}</small>
             </span>
-            <span class="checkmark" *ngIf="selectedBerthId === berth.id">✓</span>
+            <span class="checkmark" *ngIf="selectedBerthId === berth.dockId">✓</span>
           </button>
 
-          <p *ngIf="selectedCompatibleBerths.length === 0" class="no-compatible">
+          <p *ngIf="!isLoadingSuggestion && compatibleBerths.length === 0" class="no-compatible">
             No compatible berth is currently available for this ship.
           </p>
         </section>
@@ -178,11 +179,11 @@
           <dl>
             <div>
               <dt>Berth</dt>
-              <dd>{{ selectedBerth.name }}</dd>
+              <dd>{{ selectedBerth.dockName }}</dd>
             </div>
             <div>
               <dt>Start Day</dt>
-              <dd>{{ selectedBerth.availableFromDay }}</dd>
+              <dd>{{ selectedBerth.startDay }}</dd>
             </div>
             <div>
               <dt>End Day</dt>
@@ -191,7 +192,7 @@
           </dl>
         </section>
 
-        <button type="button" class="confirm-button" [disabled]="isAssigning || !selectedBerth" (click)="confirmAssignment()">
+        <button type="button" class="confirm-button" [disabled]="isAssigning || isLoadingSuggestion || !selectedBerth" (click)="confirmAssignment()">
           Confirm Assignment
         </button>
       </aside>

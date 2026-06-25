@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { Berth } from '../../models/berth.model';
-import { Ship, ShipSize, ShipStatus } from '../../models/ship.model';
+import { CompatibleBerth, Ship, ShipSize, ShipStatus, SuggestionResponse } from '../../models/ship.model';
 import { AssignmentService } from '../../services/assignment.service';
 import { BerthService } from '../../services/berth.service';
 import { ShipService } from '../../services/ship.service';
@@ -19,14 +19,6 @@ interface AssignmentMetric {
   caption: string;
   tone: 'orange' | 'purple' | 'blue' | 'green';
   trend: number[];
-}
-
-interface CompatibleBerth {
-  id: number;
-  name: string;
-  size: 'XL' | 'L' | 'M' | 'S';
-  availableFromDay: number;
-  available: boolean;
 }
 
 @Component({
@@ -48,8 +40,12 @@ export class SchedulerComponent implements OnInit {
   sortOption: SortOption = 'ArrivalAsc';
   isLoading = true;
   isAssigning = false;
+  isLoadingSuggestion = false;
   message = '';
   messageType: 'success' | 'error' = 'success';
+
+  // Compatible berths from the API for the selected ship
+  compatibleBerths: CompatibleBerth[] = [];
 
   readonly sizeOptions: SizeFilter[] = ['All', 'XL', 'L', 'M', 'S'];
   readonly dayOptions: Array<{ label: string; value: DayFilter }> = [
@@ -98,12 +94,8 @@ export class SchedulerComponent implements OnInit {
       .sort((left, right) => this.compareShips(left, right));
   }
 
-  get selectedCompatibleBerths(): CompatibleBerth[] {
-    return this.selectedShip ? this.getCompatibleBerths(this.selectedShip) : [];
-  }
-
   get selectedBerth(): CompatibleBerth | null {
-    return this.selectedCompatibleBerths.find((berth) => berth.id === this.selectedBerthId) ?? null;
+    return this.compatibleBerths.find((berth) => berth.dockId === this.selectedBerthId) ?? null;
   }
 
   get metrics(): AssignmentMetric[] {
@@ -133,7 +125,9 @@ export class SchedulerComponent implements OnInit {
         this.berths = berths;
         this.currentDay = state.currentDay;
         this.selectedShip = this.filteredShips[0] ?? null;
-        this.selectDefaultBerth();
+        if (this.selectedShip) {
+          this.loadSuggestion(this.selectedShip.id);
+        }
         this.isLoading = false;
       },
       error: () => {
@@ -145,19 +139,23 @@ export class SchedulerComponent implements OnInit {
 
   selectShip(ship: Ship): void {
     this.selectedShip = ship;
-    this.selectDefaultBerth();
     this.message = '';
+    this.loadSuggestion(ship.id);
   }
 
-  selectBerth(berthId: number): void {
-    this.selectedBerthId = berthId;
+  selectBerth(dockId: number): void {
+    this.selectedBerthId = dockId;
     this.message = '';
   }
 
   applyFilters(): void {
     if (!this.selectedShip || !this.filteredShips.some((ship) => ship.id === this.selectedShip?.id)) {
       this.selectedShip = this.filteredShips[0] ?? null;
-      this.selectDefaultBerth();
+      if (this.selectedShip) {
+        this.loadSuggestion(this.selectedShip.id);
+      } else {
+        this.compatibleBerths = [];
+      }
     }
   }
 
@@ -168,9 +166,9 @@ export class SchedulerComponent implements OnInit {
     }
 
     this.isAssigning = true;
-    this.assignmentService.createAssignment({ shipId: this.selectedShip.id, dockId: this.selectedBerth.id }).subscribe({
+    this.assignmentService.createAssignment({ shipId: this.selectedShip.id, dockId: this.selectedBerth.dockId }).subscribe({
       next: () => {
-        this.showMessage(`${this.selectedShip?.name} assigned to ${this.selectedBerth?.name}.`, 'success');
+        this.showMessage(`${this.selectedShip?.name} assigned to ${this.selectedBerth?.dockName}.`, 'success');
         this.isAssigning = false;
         this.loadAssignments();
       },
@@ -181,25 +179,17 @@ export class SchedulerComponent implements OnInit {
     });
   }
 
-  getCompatibleBerths(ship: Ship): CompatibleBerth[] {
-    const startDay = Math.max(ship.arrivalDay, this.currentDay);
-    const endDay = startDay + ship.duration - 1;
-
-    return this.berths
-      .filter((berth) => this.canFitShip(berth.size, ship.size))
-      .map((berth) => ({
-        id: berth.id,
-        name: berth.name,
-        size: this.normalizeSize(berth.size),
-        availableFromDay: startDay,
-        available: !this.hasConflict(berth, startDay, endDay)
-      }))
-      .filter((berth) => berth.available)
-      .sort((left, right) => this.sizeRank(left.size) - this.sizeRank(right.size) || left.name.localeCompare(right.name));
+  /**
+   * Count compatible berths by size only (for the ship list cards).
+   * This is a lightweight client-side check — no conflict detection.
+   */
+  getCompatibleBerthCount(ship: Ship): number {
+    return this.berths.filter((berth) => this.sizeRank(this.normalizeSize(berth.size)) >= this.sizeRank(this.normalizeSize(ship.size))).length;
   }
 
   getCompatibleBerthNames(ship: Ship): string {
-    return this.getCompatibleBerths(ship)
+    return this.berths
+      .filter((berth) => this.sizeRank(this.normalizeSize(berth.size)) >= this.sizeRank(this.normalizeSize(ship.size)))
       .slice(0, 4)
       .map((berth) => berth.name)
       .join(', ');
@@ -254,15 +244,29 @@ export class SchedulerComponent implements OnInit {
   }
 
   trackByBerth(_index: number, berth: CompatibleBerth): number {
-    return berth.id;
+    return berth.dockId;
   }
 
-  private selectDefaultBerth(): void {
-    this.selectedBerthId = this.selectedCompatibleBerths[0]?.id ?? 0;
-  }
+  /**
+   * Load scheduling suggestion from the API for the selected ship.
+   * The API returns the best suggestion + all compatible berths with availability.
+   */
+  private loadSuggestion(shipId: number): void {
+    this.isLoadingSuggestion = true;
+    this.compatibleBerths = [];
+    this.selectedBerthId = 0;
 
-  private hasConflict(berth: Berth, startDay: number, endDay: number): boolean {
-    return (berth.assignments ?? []).some((assignment) => assignment.startDay <= endDay && assignment.endDay >= startDay);
+    this.shipService.getSuggestion(shipId).subscribe({
+      next: (suggestion: SuggestionResponse) => {
+        this.compatibleBerths = suggestion.compatibleBerths;
+        this.selectedBerthId = this.compatibleBerths[0]?.dockId ?? 0;
+        this.isLoadingSuggestion = false;
+      },
+      error: () => {
+        this.compatibleBerths = [];
+        this.isLoadingSuggestion = false;
+      }
+    });
   }
 
   private compareShips(left: Ship, right: Ship): number {
@@ -270,10 +274,6 @@ export class SchedulerComponent implements OnInit {
     if (this.sortOption === 'SizeDesc') return this.sizeRank(this.normalizeSize(right.size)) - this.sizeRank(this.normalizeSize(left.size));
     if (this.sortOption === 'NameAsc') return left.name.localeCompare(right.name);
     return left.arrivalDay - right.arrivalDay || left.name.localeCompare(right.name);
-  }
-
-  private canFitShip(berthSize: ShipSize, shipSize: ShipSize): boolean {
-    return this.sizeRank(this.normalizeSize(berthSize)) >= this.sizeRank(this.normalizeSize(shipSize));
   }
 
   private sizeRank(size: 'XL' | 'L' | 'M' | 'S'): number {
