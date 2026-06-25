@@ -1,0 +1,23 @@
+<svg width="640" height="400" viewBox="0 0 640 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="400" fill="#07111B"/>
+  <rect width="640" height="400" fill="url(#grid)" opacity=".32"/>
+  <circle cx="512" cy="92" r="150" fill="#13D7FF" opacity=".08"/>
+  <circle cx="156" cy="310" r="130" fill="#3A7DFF" opacity=".08"/>
+  <path d="M111 275C136 290 162 290 187 275C212 290 238 290 263 275C288 290 314 290 339 275C364 290 390 290 415 275C440 290 466 290 491 275C516 290 542 290 567 275" stroke="#2A5D7F" stroke-width="10" stroke-linecap="round"/>
+  <path d="M82 210H558L505 306H136L82 210Z" fill="#DCEFFF"/>
+  <path d="M115 226H525L489 287H151L115 226Z" fill="#12BFE6"/>
+  <path d="M160 210V120H402V210H160Z" fill="#EAF7FF"/>
+  <path d="M190 120V78H320V120H190Z" fill="#DCEFFF"/>
+  <path d="M218 94H292" stroke="#12BFE6" stroke-width="16" stroke-linecap="round"/>
+  <path d="M198 150H238M270 150H310M342 150H382M198 182H238M270 182H310M342 182H382" stroke="#0D3A5A" stroke-width="18" stroke-linecap="round"/>
+  <path d="M85 210H555" stroke="#03131D" stroke-width="8" stroke-linecap="round"/>
+  <path d="M138 306H505" stroke="#03131D" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="470" cy="154" r="30" fill="#07111B" stroke="#13D7FF" stroke-width="8"/>
+  <path d="M470 127V181M446 154H494" stroke="#13D7FF" stroke-width="8" stroke-linecap="round"/>
+  <text x="320" y="356" text-anchor="middle" fill="#89A7C7" font-family="monospace" font-size="22" letter-spacing="6">OCTOPUS SHIP</text>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" stroke="#13D7FF" stroke-opacity=".18" stroke-width="1"/>
+    </pattern>
+  </defs>
+</svg>

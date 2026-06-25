@@ -9,11 +9,11 @@ export interface Ship {
   status: ShipStatus;
   arrivalDay: number;
   duration: number;
+  imageUrl: string;
   berthName?: string | null;
   assignmentId?: number | null;
   assignmentStartDay?: number | null;
   assignmentEndDay?: number | null;
-  imageUrl?: string | null;
 }
 
 export interface CreateShipRequest {

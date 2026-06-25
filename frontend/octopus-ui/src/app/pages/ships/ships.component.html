@@ -1,262 +1,142 @@
-<section class="new-ship-page">
-  <main class="ship-workflow">
-    <header class="page-heading">
-      <h1>New Ship</h1>
-      <p>Register a new ship to the system. Automatically generated details are shown below.</p>
-    </header>
+<section class="ships-page">
+  <header class="page-header">
+    <div>
+      <h1>Ships Registry</h1>
+      <p>View, filter, and manage all ships registered in the terminal system.</p>
+    </div>
 
-    <section class="stepper" aria-label="New ship steps">
-      <span class="step-line">
-        <span [style.width]="progressWidth"></span>
-      </span>
+    <a routerLink="/ships/new" class="primary-action">
+      <span aria-hidden="true">+</span>
+      New Ship
+    </a>
+  </header>
 
-      <button
-        *ngFor="let step of steps; trackBy: trackByStepNumber"
-        type="button"
-        [class.active]="currentStep === step.number"
-        [class.completed]="isCompleted(step.number)"
-        [class.locked]="!canAccessStep(step.number)"
-        (click)="setStep(step.number)"
-      >
-        <strong>{{ step.number }}</strong>
-        <span>{{ step.title }}</span>
-      </button>
+  <section class="metrics-grid" aria-label="Ship metrics">
+    <article *ngFor="let metric of metrics; trackBy: trackByMetric" class="metric-card" [ngClass]="metric.tone">
+      <span>{{ metric.label }}</span>
+      <strong>{{ metric.value }}</strong>
+    </article>
+  </section>
+
+  <section class="filters-panel" aria-label="Ship filters">
+    <label class="search-field">
+      Search
+      <input type="search" name="search" placeholder="Name, IMO, notes..." [(ngModel)]="searchTerm" />
+    </label>
+
+    <label>
+      Status
+      <select name="status" [(ngModel)]="statusFilter">
+        <option *ngFor="let status of statusOptions; trackBy: trackByOption" [ngValue]="status">{{ status }}</option>
+      </select>
+    </label>
+
+    <label>
+      Size
+      <select name="size" [(ngModel)]="sizeFilter">
+        <option *ngFor="let size of sizeOptions; trackBy: trackByOption" [ngValue]="size">{{ size }}</option>
+      </select>
+    </label>
+
+    <button type="button" class="secondary-action" (click)="resetFilters()">Reset</button>
+    <button type="button" class="secondary-action" (click)="loadShips()">Refresh</button>
+  </section>
+
+  <p *ngIf="errorMessage" class="state-message error">{{ errorMessage }}</p>
+  <p *ngIf="successMessage" class="state-message success">{{ successMessage }}</p>
+
+  <section *ngIf="isLoading" class="loading-state">Loading ships from backend...</section>
+
+  <section *ngIf="!isLoading" class="content-grid">
+    <section class="ships-table" aria-label="Ships list">
+      <table>
+        <thead>
+          <tr>
+            <th>Ship</th>
+            <th>IMO</th>
+            <th>Size</th>
+            <th>Arrival</th>
+            <th>Duration</th>
+            <th>Status</th>
+            <th>Berth</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let ship of filteredShips; trackBy: trackByShip"
+            [class.selected]="selectedShip?.id === ship.id"
+            (click)="selectShip(ship)"
+          >
+            <td class="ship-cell">
+              <span class="ship-thumb">
+                <img [src]="getShipImage(ship)" [alt]="ship.name" />
+              </span>
+              <strong>{{ ship.name }}</strong>
+            </td>
+            <td>{{ getImo(ship) }}</td>
+            <td><span class="size-badge">{{ normalizeSize(ship.size) }}</span></td>
+            <td>Day {{ ship.arrivalDay }}</td>
+            <td>{{ ship.duration }} days</td>
+            <td>
+              <span class="status-badge" [ngClass]="normalizeStatus(ship.status).toLowerCase()">
+                {{ normalizeStatus(ship.status) }}
+              </span>
+            </td>
+            <td>{{ ship.berthName || '-' }}</td>
+            <td>
+              <button type="button" class="delete-btn" (click)="deleteShip(ship); $event.stopPropagation()">Delete</button>
+            </td>
+          </tr>
+
+          <tr *ngIf="filteredShips.length === 0">
+            <td colspan="8" class="empty-row">No ships match the selected filters.</td>
+          </tr>
+        </tbody>
+      </table>
     </section>
 
-    <section class="carousel-shell">
-      <div class="carousel-track" [style.transform]="carouselTransform">
-        <article class="carousel-slide">
-          <section class="form-grid">
-            <article class="panel basic-panel">
-              <h2>Basic Information</h2>
-
-              <label>
-                Ship Name <span>*</span>
-                <input type="text" name="shipName" placeholder="Enter ship name" [(ngModel)]="shipName" />
-              </label>
-
-              <label>
-                IMO Number <em>(Optional)</em>
-                <input type="text" name="imoNumber" placeholder="Enter IMO number" [(ngModel)]="imoNumber" />
-              </label>
-
-              <label>
-                Notes <em>(Optional)</em>
-                <textarea
-                  name="notes"
-                  maxlength="200"
-                  placeholder="Enter any notes about the ship..."
-                  [(ngModel)]="notes"
-                ></textarea>
-                <small>{{ notesLength }} / 200</small>
-              </label>
-
-              <!-- ═══════════════════════════════════════════════════════════════════
-                   ZONE IMAGE NAVIRE (formulaire) — À compléter par le dev frontend
-                   ───────────────────────────────────────────────────────────────────
-                   Option A – URL directe (temporaire, pour tests) :
-                     Décommenter le label ci-dessous et brancher shipForm.imageUrl.
-                   Option B – Upload fichier :
-                     Remplacer par un <input type="file"> + logique d'envoi vers
-                     le backend (ex. POST /api/ships/{id}/image) et stocker l'URL
-                     retournée dans shipForm.imageUrl avant la soumission.
-                   ═══════════════════════════════════════════════════════════════════ -->
-              <!-- TODO (frontend-dev): décommenter ou remplacer selon la stratégie choisie
-              <label>
-                Ship Image URL <em>(Optional)</em>
-                <input type="url" name="imageUrl" placeholder="https://..." [(ngModel)]="imageUrl" />
-              </label>
-              -->
-            </article>
-
-            <article class="panel generated-panel">
-              <h2>Automatic Details</h2>
-
-              <div class="detail-card size-card">
-                <div>
-                  <span class="detail-icon ship-icon"></span>
-                  <div>
-                    <strong>Ship Size</strong>
-                    <p>Updates when the ship name changes</p>
-                  </div>
-                </div>
-                <b>{{ generatedDetails.size }}</b>
-              </div>
-
-              <div class="detail-card">
-                <div>
-                  <span class="detail-icon calendar-icon"></span>
-                  <div>
-                    <strong>Arrival Day</strong>
-                    <p>Generated from current simulation day</p>
-                  </div>
-                </div>
-                <b>{{ generatedDetails.arrivalDay }}</b>
-              </div>
-
-              <div class="detail-card">
-                <div>
-                  <span class="detail-icon clock-icon"></span>
-                  <div>
-                    <strong>Occupation Duration</strong>
-                    <p>Generated from size and rules</p>
-                  </div>
-                </div>
-                <b>{{ generatedDetails.duration }} <small>Days</small></b>
-              </div>
-            </article>
-          </section>
-        </article>
-
-        <article class="carousel-slide">
-          <section class="details-layout">
-            <article class="panel details-panel">
-              <h2>Ship Details Preview</h2>
-
-              <div class="generated-summary">
-                <div>
-                  <span>Ship</span>
-                  <strong>{{ cleanShipName }}</strong>
-                </div>
-                <div>
-                  <span>Size</span>
-                  <strong>{{ generatedDetails.size }}</strong>
-                </div>
-                <div>
-                  <span>Arrival</span>
-                  <strong>Day {{ generatedDetails.arrivalDay }}</strong>
-                </div>
-                <div>
-                  <span>Duration</span>
-                  <strong>{{ generatedDetails.duration }} days</strong>
-                </div>
-              </div>
-
-              <section class="timeline-preview">
-                <span class="today">Day {{ currentDay }}</span>
-                <span class="arrival">Arrival {{ generatedDetails.arrivalDay }}</span>
-                <span class="departure">Departure {{ generatedDetails.arrivalDay + generatedDetails.duration }}</span>
-              </section>
-            </article>
-
-            <article class="panel notes-review">
-              <h2>Review Notes</h2>
-              <p>{{ notes || 'No notes added for this ship.' }}</p>
-              <dl>
-                <div>
-                  <dt>IMO</dt>
-                  <dd>{{ imoNumber || 'Optional' }}</dd>
-                </div>
-                <div>
-                  <dt>Status</dt>
-                  <dd>Pending</dd>
-                </div>
-              </dl>
-            </article>
-          </section>
-        </article>
-
-        <article class="carousel-slide">
-          <section class="confirmation-layout">
-            <article class="panel confirmation-card">
-              <h2>Confirmation</h2>
-              <p class="confirm-copy">Confirm the generated details before creating the ship.</p>
-
-              <dl class="confirm-grid">
-                <div>
-                  <dt>Name</dt>
-                  <dd>{{ cleanShipName }}</dd>
-                </div>
-                <div>
-                  <dt>IMO</dt>
-                  <dd>{{ imoNumber || 'Optional' }}</dd>
-                </div>
-                <div>
-                  <dt>Size</dt>
-                  <dd>{{ generatedDetails.size }}</dd>
-                </div>
-                <div>
-                  <dt>Arrival</dt>
-                  <dd>Day {{ generatedDetails.arrivalDay }}</dd>
-                </div>
-                <div>
-                  <dt>Departure</dt>
-                  <dd>Day {{ generatedDetails.arrivalDay + generatedDetails.duration }}</dd>
-                </div>
-                <div>
-                  <dt>Duration</dt>
-                  <dd>{{ generatedDetails.duration }} days</dd>
-                </div>
-              </dl>
-            </article>
-
-            <article class="panel final-check">
-              <h2>Ready to Create</h2>
-              <p>The ship will be created with status <strong>Pending</strong>.</p>
-              <p>If the backend POST endpoint is unavailable, the frontend saves a local draft.</p>
-            </article>
-          </section>
-        </article>
-      </div>
-    </section>
-
-    <section class="info-callout">
-      <strong>How it works</strong>
-      <p>Ship size, arrival day, and occupation duration are generated automatically by deterministic rules.</p>
-    </section>
-
-    <p
-      *ngIf="feedbackMessage"
-      class="feedback"
-      [class.success]="feedbackType === 'success'"
-      [class.warning]="feedbackType === 'warning'"
-    >
-      {{ feedbackMessage }}
-    </p>
-
-    <footer class="workflow-actions">
-      <a routerLink="/operator" class="cancel-btn">Cancel</a>
-
-      <div>
-        <button *ngIf="currentStep > 1" type="button" class="secondary-btn" (click)="previousStep()">Back</button>
-        <button type="button" class="secondary-btn" (click)="resetForm()">Reset</button>
-        <button *ngIf="currentStep < 3" type="button" class="next-btn" (click)="nextStep()">
-          Next Step
-          <span aria-hidden="true">></span>
-        </button>
-        <button *ngIf="currentStep === 3" type="button" class="next-btn" [disabled]="isSaving" (click)="createShip()">
-          {{ isSaving ? 'Saving...' : 'Create Ship' }}
-        </button>
-      </div>
-    </footer>
-  </main>
-
-  <aside class="rules-sidebar">
-    <section class="side-panel">
-      <h2>Generation Rules</h2>
-      <article *ngFor="let rule of rules; trackBy: trackByRuleTitle" class="rule-card" [ngClass]="rule.tone">
-        <span></span>
-        <div>
-          <strong>{{ rule.title }}</strong>
-          <p>{{ rule.description }}</p>
+    <aside class="ship-details" aria-label="Selected ship details">
+      <ng-container *ngIf="selectedShip as ship; else noSelection">
+        <div class="detail-image">
+          <img [src]="getShipImage(ship)" [alt]="ship.name" />
         </div>
-      </article>
-    </section>
 
-    <section class="side-panel">
-      <h2>Size Categories</h2>
-      <article *ngFor="let category of sizeCategories; trackBy: trackBySize" class="size-row">
-        <b>{{ category.size }}</b>
-        <div>
-          <strong>{{ category.label }}</strong>
-          <p>{{ category.description }}</p>
-        </div>
-      </article>
-    </section>
+        <p class="eyebrow">Selected Ship</p>
+        <h2>{{ ship.name }}</h2>
+        <p class="detail-notes">{{ ship.notes || 'No notes available.' }}</p>
 
-    <section class="side-panel tips-panel">
-      <h2>Tips</h2>
-      <p>Make sure the ship name is unique for better tracking and management.</p>
-    </section>
-  </aside>
+        <dl>
+          <div>
+            <dt>IMO</dt>
+            <dd>{{ getImo(ship) }}</dd>
+          </div>
+          <div>
+            <dt>Size</dt>
+            <dd>{{ normalizeSize(ship.size) }}</dd>
+          </div>
+          <div>
+            <dt>Status</dt>
+            <dd>{{ normalizeStatus(ship.status) }}</dd>
+          </div>
+          <div>
+            <dt>Arrival</dt>
+            <dd>Day {{ ship.arrivalDay }}</dd>
+          </div>
+          <div>
+            <dt>Departure</dt>
+            <dd>Day {{ ship.arrivalDay + ship.duration }}</dd>
+          </div>
+          <div>
+            <dt>Berth</dt>
+            <dd>{{ ship.berthName || 'Not assigned' }}</dd>
+          </div>
+        </dl>
+      </ng-container>
+
+      <ng-template #noSelection>
+        <p class="empty-detail">Select a ship to see its details.</p>
+      </ng-template>
+    </aside>
+  </section>
 </section>

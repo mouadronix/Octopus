@@ -9,7 +9,7 @@ public class Ship
     public ShipStatus Status { get; set; } = ShipStatus.Pending;
     public int ArrivalDay { get; set; }
     public int Duration { get; set; }
-    public string? ImageUrl { get; set; }
+    public string ImageUrl { get; set; } = string.Empty;
 
     // Navigation property
     public Assignment? Assignment { get; set; }

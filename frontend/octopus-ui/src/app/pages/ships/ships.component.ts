@@ -1,35 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { of } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
+import { RouterLink } from '@angular/router';
+import { Ship, ShipSize, ShipStatus } from '../../models/ship.model';
 import { ShipService } from '../../services/ship.service';
 
-type ShipSizeValue = 'XL' | 'L' | 'M' | 'S';
-type FeedbackType = 'info' | 'success' | 'warning';
+type StatusFilter = 'All' | 'Pending' | 'Assigned' | 'Departed';
+type SizeFilter = 'All' | 'XL' | 'L' | 'M' | 'S';
 
-interface Step {
-  number: number;
-  title: string;
-}
-
-interface GeneratedDetails {
-  size: ShipSizeValue;
-  arrivalDay: number;
-  duration: number;
-}
-
-interface RuleCard {
-  title: string;
-  description: string;
-  tone: 'purple' | 'cyan' | 'green';
-}
-
-interface SizeCategory {
-  size: ShipSizeValue;
+interface ShipMetric {
   label: string;
-  description: string;
+  value: number;
+  tone: 'cyan' | 'orange' | 'green' | 'muted';
 }
 
 @Component({
@@ -39,205 +21,124 @@ interface SizeCategory {
   templateUrl: './ships.component.html',
   styleUrl: './ships.component.scss'
 })
-export class ShipsComponent {
-  currentStep = 1;
-  currentDay = 12;
-  shipName = '';
-  imoNumber = '';
-  notes = '';
-  isSaving = false;
-  feedbackMessage = '';
-  feedbackType: FeedbackType = 'info';
+export class ShipsComponent implements OnInit {
+  ships: Ship[] = [];
+  searchTerm = '';
+  statusFilter: StatusFilter = 'All';
+  sizeFilter: SizeFilter = 'All';
+  isLoading = true;
+  errorMessage = '';
+  successMessage = '';
+  selectedShip: Ship | null = null;
 
-  readonly steps: Step[] = [
-    { number: 1, title: 'Basic Information' },
-    { number: 2, title: 'Ship Details' },
-    { number: 3, title: 'Confirmation' }
-  ];
+  readonly statusOptions: StatusFilter[] = ['All', 'Pending', 'Assigned', 'Departed'];
+  readonly sizeOptions: SizeFilter[] = ['All', 'XL', 'L', 'M', 'S'];
+  readonly defaultShipImage = 'assets/default-ship.svg';
 
-  readonly rules: RuleCard[] = [
-    {
-      title: 'Ship Size',
-      description: 'Determined from ship name hash and system rules.',
-      tone: 'purple'
-    },
-    {
-      title: 'Arrival Day',
-      description: 'Calculated from current day and simulation rules.',
-      tone: 'cyan'
-    },
-    {
-      title: 'Occupation Duration',
-      description: 'Generated from ship size and deterministic randomization.',
-      tone: 'green'
-    }
-  ];
+  constructor(private readonly shipService: ShipService) {}
 
-  readonly sizeCategories: SizeCategory[] = [
-    { size: 'XL', label: 'Extra Large', description: 'For the largest vessels' },
-    { size: 'L', label: 'Large', description: 'For large vessels' },
-    { size: 'M', label: 'Medium', description: 'For medium vessels' },
-    { size: 'S', label: 'Small', description: 'For small vessels' }
-  ];
-
-  constructor(
-    private readonly shipService: ShipService,
-    private readonly router: Router
-  ) {}
-
-  get generatedDetails(): GeneratedDetails {
-    const hash = this.hashName(this.shipName || 'OCTOPUS');
-    const sizes: ShipSizeValue[] = ['XL', 'L', 'M', 'S'];
-    const size = sizes[hash % sizes.length];
-    const baseDuration: Record<ShipSizeValue, number> = { XL: 8, L: 6, M: 4, S: 2 };
-
-    return {
-      size,
-      arrivalDay: this.currentDay + 1 + (hash % 5),
-      duration: baseDuration[size] + (hash % 3)
-    };
+  ngOnInit(): void {
+    this.loadShips();
   }
 
-  get notesLength(): number {
-    return this.notes.length;
+  get metrics(): ShipMetric[] {
+    return [
+      { label: 'Total Ships', value: this.ships.length, tone: 'cyan' },
+      { label: 'Pending', value: this.countByStatus('Pending'), tone: 'orange' },
+      { label: 'Assigned', value: this.countByStatus('Assigned'), tone: 'green' },
+      { label: 'Departed', value: this.countByStatus('Departed'), tone: 'muted' }
+    ];
   }
 
-  get canGoNext(): boolean {
-    return this.shipName.trim().length >= 2;
+  get filteredShips(): Ship[] {
+    const term = this.searchTerm.trim().toLowerCase();
+
+    return this.ships.filter((ship) => {
+      const matchesSearch =
+        !term ||
+        ship.name.toLowerCase().includes(term) ||
+        this.getImo(ship).toLowerCase().includes(term) ||
+        (ship.notes ?? '').toLowerCase().includes(term);
+      const matchesStatus = this.statusFilter === 'All' || this.normalizeStatus(ship.status) === this.statusFilter;
+      const matchesSize = this.sizeFilter === 'All' || this.normalizeSize(ship.size) === this.sizeFilter;
+      return matchesSearch && matchesStatus && matchesSize;
+    });
   }
 
-  get cleanShipName(): string {
-    return this.shipName.trim() || 'Not provided';
+  loadShips(): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.shipService.getShips().subscribe({
+      next: (ships) => {
+        this.ships = ships;
+        this.selectedShip = ships[0] ?? null;
+        this.isLoading = false;
+      },
+      error: () => {
+        this.errorMessage = 'Unable to load ships. Start the backend API and try again.';
+        this.isLoading = false;
+      }
+    });
   }
 
-  get carouselTransform(): string {
-    return `translateX(-${(this.currentStep - 1) * 100}%)`;
+  selectShip(ship: Ship): void {
+    this.selectedShip = ship;
   }
 
-  get progressWidth(): string {
-    return `${((this.currentStep - 1) / (this.steps.length - 1)) * 100}%`;
+  deleteShip(ship: Ship): void {
+    this.shipService.deleteShip(ship.id).subscribe({
+      next: () => {
+        this.successMessage = `${ship.name} deleted successfully.`;
+        this.loadShips();
+      },
+      error: () => {
+        this.errorMessage = `Unable to delete ${ship.name}.`;
+      }
+    });
   }
 
-  setStep(step: number): void {
-    if (!this.canAccessStep(step)) {
-      this.setFeedback('Insert a ship name before continuing.', 'warning');
-      return;
-    }
-
-    this.currentStep = step;
-    this.feedbackMessage = '';
+  resetFilters(): void {
+    this.searchTerm = '';
+    this.statusFilter = 'All';
+    this.sizeFilter = 'All';
   }
 
-  nextStep(): void {
-    if (!this.canGoNext) {
-      this.setFeedback('Insert a ship name before continuing.', 'warning');
-      return;
-    }
-
-    this.currentStep = Math.min(this.currentStep + 1, this.steps.length);
-    this.feedbackMessage = '';
+  getImo(ship: Ship): string {
+    const match = ship.notes?.match(/IMO:\s*([A-Za-z0-9-]+)/i);
+    return match?.[1] ?? `NF-${String(ship.id).padStart(4, '0')}`;
   }
 
-  previousStep(): void {
-    this.currentStep = Math.max(this.currentStep - 1, 1);
-    this.feedbackMessage = '';
+  getShipImage(ship: Ship): string {
+    return ship.imageUrl?.trim() || this.defaultShipImage;
   }
 
-  createShip(): void {
-    if (!this.canGoNext) {
-      this.currentStep = 1;
-      this.setFeedback('Ship name is required.', 'warning');
-      return;
-    }
-
-    const details = this.generatedDetails;
-
-    this.isSaving = true;
-    this.feedbackMessage = '';
-    this.shipService
-      .createShip({
-        name: this.shipName.trim(),
-        notes: this.notes.trim(),
-        size: details.size,
-        arrivalDay: details.arrivalDay,
-        duration: details.duration
-      })
-      .pipe(
-        catchError(() => of(null)),
-        finalize(() => {
-          this.isSaving = false;
-        })
-      )
-      .subscribe((ship) => {
-        if (ship) {
-          void this.router.navigate(['/operator']);
-          return;
-        }
-
-        this.saveLocalDraft(details);
-        this.setFeedback('Backend create endpoint is not ready yet. Ship saved locally as a frontend draft.', 'warning');
-      });
+  normalizeStatus(status: ShipStatus): 'Pending' | 'Assigned' | 'Departed' {
+    if (status === 1 || status === 'Assigned') return 'Assigned';
+    if (status === 2 || status === 'Departed') return 'Departed';
+    return 'Pending';
   }
 
-  resetForm(): void {
-    this.currentStep = 1;
-    this.shipName = '';
-    this.imoNumber = '';
-    this.notes = '';
-    this.feedbackMessage = '';
+  normalizeSize(size: ShipSize): 'XL' | 'L' | 'M' | 'S' {
+    if (size === 0 || size === 'XL') return 'XL';
+    if (size === 1 || size === 'L') return 'L';
+    if (size === 2 || size === 'M') return 'M';
+    return 'S';
   }
 
-  canAccessStep(step: number): boolean {
-    return step === 1 || this.canGoNext;
+  trackByShip(_index: number, ship: Ship): number {
+    return ship.id;
   }
 
-  isCompleted(step: number): boolean {
-    return step < this.currentStep && this.canAccessStep(step);
+  trackByMetric(_index: number, metric: ShipMetric): string {
+    return metric.label;
   }
 
-  trackByStepNumber(_index: number, step: Step): number {
-    return step.number;
+  trackByOption(_index: number, option: string): string {
+    return option;
   }
 
-  trackByRuleTitle(_index: number, rule: RuleCard): string {
-    return rule.title;
-  }
-
-  trackBySize(_index: number, category: SizeCategory): ShipSizeValue {
-    return category.size;
-  }
-
-  private setFeedback(message: string, type: FeedbackType): void {
-    this.feedbackMessage = message;
-    this.feedbackType = type;
-  }
-
-  private saveLocalDraft(details: GeneratedDetails): void {
-    const key = 'octopus.localShips';
-    const current = JSON.parse(localStorage.getItem(key) || '[]') as unknown[];
-
-    localStorage.setItem(
-      key,
-      JSON.stringify([
-        {
-          id: Date.now(),
-          name: this.shipName.trim(),
-          imoNumber: this.imoNumber.trim(),
-          notes: this.notes.trim(),
-          status: 'Pending',
-          ...details,
-          createdAt: new Date().toISOString()
-        },
-        ...current
-      ])
-    );
-  }
-
-  private hashName(value: string): number {
-    return value
-      .trim()
-      .toUpperCase()
-      .split('')
-      .reduce((hash, char) => hash + char.charCodeAt(0), 0);
+  private countByStatus(status: StatusFilter): number {
+    return this.ships.filter((ship) => this.normalizeStatus(ship.status) === status).length;
   }
 }

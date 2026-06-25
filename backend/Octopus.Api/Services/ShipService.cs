@@ -1,7 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using Octopus.Api.Data;
 using Octopus.Api.DTOs;
 using Octopus.Api.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Octopus.Api.Services;
 
@@ -12,7 +12,7 @@ public class ShipService
     public ShipService(AppDbContext context)
     {
         _context = context;
-    } 
+    }
 
     public List<Ship> GetAll()
     {
@@ -32,8 +32,6 @@ public class ShipService
             .FirstOrDefault(s => s.Id == id);
     }
 
-
-// Creates a new ship with Pending status
     public Ship Create(CreateShipRequest request)
     {
         var ship = new Ship
@@ -43,8 +41,8 @@ public class ShipService
             Size = request.Size,
             ArrivalDay = request.ArrivalDay,
             Duration = request.Duration,
-            Status = ShipStatus.Pending,
-            ImageUrl = request.ImageUrl
+            ImageUrl = request.ImageUrl,
+            Status = ShipStatus.Pending
         };
 
         _context.Ships.Add(ship);
@@ -52,9 +50,6 @@ public class ShipService
         return ship;
     }
 
-
-
-// Updates an existing ship
     public Ship? Update(int id, Action<Ship> apply)
     {
         var ship = GetById(id);
@@ -64,9 +59,6 @@ public class ShipService
         return ship;
     }
 
-
-
-// Deletes a ship by id
     public bool Delete(int id)
     {
         var ship = GetById(id);

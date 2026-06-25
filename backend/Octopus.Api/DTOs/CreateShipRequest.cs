@@ -21,7 +21,5 @@ public class CreateShipRequest
     [Range(1, 90)]
     public int Duration { get; set; } = 1;
 
-    [Url]
-    [MaxLength(2048)]
-    public string? ImageUrl { get; set; }
+    public string ImageUrl { get; set; } = string.Empty;
 }
