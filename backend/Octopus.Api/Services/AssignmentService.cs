@@ -23,6 +23,10 @@ public class AssignmentService
             .ToList();
     }
 
+    /// <summary>
+    /// First-fit greedy: find the earliest day a ship can be assigned to a dock.
+    /// Scans existing assignments chronologically, finds the first gap that fits.
+    /// </summary>
     public (bool CanAssign, int StartDay) CanAssign(Ship ship, Dock dock, TerminalState terminal)
     {
         if (ship.ArrivalDay < terminal.CurrentDay)

@@ -12,6 +12,7 @@ public class Ship
     public int ArrivalDay { get; set; }
     [Range(3, 15)]
     public int Duration { get; set; }
+    public string ImageUrl { get; set; } = string.Empty;
 
     // Navigation property
     public Assignment? Assignment { get; set; }

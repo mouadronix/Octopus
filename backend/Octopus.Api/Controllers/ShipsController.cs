@@ -78,6 +78,7 @@ public class ShipsController : ControllerBase
             Status = ship.Status,
             ArrivalDay = ship.ArrivalDay,
             Duration = ship.Duration,
+            ImageUrl = ship.ImageUrl,
             BerthName = ship.Assignment?.Dock?.Name,
             AssignmentId = ship.Assignment?.Id,
             AssignmentStartDay = ship.Assignment?.StartDay,

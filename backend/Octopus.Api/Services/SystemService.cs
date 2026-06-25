@@ -15,34 +15,28 @@ public class SystemService
 
     public int GetCurrentDay()
     {
-        return _context.TerminalStates.First().CurrentDay;
+        return GetOrCreateTerminalState().CurrentDay;
     }
 
     public SystemState GetState()
     {
-        var terminal = _context.TerminalStates.FirstOrDefault();
+        var terminal = GetOrCreateTerminalState();
 
         return new SystemState
         {
             Environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development",
             ServerTimeUtc = DateTime.UtcNow,
-            CurrentDay = terminal?.CurrentDay ?? 1,
+            CurrentDay = terminal.CurrentDay,
             ShipCount = _context.Ships.Count(),
             BerthCount = _context.Docks.Count(),
-            ActiveAssignmentCount = _context.Assignments.Count()
+            ActiveAssignmentCount = _context.Assignments.Count(a => a.EndDay >= terminal.CurrentDay)
         };
     }
 
     public SystemState AdvanceDay()
     {
-        var state = _context.TerminalStates.FirstOrDefault();
-        if (state is null)
-        {
-            state = new TerminalState { CurrentDay = 1, PlanningHorizon = 30 };
-            _context.TerminalStates.Add(state);
-        }
-
-        state.CurrentDay++;
+        var terminal = GetOrCreateTerminalState();
+        terminal.CurrentDay++;
 
         var assignedShips = _context.Ships
             .Include(s => s.Assignment)
@@ -51,7 +45,7 @@ public class SystemService
 
         foreach (var ship in assignedShips)
         {
-            if (ship.Assignment is not null && ship.Assignment.EndDay < state.CurrentDay)
+            if (ship.Assignment is not null && ship.Assignment.EndDay < terminal.CurrentDay)
             {
                 ship.Status = ShipStatus.Departed;
             }
@@ -59,5 +53,17 @@ public class SystemService
 
         _context.SaveChanges();
         return GetState();
+    }
+
+    private TerminalState GetOrCreateTerminalState()
+    {
+        var terminal = _context.TerminalStates.FirstOrDefault();
+        if (terminal is not null)
+            return terminal;
+
+        terminal = new TerminalState { CurrentDay = 1, PlanningHorizon = 30 };
+        _context.TerminalStates.Add(terminal);
+        _context.SaveChanges();
+        return terminal;
     }
 }

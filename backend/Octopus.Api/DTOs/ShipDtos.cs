@@ -11,6 +11,7 @@ public class ShipListItem
     public ShipStatus Status { get; set; }
     public int ArrivalDay { get; set; }
     public int Duration { get; set; }
+    public string ImageUrl { get; set; } = string.Empty;
     public string? BerthName { get; set; }
     public int? AssignmentId { get; set; }
     public int? AssignmentStartDay { get; set; }

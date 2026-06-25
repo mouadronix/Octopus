@@ -1,257 +1,142 @@
 <section class="ships-page">
   <header class="page-header">
     <div>
-      <h1>Ships</h1>
-      <p>View and manage all registered ships in the system.</p>
+      <h1>Ships Registry</h1>
+      <p>View, filter, and manage all ships registered in the terminal system.</p>
     </div>
 
-    <button type="button" class="new-ship-button" (click)="openNewShip()">
+    <a routerLink="/ships/new" class="primary-action">
       <span aria-hidden="true">+</span>
       New Ship
-    </button>
+    </a>
   </header>
 
-  <section class="metrics-grid" aria-label="Ship summary">
+  <section class="metrics-grid" aria-label="Ship metrics">
     <article *ngFor="let metric of metrics; trackBy: trackByMetric" class="metric-card" [ngClass]="metric.tone">
-      <div class="metric-icon" aria-hidden="true">
-        <svg viewBox="0 0 48 48">
-          <path d="M7 30h34l-5 9H12z" />
-          <path d="M15 30V17h18v13" />
-          <path d="M20 17v-6h8v6" />
-          <path d="M12 39c3 0 3-2 6-2s3 2 6 2 3-2 6-2 3 2 6 2" />
-          <path d="M24 22v5M18 25h12" />
-        </svg>
-      </div>
-      <div>
-        <span>{{ metric.label }}</span>
-        <strong>{{ metric.value }}</strong>
-        <p>{{ metric.caption }}</p>
-      </div>
+      <span>{{ metric.label }}</span>
+      <strong>{{ metric.value }}</strong>
     </article>
   </section>
 
   <section class="filters-panel" aria-label="Ship filters">
     <label class="search-field">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="11" cy="11" r="7" />
-        <path d="m16 16 5 5" />
-      </svg>
-      <input
-        type="search"
-        name="search"
-        placeholder="Search ship name or IMO..."
-        [(ngModel)]="searchTerm"
-        (ngModelChange)="applyFilters()"
-      />
+      Search
+      <input type="search" name="search" placeholder="Name, IMO, notes..." [(ngModel)]="searchTerm" />
     </label>
 
     <label>
-      <span>Status</span>
-      <select name="status" [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
-        <option *ngFor="let status of statusOptions" [ngValue]="status">{{ status }}</option>
+      Status
+      <select name="status" [(ngModel)]="statusFilter">
+        <option *ngFor="let status of statusOptions; trackBy: trackByOption" [ngValue]="status">{{ status }}</option>
       </select>
     </label>
 
     <label>
-      <span>Ship Size</span>
-      <select name="size" [(ngModel)]="sizeFilter" (ngModelChange)="applyFilters()">
-        <option *ngFor="let size of sizeOptions" [ngValue]="size">{{ size }}</option>
+      Size
+      <select name="size" [(ngModel)]="sizeFilter">
+        <option *ngFor="let size of sizeOptions; trackBy: trackByOption" [ngValue]="size">{{ size }}</option>
       </select>
     </label>
 
-    <label>
-      <span>Arrival Day</span>
-      <input type="number" name="arrivalFrom" placeholder="From" [(ngModel)]="arrivalFrom" (ngModelChange)="applyFilters()" />
-    </label>
-
-    <label>
-      <span>&nbsp;</span>
-      <input type="number" name="arrivalTo" placeholder="To" [(ngModel)]="arrivalTo" (ngModelChange)="applyFilters()" />
-    </label>
-
-    <div class="filter-actions">
-      <button type="button" class="ghost-button" (click)="resetFilters()">Reset</button>
-      <button type="button" class="primary-button" (click)="applyFilters()">Filter</button>
-    </div>
+    <button type="button" class="secondary-action" (click)="resetFilters()">Reset</button>
+    <button type="button" class="secondary-action" (click)="loadShips()">Refresh</button>
   </section>
 
   <p *ngIf="errorMessage" class="state-message error">{{ errorMessage }}</p>
   <p *ngIf="successMessage" class="state-message success">{{ successMessage }}</p>
 
-  <section class="table-panel" aria-label="Registered ships">
-    <div *ngIf="isLoading" class="loading-state">Loading ships from backend...</div>
+  <section *ngIf="isLoading" class="loading-state">Loading ships from backend...</section>
 
-    <table *ngIf="!isLoading">
-      <thead>
-        <tr>
-          <th>
-            <button type="button" class="sort-button" (click)="toggleSort()">
-              Ship Name
-              <span aria-hidden="true">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
-            </button>
-          </th>
-          <th>IMO</th>
-          <th>Size</th>
-          <th>Arrival Day</th>
-          <th>Duration (Days)</th>
-          <th>Status</th>
-          <th>Berth</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let ship of pageShips; trackBy: trackByShip">
-          <td class="ship-cell">
-            <svg viewBox="0 0 48 48" aria-hidden="true">
-              <path d="M7 30h34l-5 9H12z" />
-              <path d="M15 30V17h18v13" />
-              <path d="M20 17v-6h8v6" />
-              <path d="M12 39c3 0 3-2 6-2s3 2 6 2 3-2 6-2 3 2 6 2" />
-            </svg>
-            <button type="button" (click)="viewShip(ship)">{{ ship.name }}</button>
-          </td>
-          <td>{{ getImo(ship) }}</td>
-          <td><span class="size-badge" [ngClass]="'size-' + normalizeSize(ship.size).toLowerCase()">{{ normalizeSize(ship.size) }}</span></td>
-          <td>{{ ship.arrivalDay }}</td>
-          <td>{{ ship.duration }}</td>
-          <td>
-            <span class="status-badge" [ngClass]="'status-' + normalizeStatus(ship.status).toLowerCase()">
-              {{ normalizeStatus(ship.status) }}
-            </span>
-          </td>
-          <td>{{ getBerth(ship) }}</td>
-          <td class="actions-cell">
-            <button type="button" title="View details" (click)="viewShip(ship)">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" />
-                <circle cx="12" cy="12" r="3" />
-              </svg>
-            </button>
-            <button type="button" title="Delete ship" (click)="deleteShip(ship)">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M4 7h16M9 7V4h6v3M7 7l1 14h8l1-14" />
-              </svg>
-            </button>
-          </td>
-        </tr>
-        <tr *ngIf="pageShips.length === 0">
-          <td colspan="8" class="empty-state">No ships match the selected filters.</td>
-        </tr>
-      </tbody>
-    </table>
+  <section *ngIf="!isLoading" class="content-grid">
+    <section class="ships-table" aria-label="Ships list">
+      <table>
+        <thead>
+          <tr>
+            <th>Ship</th>
+            <th>IMO</th>
+            <th>Size</th>
+            <th>Arrival</th>
+            <th>Duration</th>
+            <th>Status</th>
+            <th>Berth</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let ship of filteredShips; trackBy: trackByShip"
+            [class.selected]="selectedShip?.id === ship.id"
+            (click)="selectShip(ship)"
+          >
+            <td class="ship-cell">
+              <span class="ship-thumb">
+                <img [src]="getShipImage(ship)" [alt]="ship.name" />
+              </span>
+              <strong>{{ ship.name }}</strong>
+            </td>
+            <td>{{ getImo(ship) }}</td>
+            <td><span class="size-badge">{{ normalizeSize(ship.size) }}</span></td>
+            <td>Day {{ ship.arrivalDay }}</td>
+            <td>{{ ship.duration }} days</td>
+            <td>
+              <span class="status-badge" [ngClass]="normalizeStatus(ship.status).toLowerCase()">
+                {{ normalizeStatus(ship.status) }}
+              </span>
+            </td>
+            <td>{{ ship.berthName || '-' }}</td>
+            <td>
+              <button type="button" class="delete-btn" (click)="deleteShip(ship); $event.stopPropagation()">Delete</button>
+            </td>
+          </tr>
 
-    <footer class="table-footer" *ngIf="!isLoading">
-      <span>Showing {{ pageStart }} to {{ pageEnd }} of {{ filteredShips.length }} ships</span>
+          <tr *ngIf="filteredShips.length === 0">
+            <td colspan="8" class="empty-row">No ships match the selected filters.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
 
-      <nav aria-label="Pagination">
-        <button type="button" [disabled]="currentPage === 1" (click)="setPage(currentPage - 1)">‹</button>
-        <button
-          *ngFor="let page of pageNumbers"
-          type="button"
-          [class.active]="page === currentPage"
-          (click)="setPage(page)"
-        >
-          {{ page }}
-        </button>
-        <button type="button" [disabled]="currentPage === totalPages" (click)="setPage(currentPage + 1)">›</button>
-      </nav>
+    <aside class="ship-details" aria-label="Selected ship details">
+      <ng-container *ngIf="selectedShip as ship; else noSelection">
+        <div class="detail-image">
+          <img [src]="getShipImage(ship)" [alt]="ship.name" />
+        </div>
 
-      <label class="rows-select">
-        Rows per page
-        <select name="rowsPerPage" [(ngModel)]="rowsPerPage" (ngModelChange)="setPage(1)">
-          <option *ngFor="let option of rowsPerPageOptions" [ngValue]="option">{{ option }}</option>
-        </select>
-      </label>
-    </footer>
+        <p class="eyebrow">Selected Ship</p>
+        <h2>{{ ship.name }}</h2>
+        <p class="detail-notes">{{ ship.notes || 'No notes available.' }}</p>
+
+        <dl>
+          <div>
+            <dt>IMO</dt>
+            <dd>{{ getImo(ship) }}</dd>
+          </div>
+          <div>
+            <dt>Size</dt>
+            <dd>{{ normalizeSize(ship.size) }}</dd>
+          </div>
+          <div>
+            <dt>Status</dt>
+            <dd>{{ normalizeStatus(ship.status) }}</dd>
+          </div>
+          <div>
+            <dt>Arrival</dt>
+            <dd>Day {{ ship.arrivalDay }}</dd>
+          </div>
+          <div>
+            <dt>Departure</dt>
+            <dd>Day {{ ship.arrivalDay + ship.duration }}</dd>
+          </div>
+          <div>
+            <dt>Berth</dt>
+            <dd>{{ ship.berthName || 'Not assigned' }}</dd>
+          </div>
+        </dl>
+      </ng-container>
+
+      <ng-template #noSelection>
+        <p class="empty-detail">Select a ship to see its details.</p>
+      </ng-template>
+    </aside>
   </section>
-</section>
-
-<section *ngIf="showNewShipModal" class="modal-backdrop" aria-label="New ship dialog">
-  <form class="modal-card" (ngSubmit)="createShip()">
-    <header>
-      <div>
-        <span>Registry</span>
-        <h2>New Ship</h2>
-      </div>
-      <button type="button" class="icon-close" aria-label="Close" (click)="closeNewShip()">×</button>
-    </header>
-
-    <label>
-      <span>Ship Name</span>
-      <input name="newShipName" type="text" [(ngModel)]="shipForm.name" placeholder="e.g. MSC Aurora" />
-    </label>
-
-    <div class="modal-grid">
-      <label>
-        <span>Size</span>
-        <select name="newShipSize" [(ngModel)]="shipForm.size">
-          <option value="XL">XL</option>
-          <option value="L">L</option>
-          <option value="M">M</option>
-          <option value="S">S</option>
-        </select>
-      </label>
-
-      <label>
-        <span>Arrival Day</span>
-        <input name="newArrivalDay" type="number" min="1" [(ngModel)]="shipForm.arrivalDay" />
-      </label>
-
-      <label>
-        <span>Duration</span>
-        <input name="newDuration" type="number" min="1" [(ngModel)]="shipForm.duration" />
-      </label>
-    </div>
-
-    <label>
-      <span>Notes / IMO</span>
-      <textarea name="newShipNotes" [(ngModel)]="shipForm.notes" placeholder="IMO: 1234567 or operational notes"></textarea>
-    </label>
-
-    <footer>
-      <button type="button" class="ghost-button" (click)="closeNewShip()">Cancel</button>
-      <button type="submit" class="primary-button" [disabled]="isSaving">{{ isSaving ? 'Saving...' : 'Register Ship' }}</button>
-    </footer>
-  </form>
-</section>
-
-<section *ngIf="selectedShip" class="modal-backdrop details-backdrop" aria-label="Ship details dialog">
-  <article class="modal-card details-card">
-    <header>
-      <div>
-        <span>Ship Details</span>
-        <h2>{{ selectedShip.name }}</h2>
-      </div>
-      <button type="button" class="icon-close" aria-label="Close" (click)="closeDetails()">×</button>
-    </header>
-
-    <dl>
-      <div>
-        <dt>IMO</dt>
-        <dd>{{ getImo(selectedShip) }}</dd>
-      </div>
-      <div>
-        <dt>Size</dt>
-        <dd>{{ normalizeSize(selectedShip.size) }}</dd>
-      </div>
-      <div>
-        <dt>Status</dt>
-        <dd>{{ normalizeStatus(selectedShip.status) }}</dd>
-      </div>
-      <div>
-        <dt>Arrival Day</dt>
-        <dd>{{ selectedShip.arrivalDay }}</dd>
-      </div>
-      <div>
-        <dt>Duration</dt>
-        <dd>{{ selectedShip.duration }} days</dd>
-      </div>
-      <div>
-        <dt>Berth</dt>
-        <dd>{{ getBerth(selectedShip) }}</dd>
-      </div>
-    </dl>
-
-    <p>{{ selectedShip.notes || 'No operational notes available.' }}</p>
-  </article>
 </section>

@@ -25,6 +25,7 @@ export class AppSidebarComponent {
   navItems: NavItem[] = [
     { label: 'Dashboard', route: '/dashboard', icon: 'dashboard' },
     { label: 'Ships', route: '/ships', icon: 'ship' },
+    { label: 'New Ship', route: '/ships/new', icon: 'ship' },
     { label: 'Pending Assignments', route: '/scheduler', icon: 'pending' },
     { label: 'Berth Board', route: '/operator', icon: 'berth' },
     { label: 'Planning Calendar', route: '/berths', icon: 'calendar' },

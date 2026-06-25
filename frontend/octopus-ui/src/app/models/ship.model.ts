@@ -9,6 +9,7 @@ export interface Ship {
   status: ShipStatus;
   arrivalDay: number;
   duration: number;
+  imageUrl: string;
   berthName?: string | null;
   assignmentId?: number | null;
   assignmentStartDay?: number | null;
@@ -21,4 +22,5 @@ export interface CreateShipRequest {
   size: Exclude<ShipSize, number>;
   arrivalDay: number;
   duration: number;
+  imageUrl?: string;
 }

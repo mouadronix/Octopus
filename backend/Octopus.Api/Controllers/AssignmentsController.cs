@@ -30,18 +30,8 @@ public class AssignmentsController : ControllerBase
             assignment.DockId,
             assignment.StartDay,
             assignment.EndDay,
-            Ship = assignment.Ship is null
-                ? null
-                : new
-                {
-                    assignment.Ship.Id,
-                    assignment.Ship.Name,
-                    assignment.Ship.Notes,
-                    assignment.Ship.Size,
-                    assignment.Ship.Status,
-                    assignment.Ship.ArrivalDay,
-                    assignment.Ship.Duration
-                }
+            Ship = assignment.Ship,
+            Dock = assignment.Dock
         };
     }
 }
