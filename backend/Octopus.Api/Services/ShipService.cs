@@ -1,13 +1,14 @@
+using Microsoft.EntityFrameworkCore;
 using Octopus.Api.Data;
 using Octopus.Api.DTOs;
 using Octopus.Api.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Octopus.Api.Services;
 
 public class ShipService
 {
     private readonly AppDbContext _context;
+    private static readonly Random _random = new();
 
     public ShipService(AppDbContext context)
     {
@@ -17,7 +18,7 @@ public class ShipService
     public List<Ship> GetAll()
     {
         return _context.Ships
-            .Include(s => s.Assignment!)
+            .Include(s => s.Assignment)
                 .ThenInclude(a => a.Dock)
             .OrderBy(s => s.ArrivalDay)
             .ThenBy(s => s.Name)
@@ -27,22 +28,29 @@ public class ShipService
     public Ship? GetById(int id)
     {
         return _context.Ships
-            .Include(s => s.Assignment!)
+            .Include(s => s.Assignment)
                 .ThenInclude(a => a.Dock)
             .FirstOrDefault(s => s.Id == id);
     }
 
-
-// Creates a new ship with Pending status
+    /// <summary>
+    /// Creates a new ship with auto-generated Size, ArrivalDay, and Duration.
+    /// Operator only provides Name and Notes.
+    /// </summary>
     public Ship Create(CreateShipRequest request)
     {
+        var terminal = _context.TerminalStates.FirstOrDefault();
+        var currentDay = terminal?.CurrentDay ?? 1;
+
+        var sizes = Enum.GetValues<ShipSize>();
+
         var ship = new Ship
         {
             Name = request.Name,
             Notes = request.Notes,
-            Size = request.Size,
-            ArrivalDay = request.ArrivalDay,
-            Duration = request.Duration,
+            Size = sizes[_random.Next(sizes.Length)],
+            ArrivalDay = currentDay + _random.Next(0, 31),
+            Duration = _random.Next(3, 16),
             Status = ShipStatus.Pending
         };
 
@@ -51,25 +59,25 @@ public class ShipService
         return ship;
     }
 
-
-
-// Updates an existing ship
-    public Ship? Update(int id, Action<Ship> apply)
+    /// <summary>
+    /// Updates name and notes of a Pending ship. Returns null if not found or not Pending.
+    /// </summary>
+    public Ship? UpdateNameNotes(int id, EditShipRequest request)
     {
-        var ship = GetById(id);
-        if (ship == null) return null;
-        apply(ship);
+        var ship = _context.Ships.Find(id);
+        if (ship is null || ship.Status != ShipStatus.Pending)
+            return null;
+
+        ship.Name = request.Name;
+        ship.Notes = request.Notes;
         _context.SaveChanges();
         return ship;
     }
 
-
-
-// Deletes a ship by id
     public bool Delete(int id)
     {
-        var ship = GetById(id);
-        if (ship == null) return false;
+        var ship = _context.Ships.Find(id);
+        if (ship is null) return false;
         _context.Ships.Remove(ship);
         _context.SaveChanges();
         return true;
