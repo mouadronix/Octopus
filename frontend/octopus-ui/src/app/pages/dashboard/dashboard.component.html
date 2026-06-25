@@ -1,0 +1,154 @@
+<section class="dashboard-page">
+  <header class="dashboard-hero">
+    <div>
+      <h1>Dashboard</h1>
+      <p>Overview of terminal operations and port activities.</p>
+    </div>
+  </header>
+
+  <p *ngIf="errorMessage" class="state-message">{{ errorMessage }}</p>
+  <p *ngIf="isLoading" class="loading-message">Loading dashboard data from backend...</p>
+
+  <ng-container *ngIf="!isLoading && !errorMessage">
+    <section class="metrics-grid" aria-label="Terminal metrics">
+      <article *ngFor="let metric of metrics; trackBy: trackByMetric" class="metric-card" [ngClass]="metric.tone">
+        <header>
+          <div class="metric-icon" [ngSwitch]="metric.icon" aria-hidden="true">
+            <svg *ngSwitchCase="'ship'" viewBox="0 0 48 48">
+              <path d="M7 30h34l-5 9H12z" />
+              <path d="M15 30V17h18v13M20 17v-6h8v6" />
+              <path d="M12 39c3 0 3-2 6-2s3 2 6 2 3-2 6-2 3 2 6 2" />
+            </svg>
+            <svg *ngSwitchCase="'crane'" viewBox="0 0 48 48">
+              <path d="M13 39h22M24 39V12M16 16h24l-8-6M38 16v8M35 24h6M18 39l6-27 6 27" />
+            </svg>
+            <svg *ngSwitchCase="'berth'" viewBox="0 0 48 48">
+              <path d="M8 34V14M40 34V14M8 24h32M14 18v12M34 18v12" />
+            </svg>
+          </div>
+          <span>&rsaquo;</span>
+        </header>
+
+        <span class="metric-label">{{ metric.label }}</span>
+        <strong>{{ metric.value }}</strong>
+        <p>{{ metric.caption }}</p>
+
+        <svg class="sparkline" viewBox="0 0 100 36" preserveAspectRatio="none" aria-hidden="true">
+          <path [attr.d]="getMetricPath(metric.trend)" />
+        </svg>
+      </article>
+    </section>
+
+    <section class="dashboard-grid">
+      <article class="panel utilization-panel">
+        <h2>Berth Utilization</h2>
+        <div class="utilization-content">
+          <div
+            class="donut utilization-donut"
+            [style.background]="'conic-gradient(#29b7ff 0 ' + utilizationPercentage + '%, #18d989 ' + utilizationPercentage + '% 100%)'"
+          >
+            <div>
+              <strong>{{ utilizationPercentage }}%</strong>
+              <span>Utilized</span>
+            </div>
+          </div>
+
+          <dl class="legend-list">
+            <div>
+              <dt><span class="dot green"></span>Occupied Berths</dt>
+              <dd>{{ occupiedBerths }} ({{ utilizationPercentage }}%)</dd>
+            </div>
+            <div>
+              <dt><span class="dot cyan"></span>Available Berths</dt>
+              <dd>{{ availableBerths }} ({{ 100 - utilizationPercentage }}%)</dd>
+            </div>
+            <div class="total-row">
+              <dt>Total Berths</dt>
+              <dd>{{ berths.length }}</dd>
+            </div>
+          </dl>
+        </div>
+      </article>
+
+      <article class="panel status-panel">
+        <h2>Ships By Status</h2>
+        <div class="status-content">
+          <div
+            class="donut status-donut"
+            [style.background]="'conic-gradient(#ff9f1c 0 ' + statusBreakdown[0].percentage + '%, #28d982 ' + statusBreakdown[0].percentage + '% ' + (statusBreakdown[0].percentage + statusBreakdown[1].percentage) + '%, #6885a8 ' + (statusBreakdown[0].percentage + statusBreakdown[1].percentage) + '% 100%)'"
+          >
+            <svg viewBox="0 0 48 48" aria-hidden="true">
+              <path d="M7 30h34l-5 9H12z" />
+              <path d="M15 30V17h18v13M20 17v-6h8v6" />
+              <path d="M12 39c3 0 3-2 6-2s3 2 6 2 3-2 6-2 3 2 6 2" />
+            </svg>
+          </div>
+
+          <dl class="legend-list">
+            <div *ngFor="let item of statusBreakdown" [class.total-row]="item.label === 'Total'">
+              <dt><span class="dot" [ngClass]="item.color"></span>{{ item.label }}</dt>
+              <dd>{{ item.value }} <span *ngIf="item.label !== 'Total'">({{ item.percentage }}%)</span></dd>
+            </div>
+          </dl>
+        </div>
+      </article>
+
+      <article class="panel arrivals-panel">
+        <header class="panel-header">
+          <h2>Upcoming Arrivals</h2>
+          <a routerLink="/ships">View all</a>
+        </header>
+
+        <div class="arrival-list">
+          <div *ngFor="let ship of upcomingArrivals; trackBy: trackByShip" class="arrival-item">
+            <svg viewBox="0 0 48 48" aria-hidden="true">
+              <path d="M7 30h34l-5 9H12z" />
+              <path d="M15 30V17h18v13M20 17v-6h8v6" />
+              <path d="M12 39c3 0 3-2 6-2s3 2 6 2 3-2 6-2 3 2 6 2" />
+            </svg>
+            <div>
+              <a routerLink="/ships">{{ ship.name }}</a>
+              <span>IMO: {{ getImo(ship) }}</span>
+            </div>
+            <strong>Day {{ ship.arrivalDay }}</strong>
+            <em>Size: {{ normalizeSize(ship.size) }}</em>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel chart-panel">
+        <h2>Ship Arrivals (Next 7 Days)</h2>
+        <svg viewBox="0 0 100 190" preserveAspectRatio="none" aria-label="Ship arrivals chart">
+          <g class="grid-lines">
+            <path d="M0 30H100M0 63H100M0 96H100M0 129H100M0 160H100" />
+          </g>
+          <polygon [attr.points]="getChartArea()" />
+          <polyline [attr.points]="getChartPolyline()" />
+          <g *ngFor="let point of arrivalChart; let index = index; trackBy: trackByArrival">
+            <circle [attr.cx]="chartX(index)" [attr.cy]="chartY(point.value)" r="1.2" />
+          </g>
+        </svg>
+        <div class="chart-labels">
+          <span *ngFor="let point of arrivalChart; trackBy: trackByArrival">{{ point.label }}</span>
+        </div>
+      </article>
+
+      <article class="panel activity-panel">
+        <header class="panel-header">
+          <h2>Recent Activity</h2>
+          <a routerLink="/operator">View all</a>
+        </header>
+
+        <div class="activity-list">
+          <div *ngFor="let activity of recentActivity; trackBy: trackByActivity" class="activity-item">
+            <span class="activity-icon" [ngClass]="activity.tone"></span>
+            <p>{{ activity.message }}</p>
+            <time>{{ activity.meta }}</time>
+          </div>
+        </div>
+      </article>
+    </section>
+  </ng-container>
+
+  <footer class="dashboard-footer">&copy; 2025 OCTOPUS Port &amp; Berth Management System. All rights reserved.</footer>
+</section>

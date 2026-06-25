@@ -20,12 +20,13 @@ public class AssignmentService
         return _context.Assignments
             .Include(a => a.Ship)
             .Include(a => a.Dock)
+            .OrderBy(a => a.StartDay)
             .ToList();
     }
 
     public (bool CanAssign, int StartDay) CanAssign(Ship ship, Dock dock, TerminalState terminal)
     {
-        if (ship.ArrivalDay < terminal.CurrentDay)
+        if (ship.ArrivalDay < terminal.CurrentDay || !CanFitShip(dock.Size, ship.Size))
         {
             return (false, -1);
         }
@@ -65,8 +66,8 @@ public class AssignmentService
         var terminal = GetOrCreateTerminalState();
 
         var best = _context.Docks
-            .Where(d => d.Size == ship.Size)
-            .ToList()
+            .AsEnumerable()
+            .Where(dock => CanFitShip(dock.Size, ship.Size))
             .Select(dock => new
             {
                 Dock = dock,
@@ -74,7 +75,8 @@ public class AssignmentService
             })
             .Where(item => item.Result.CanAssign)
             .OrderBy(item => item.Result.StartDay)
-            .ThenBy(item => _context.Assignments.Count(a => a.DockId == item.Dock.Id))
+            .ThenBy(item => SizeRank(item.Dock.Size))
+            .ThenBy(item => item.Dock.Name)
             .FirstOrDefault();
 
         if (best == null)
@@ -95,13 +97,15 @@ public class AssignmentService
 
     public Result<Assignment> AssignShip(int shipId, int dockId)
     {
-        var ship = _context.Ships.Find(shipId);
+        var ship = _context.Ships
+            .Include(s => s.Assignment)
+            .FirstOrDefault(s => s.Id == shipId);
         if (ship == null)
         {
             return Result<Assignment>.Fail("SHIP_NOT_FOUND", "Ship not found");
         }
 
-        if (ship.Status != ShipStatus.Pending)
+        if (ship.Status != ShipStatus.Pending || ship.Assignment != null)
         {
             return Result<Assignment>.Fail("SHIP_NOT_PENDING", "Ship is not pending");
         }
@@ -112,9 +116,9 @@ public class AssignmentService
             return Result<Assignment>.Fail("DOCK_NOT_FOUND", "Dock not found");
         }
 
-        if (dock.Size != ship.Size)
+        if (!CanFitShip(dock.Size, ship.Size))
         {
-            return Result<Assignment>.Fail("SIZE_MISMATCH", "Dock size does not match ship size");
+            return Result<Assignment>.Fail("SIZE_MISMATCH", "Dock size does not fit ship size");
         }
 
         var terminal = GetOrCreateTerminalState();
@@ -161,5 +165,22 @@ public class AssignmentService
         _context.TerminalStates.Add(terminal);
         _context.SaveChanges();
         return terminal;
+    }
+
+    private static bool CanFitShip(ShipSize dockSize, ShipSize shipSize)
+    {
+        return SizeRank(dockSize) >= SizeRank(shipSize);
+    }
+
+    private static int SizeRank(ShipSize size)
+    {
+        return size switch
+        {
+            ShipSize.S => 1,
+            ShipSize.M => 2,
+            ShipSize.L => 3,
+            ShipSize.XL => 4,
+            _ => 0
+        };
     }
 }

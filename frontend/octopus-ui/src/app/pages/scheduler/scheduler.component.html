@@ -1,9 +1,209 @@
-<section class="simple-view">
-  <header class="view-header">
-    <h1>NAVI IN ATTESA DI ASSEGNAZIONE</h1>
+<section class="assignments-page">
+  <header class="assignments-hero">
+    <div>
+      <h1>Pending Assignments</h1>
+      <p>Incoming ships waiting for berth allocation. Select a ship to view compatible berths and assign.</p>
+    </div>
   </header>
 
-  <div class="empty-panel">
-    Nessuna nave in attesa.
-  </div>
+  <p *ngIf="isLoading" class="state-message">Loading pending assignments from backend...</p>
+  <p *ngIf="message" class="state-message" [class.error]="messageType === 'error'">{{ message }}</p>
+
+  <ng-container *ngIf="!isLoading">
+    <section class="metrics-grid" aria-label="Assignment metrics">
+      <article *ngFor="let metric of metrics; trackBy: trackByMetric" class="metric-card" [ngClass]="metric.tone">
+        <div class="metric-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48">
+            <path d="M7 30h34l-5 9H12z" />
+            <path d="M15 30V17h18v13M20 17v-6h8v6" />
+            <path d="M12 39c3 0 3-2 6-2s3 2 6 2 3-2 6-2 3 2 6 2" />
+          </svg>
+        </div>
+        <span>{{ metric.label }}</span>
+        <strong>{{ metric.value }}</strong>
+        <p>{{ metric.caption }}</p>
+        <svg class="sparkline" viewBox="0 0 100 34" preserveAspectRatio="none" aria-hidden="true">
+          <path [attr.d]="getMetricPath(metric.trend)" />
+        </svg>
+      </article>
+    </section>
+
+    <section class="assignment-layout">
+      <div class="main-column">
+        <section class="filters-panel" aria-label="Pending assignment filters">
+          <label class="search-field">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" />
+              <path d="m16 16 5 5" />
+            </svg>
+            <input type="search" name="search" placeholder="Search ship name or IMO..." [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" />
+          </label>
+
+          <label>
+            <span>Ship Size</span>
+            <select name="shipSize" [(ngModel)]="sizeFilter" (ngModelChange)="applyFilters()">
+              <option *ngFor="let size of sizeOptions" [ngValue]="size">{{ size }}</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Arrival Day</span>
+            <select name="arrivalDay" [(ngModel)]="dayFilter" (ngModelChange)="applyFilters()">
+              <option *ngFor="let day of dayOptions" [ngValue]="day.value">{{ day.label }}</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Sort By</span>
+            <select name="sortBy" [(ngModel)]="sortOption" (ngModelChange)="applyFilters()">
+              <option *ngFor="let option of sortOptions" [ngValue]="option.value">{{ option.label }}</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="ship-list" aria-label="Pending ships">
+          <article
+            *ngFor="let ship of filteredShips; trackBy: trackByShip"
+            class="ship-card"
+            [class.selected]="selectedShip?.id === ship.id"
+            (click)="selectShip(ship)"
+          >
+            <div class="ship-badge" [ngClass]="normalizeSize(ship.size)">
+              <svg viewBox="0 0 48 48" aria-hidden="true">
+                <path d="M7 30h34l-5 9H12z" />
+                <path d="M15 30V17h18v13M20 17v-6h8v6" />
+                <path d="M12 39c3 0 3-2 6-2s3 2 6 2 3-2 6-2 3 2 6 2" />
+              </svg>
+              <span>{{ normalizeSize(ship.size) }}</span>
+            </div>
+
+            <div class="ship-main">
+              <h2>{{ ship.name }}</h2>
+              <p>IMO: {{ getImo(ship) }}</p>
+            </div>
+
+            <div class="ship-meta">
+              <span>Arrival Day</span>
+              <strong>{{ ship.arrivalDay }}</strong>
+              <small>{{ getDaysFromNow(ship) }}</small>
+            </div>
+
+            <div class="ship-meta">
+              <span>Duration</span>
+              <strong>{{ ship.duration }} Days</strong>
+            </div>
+
+            <div class="compatible-inline">
+              <span>Compatible Berths</span>
+              <strong *ngIf="getCompatibleBerths(ship).length; else noBerths">
+                {{ getCompatibleBerthNames(ship) }}
+              </strong>
+              <ng-template #noBerths><strong>None</strong></ng-template>
+            </div>
+
+            <button type="button" class="assign-shortcut" (click)="$event.stopPropagation(); selectShip(ship)">
+              Assign
+              <span aria-hidden="true">&rsaquo;</span>
+            </button>
+          </article>
+
+          <div *ngIf="filteredShips.length === 0" class="empty-state">
+            No pending ships match the selected filters.
+          </div>
+        </section>
+
+        <footer class="list-footer">Showing 1 to {{ filteredShips.length }} of {{ pendingShips.length }} ships</footer>
+      </div>
+
+      <aside class="preview-panel" *ngIf="selectedShip; else noSelection">
+        <h2>Assignment Preview</h2>
+
+        <div class="preview-ship">
+          <div class="ship-badge large" [ngClass]="normalizeSize(selectedShip.size)">
+            <svg viewBox="0 0 48 48" aria-hidden="true">
+              <path d="M7 30h34l-5 9H12z" />
+              <path d="M15 30V17h18v13M20 17v-6h8v6" />
+              <path d="M12 39c3 0 3-2 6-2s3 2 6 2 3-2 6-2 3 2 6 2" />
+            </svg>
+          </div>
+          <div>
+            <h3>{{ selectedShip.name }} <span>{{ normalizeSize(selectedShip.size) }}</span></h3>
+            <p>IMO: {{ getImo(selectedShip) }}</p>
+          </div>
+        </div>
+
+        <dl class="preview-details">
+          <div>
+            <dt>Arrival Day</dt>
+            <dd>{{ selectedShip.arrivalDay }}</dd>
+          </div>
+          <div>
+            <dt>Occupation Duration</dt>
+            <dd>{{ selectedShip.duration }} Days</dd>
+          </div>
+          <div>
+            <dt>Ship Size</dt>
+            <dd>{{ normalizeSize(selectedShip.size) }}</dd>
+          </div>
+          <div>
+            <dt>Status</dt>
+            <dd><span class="pending-dot"></span>Pending</dd>
+          </div>
+        </dl>
+
+        <section class="compatible-list">
+          <h3>Compatible Berths</h3>
+          <button
+            *ngFor="let berth of selectedCompatibleBerths; trackBy: trackByBerth"
+            type="button"
+            class="berth-option"
+            [class.active]="selectedBerthId === berth.id"
+            (click)="selectBerth(berth.id)"
+          >
+            <span class="berth-icon">{{ berth.size }}</span>
+            <span>
+              <strong>{{ berth.name }}</strong>
+              <small>{{ berth.size }} berth · Available from Day {{ berth.availableFromDay }}</small>
+            </span>
+            <span class="checkmark" *ngIf="selectedBerthId === berth.id">✓</span>
+          </button>
+
+          <p *ngIf="selectedCompatibleBerths.length === 0" class="no-compatible">
+            No compatible berth is currently available for this ship.
+          </p>
+        </section>
+
+        <section class="allocation-summary" *ngIf="selectedBerth">
+          <h3>Allocation Summary</h3>
+          <dl>
+            <div>
+              <dt>Berth</dt>
+              <dd>{{ selectedBerth.name }}</dd>
+            </div>
+            <div>
+              <dt>Start Day</dt>
+              <dd>{{ selectedBerth.availableFromDay }}</dd>
+            </div>
+            <div>
+              <dt>End Day</dt>
+              <dd>{{ getEndDay(selectedShip) }} ({{ selectedShip.duration }} Days)</dd>
+            </div>
+          </dl>
+        </section>
+
+        <button type="button" class="confirm-button" [disabled]="isAssigning || !selectedBerth" (click)="confirmAssignment()">
+          Confirm Assignment
+        </button>
+      </aside>
+
+      <ng-template #noSelection>
+        <aside class="preview-panel empty-preview">
+          <h2>Assignment Preview</h2>
+          <p>Select a pending ship to view compatible berths.</p>
+        </aside>
+      </ng-template>
+    </section>
+  </ng-container>
+
+  <footer class="page-footer">&copy; 2025 OCTOPUS Port &amp; Berth Management System. All rights reserved.</footer>
 </section>

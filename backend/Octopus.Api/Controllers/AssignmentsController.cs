@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Octopus.Api.DTOs;
+using Octopus.Api.Models;
 using Octopus.Api.Services;
 
 namespace Octopus.Api.Controllers;
@@ -8,7 +9,6 @@ namespace Octopus.Api.Controllers;
 [Route("api/assignments")]
 public class AssignmentsController : ControllerBase
 {
-     // Service
     private readonly AssignmentService _assignmentService;
 
     public AssignmentsController(AssignmentService assignmentService)
@@ -16,17 +16,19 @@ public class AssignmentsController : ControllerBase
         _assignmentService = assignmentService;
     }
 
-    // GET: api/assignments
     [HttpGet]
     public IActionResult GetAll()
     {
-        return Ok(_assignmentService.GetAll());
+        return Ok(_assignmentService.GetAll().Select(ToDto));
     }
 
     [HttpPost]
     public IActionResult Create([FromBody] AssignShipRequest request)
     {
-        if (!ModelState.IsValid) return ValidationProblem(ModelState);
+        if (!ModelState.IsValid)
+        {
+            return ValidationProblem(ModelState);
+        }
 
         var result = _assignmentService.AssignShip(request.ShipId, request.DockId);
         if (!result.IsSuccess || result.Value == null)
@@ -34,6 +36,20 @@ public class AssignmentsController : ControllerBase
             return BadRequest(new { code = result.ErrorCode, message = result.ErrorMessage });
         }
 
-        return CreatedAtAction(nameof(GetAll), new { id = result.Value.Id }, result.Value);
+        return CreatedAtAction(nameof(GetAll), new { id = result.Value.Id }, ToDto(result.Value));
+    }
+
+    private static object ToDto(Assignment assignment)
+    {
+        return new
+        {
+            assignment.Id,
+            assignment.ShipId,
+            assignment.DockId,
+            assignment.StartDay,
+            assignment.EndDay,
+            Ship = assignment.Ship,
+            Dock = assignment.Dock
+        };
     }
 }
