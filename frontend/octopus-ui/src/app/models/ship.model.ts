@@ -24,3 +24,19 @@ export interface CreateShipRequest {
   duration: number;
   imageUrl?: string;
 }
+
+export interface CompatibleBerth {
+  dockId: number;
+  dockName: string;
+  size: string;
+  startDay: number;
+  available: boolean;
+}
+
+export interface SuggestionResponse {
+  dockId: number;
+  dockName: string;
+  startDay: number;
+  message: string;
+  compatibleBerths: CompatibleBerth[];
+}

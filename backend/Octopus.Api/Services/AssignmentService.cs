@@ -23,40 +23,6 @@ public class AssignmentService
             .ToList();
     }
 
-    /// <summary>
-    /// First-fit greedy: find the earliest day a ship can be assigned to a dock.
-    /// Scans existing assignments chronologically, finds the first gap that fits.
-    /// </summary>
-    public (bool CanAssign, int StartDay) CanAssign(Ship ship, Dock dock, TerminalState terminal)
-    {
-        if (ship.ArrivalDay < terminal.CurrentDay)
-            return (false, -1);
-
-        if (ship.Duration < 1)
-            return (false, -1);
-
-        var assignments = _context.Assignments
-            .Where(a => a.DockId == dock.Id)
-            .OrderBy(a => a.StartDay)
-            .ToList();
-
-        int candidate = Math.Max(ship.ArrivalDay, terminal.CurrentDay);
-        int maxDay = terminal.CurrentDay + terminal.PlanningHorizon;
-
-        foreach (var a in assignments)
-        {
-            int candidateEnd = candidate + ship.Duration - 1;
-
-            if (candidateEnd < a.StartDay)
-                return (true, candidate);
-
-            candidate = a.EndDay + 1;
-        }
-
-        int finalEnd = candidate + ship.Duration - 1;
-        return finalEnd <= maxDay ? (true, candidate) : (false, -1);
-    }
-
     public Assignment? AssignShip(int shipId, int dockId)
     {
         var ship = _context.Ships
@@ -74,7 +40,14 @@ public class AssignmentService
         if (dock.Size != ship.Size)
             return null;
 
-        var (canAssign, startDay) = CanAssign(ship, dock, terminal);
+        // Pre-fetch dock assignments, then call the scheduling module
+        var dockAssignments = _context.Assignments
+            .Where(a => a.DockId == dock.Id)
+            .ToList();
+
+        var (canAssign, startDay) = SchedulingModule.FindEarliestSlot(
+            ship, dock, dockAssignments, terminal.CurrentDay, terminal.PlanningHorizon);
+
         if (!canAssign)
             return null;
 
@@ -103,6 +76,9 @@ public class AssignmentService
         }
     }
 
+    /// <summary>
+    /// Get a scheduling suggestion for a ship. Delegates all scheduling logic to SchedulingModule.
+    /// </summary>
     public SuggestionResponse? GetSuggestion(int shipId)
     {
         var ship = _context.Ships.Find(shipId);
@@ -111,39 +87,15 @@ public class AssignmentService
         if (ship is null || terminal is null || ship.Status != ShipStatus.Pending)
             return null;
 
-        var compatibleDocks = _context.Docks
-            .Where(d => d.Size == ship.Size)
-            .ToList();
+        var allDocks = _context.Docks.ToList();
 
-        // Find earliest assignable day for each compatible dock
-        var candidates = new List<(Dock Dock, int StartDay, int AssignmentCount)>();
-        foreach (var dock in compatibleDocks)
-        {
-            var (canAssign, startDay) = CanAssign(ship, dock, terminal);
-            if (canAssign)
-            {
-                int count = _context.Assignments.Count(a => a.DockId == dock.Id);
-                candidates.Add((dock, startDay, count));
-            }
-        }
+        // Pre-fetch assignments grouped by dock
+        var assignmentsByDock = _context.Assignments
+            .GroupBy(a => a.DockId)
+            .ToDictionary(g => g.Key, g => g.ToList());
 
-        if (candidates.Count == 0)
-            return null;
-
-        // Pick earliest start day, tie-break by fewest existing assignments
-        var best = candidates
-            .OrderBy(c => c.StartDay)
-            .ThenBy(c => c.AssignmentCount)
-            .First();
-
-        return new SuggestionResponse
-        {
-            DockId = best.Dock.Id,
-            DockName = best.Dock.Name,
-            StartDay = best.StartDay,
-            Message = best.StartDay <= ship.ArrivalDay
-                ? $"Available from Day {best.StartDay}"
-                : $"Delayed: earliest slot Day {best.StartDay}"
-        };
+        return SchedulingModule.Suggest(
+            ship, allDocks, assignmentsByDock,
+            terminal.CurrentDay, terminal.PlanningHorizon);
     }
 }
