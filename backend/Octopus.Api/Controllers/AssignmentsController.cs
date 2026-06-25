@@ -9,7 +9,6 @@ namespace Octopus.Api.Controllers;
 [Route("api/assignments")]
 public class AssignmentsController : ControllerBase
 {
-     // Service
     private readonly AssignmentService _assignmentService;
 
     public AssignmentsController(AssignmentService assignmentService)
@@ -17,7 +16,6 @@ public class AssignmentsController : ControllerBase
         _assignmentService = assignmentService;
     }
 
-    // GET: api/assignments
     [HttpGet]
     public IActionResult GetAll()
     {
@@ -27,15 +25,18 @@ public class AssignmentsController : ControllerBase
     [HttpPost]
     public IActionResult Create([FromBody] AssignShipRequest request)
     {
-        if (!ModelState.IsValid) return ValidationProblem(ModelState);
-
-        var assignment = _assignmentService.AssignShip(request.ShipId, request.DockId);
-        if (assignment == null)
+        if (!ModelState.IsValid)
         {
-            return BadRequest(new { message = "Ship or dock not found, or the selected dock is occupied for this time range." });
+            return ValidationProblem(ModelState);
         }
 
-        return CreatedAtAction(nameof(GetAll), new { id = assignment.Id }, ToDto(assignment));
+        var result = _assignmentService.AssignShip(request.ShipId, request.DockId);
+        if (!result.IsSuccess || result.Value == null)
+        {
+            return BadRequest(new { code = result.ErrorCode, message = result.ErrorMessage });
+        }
+
+        return CreatedAtAction(nameof(GetAll), new { id = result.Value.Id }, ToDto(result.Value));
     }
 
     private static object ToDto(Assignment assignment)
@@ -47,18 +48,8 @@ public class AssignmentsController : ControllerBase
             assignment.DockId,
             assignment.StartDay,
             assignment.EndDay,
-            Ship = assignment.Ship is null
-                ? null
-                : new
-                {
-                    assignment.Ship.Id,
-                    assignment.Ship.Name,
-                    assignment.Ship.Notes,
-                    assignment.Ship.Size,
-                    assignment.Ship.Status,
-                    assignment.Ship.ArrivalDay,
-                    assignment.Ship.Duration
-                }
+            Ship = assignment.Ship,
+            Dock = assignment.Dock
         };
     }
 }

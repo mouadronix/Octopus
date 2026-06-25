@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Octopus.Api.Common;
 using Octopus.Api.Data;
 using Octopus.Api.DTOs;
 using Octopus.Api.Models;
@@ -23,95 +24,147 @@ public class AssignmentService
             .ToList();
     }
 
-    public Assignment? AssignShip(int shipId, int dockId)
+    public (bool CanAssign, int StartDay) CanAssign(Ship ship, Dock dock, TerminalState terminal)
     {
-        var ship = _context.Ships
-            .Include(s => s.Assignment)
-            .FirstOrDefault(s => s.Id == shipId);
-        var dock = _context.Docks.Find(dockId);
-        var terminal = _context.TerminalStates.FirstOrDefault();
-
-        if (ship is null || dock is null || terminal is null)
+        if (ship.ArrivalDay < terminal.CurrentDay || !CanFitShip(dock.Size, ship.Size))
         {
-            return null;
+            return (false, -1);
         }
 
-        if (ship.Status != ShipStatus.Pending || ship.Assignment is not null)
+        var assignments = _context.Assignments
+            .Where(a => a.DockId == dock.Id)
+            .OrderBy(a => a.StartDay)
+            .ToList();
+
+        var candidate = Math.Max(ship.ArrivalDay, terminal.CurrentDay);
+        var maxDay = terminal.CurrentDay + terminal.PlanningHorizon;
+
+        foreach (var assignment in assignments)
         {
-            return null;
+            var candidateEnd = candidate + ship.Duration - 1;
+            if (candidateEnd < assignment.StartDay)
+            {
+                return (true, candidate);
+            }
+
+            candidate = assignment.EndDay + 1;
         }
 
-        if (!CanFitShip(dock.Size, ship.Size))
-        {
-            return null;
-        }
-
-        var startDay = Math.Max(ship.ArrivalDay, terminal.CurrentDay);
-        var endDay = startDay + ship.Duration - 1;
-
-        if (HasDockConflict(dock.Id, startDay, endDay))
-        {
-            return null;
-        }
-
-        var assignment = new Assignment
-        {
-            ShipId = ship.Id,
-            DockId = dock.Id,
-            StartDay = startDay,
-            EndDay = endDay
-        };
-
-        ship.Status = ShipStatus.Assigned;
-        _context.Assignments.Add(assignment);
-        _context.SaveChanges();
-
-        return assignment;
+        return candidate + ship.Duration - 1 <= maxDay
+            ? (true, candidate)
+            : (false, -1);
     }
 
     public SuggestionResponse? GetSuggestion(int shipId)
     {
         var ship = _context.Ships.Find(shipId);
-        var terminal = _context.TerminalStates.FirstOrDefault();
-
-        if (ship is null || terminal is null || ship.Status != ShipStatus.Pending)
+        if (ship == null || ship.Status != ShipStatus.Pending)
         {
             return null;
         }
 
-        var startDay = Math.Max(ship.ArrivalDay, terminal.CurrentDay);
-        var endDay = startDay + ship.Duration - 1;
+        var terminal = GetOrCreateTerminalState();
 
-        var dock = _context.Docks
+        var best = _context.Docks
             .AsEnumerable()
-            .Where(d => CanFitShip(d.Size, ship.Size))
-            .Where(d => !HasDockConflict(d.Id, startDay, endDay))
-            .OrderBy(d => SizeRank(d.Size))
-            .ThenBy(d => d.Name)
+            .Where(dock => CanFitShip(dock.Size, ship.Size))
+            .Select(dock => new
+            {
+                Dock = dock,
+                Result = CanAssign(ship, dock, terminal)
+            })
+            .Where(item => item.Result.CanAssign)
+            .OrderBy(item => item.Result.StartDay)
+            .ThenBy(item => SizeRank(item.Dock.Size))
+            .ThenBy(item => item.Dock.Name)
             .FirstOrDefault();
 
-        if (dock is null)
+        if (best == null)
         {
             return null;
         }
 
         return new SuggestionResponse
         {
-            DockId = dock.Id,
-            DockName = dock.Name,
-            StartDay = startDay,
-            Message = startDay <= ship.ArrivalDay
-                ? $"Available from Day {startDay}"
-                : $"Delayed: earliest slot Day {startDay}"
+            DockId = best.Dock.Id,
+            DockName = best.Dock.Name,
+            StartDay = best.Result.StartDay,
+            Message = best.Result.StartDay <= ship.ArrivalDay
+                ? $"Available from Day {best.Result.StartDay}"
+                : $"Delayed: earliest slot Day {best.Result.StartDay}"
         };
     }
 
-    private bool HasDockConflict(int dockId, int startDay, int endDay)
+    public Result<Assignment> AssignShip(int shipId, int dockId)
     {
-        return _context.Assignments.Any(a =>
-            a.DockId == dockId &&
-            a.StartDay <= endDay &&
-            a.EndDay >= startDay);
+        var ship = _context.Ships
+            .Include(s => s.Assignment)
+            .FirstOrDefault(s => s.Id == shipId);
+        if (ship == null)
+        {
+            return Result<Assignment>.Fail("SHIP_NOT_FOUND", "Ship not found");
+        }
+
+        if (ship.Status != ShipStatus.Pending || ship.Assignment != null)
+        {
+            return Result<Assignment>.Fail("SHIP_NOT_PENDING", "Ship is not pending");
+        }
+
+        var dock = _context.Docks.Find(dockId);
+        if (dock == null)
+        {
+            return Result<Assignment>.Fail("DOCK_NOT_FOUND", "Dock not found");
+        }
+
+        if (!CanFitShip(dock.Size, ship.Size))
+        {
+            return Result<Assignment>.Fail("SIZE_MISMATCH", "Dock size does not fit ship size");
+        }
+
+        var terminal = GetOrCreateTerminalState();
+        var (canAssign, startDay) = CanAssign(ship, dock, terminal);
+        if (!canAssign)
+        {
+            return Result<Assignment>.Fail("NO_SLOT", "No available slot for this ship");
+        }
+
+        using var transaction = _context.Database.BeginTransaction();
+        try
+        {
+            var assignment = new Assignment
+            {
+                ShipId = ship.Id,
+                DockId = dock.Id,
+                StartDay = startDay,
+                EndDay = startDay + ship.Duration - 1
+            };
+
+            _context.Assignments.Add(assignment);
+            ship.Status = ShipStatus.Assigned;
+            _context.SaveChanges();
+            transaction.Commit();
+
+            return Result<Assignment>.Ok(assignment);
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
+    }
+
+    private TerminalState GetOrCreateTerminalState()
+    {
+        var terminal = _context.TerminalStates.FirstOrDefault();
+        if (terminal != null)
+        {
+            return terminal;
+        }
+
+        terminal = new TerminalState { CurrentDay = 1, PlanningHorizon = 30 };
+        _context.TerminalStates.Add(terminal);
+        _context.SaveChanges();
+        return terminal;
     }
 
     private static bool CanFitShip(ShipSize dockSize, ShipSize shipSize)
