@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using Octopus.Api.Data;
 using Octopus.Api.DTOs;
 using Octopus.Api.Models;
@@ -7,46 +6,35 @@ namespace Octopus.Api.Services;
 
 public class AssignmentService
 {
+    private readonly IAssignmentRepository _repo;
     private readonly AppDbContext _context;
 
-    public AssignmentService(AppDbContext context)
+    public AssignmentService(IAssignmentRepository repo, AppDbContext context)
     {
+        _repo = repo;
         _context = context;
     }
 
     public List<Assignment> GetAll()
     {
-        return _context.Assignments
-            .Include(a => a.Ship)
-            .Include(a => a.Dock)
-            .OrderBy(a => a.StartDay)
-            .ToList();
+        return _repo.GetAllWithDetails();
     }
 
     public Assignment? AssignShip(int shipId, int dockId)
     {
-        var ship = _context.Ships
-            .Include(s => s.Assignment)
-            .FirstOrDefault(s => s.Id == shipId);
-        var dock = _context.Docks.Find(dockId);
-        var terminal = _context.TerminalStates.FirstOrDefault();
-
-        if (ship is null || dock is null || terminal is null)
+        var ctx = _repo.GetAssignmentContext(shipId, dockId);
+        if (ctx is null)
             return null;
 
-        if (ship.Status != ShipStatus.Pending || ship.Assignment is not null)
+        if (ctx.Ship.Status != ShipStatus.Pending || ctx.Ship.Assignment is not null)
             return null;
 
-        if (dock.Size != ship.Size)
+        if (ctx.Dock.Size != ctx.Ship.Size)
             return null;
-
-        // Pre-fetch dock assignments, then call the scheduling module
-        var dockAssignments = _context.Assignments
-            .Where(a => a.DockId == dock.Id)
-            .ToList();
 
         var (canAssign, startDay) = SchedulingModule.FindEarliestSlot(
-            ship, dock, dockAssignments, terminal.CurrentDay, terminal.PlanningHorizon);
+            ctx.Ship, ctx.Dock, ctx.DockAssignments,
+            ctx.Terminal.CurrentDay, ctx.Terminal.PlanningHorizon);
 
         if (!canAssign)
             return null;
@@ -56,15 +44,15 @@ public class AssignmentService
         {
             var assignment = new Assignment
             {
-                ShipId = ship.Id,
-                DockId = dock.Id,
+                ShipId = ctx.Ship.Id,
+                DockId = ctx.Dock.Id,
                 StartDay = startDay,
-                EndDay = startDay + ship.Duration - 1
+                EndDay = startDay + ctx.Ship.Duration - 1
             };
 
-            ship.Status = ShipStatus.Assigned;
-            _context.Assignments.Add(assignment);
-            _context.SaveChanges();
+            ctx.Ship.Status = ShipStatus.Assigned;
+            _repo.Add(assignment);
+            _repo.Save();
             transaction.Commit();
 
             return assignment;
@@ -77,25 +65,16 @@ public class AssignmentService
     }
 
     /// <summary>
-    /// Get a scheduling suggestion for a ship. Delegates all scheduling logic to SchedulingModule.
+    /// Get a scheduling suggestion for a ship. Delegates scheduling to SchedulingModule.
     /// </summary>
     public SuggestionResponse? GetSuggestion(int shipId)
     {
-        var ship = _context.Ships.Find(shipId);
-        var terminal = _context.TerminalStates.FirstOrDefault();
-
-        if (ship is null || terminal is null || ship.Status != ShipStatus.Pending)
+        var ctx = _repo.GetSuggestionContext(shipId);
+        if (ctx is null || ctx.Ship.Status != ShipStatus.Pending)
             return null;
 
-        var allDocks = _context.Docks.ToList();
-
-        // Pre-fetch assignments grouped by dock
-        var assignmentsByDock = _context.Assignments
-            .GroupBy(a => a.DockId)
-            .ToDictionary(g => g.Key, g => g.ToList());
-
         return SchedulingModule.Suggest(
-            ship, allDocks, assignmentsByDock,
-            terminal.CurrentDay, terminal.PlanningHorizon);
+            ctx.Ship, ctx.AllDocks, ctx.AssignmentsByDock,
+            ctx.Terminal.CurrentDay, ctx.Terminal.PlanningHorizon);
     }
 }

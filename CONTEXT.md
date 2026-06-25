@@ -23,3 +23,7 @@ The algorithm that finds the earliest available slot for a ship at a compatible 
 ## Scheduling Module
 
 A deep module owning all scheduling rules: slot-finding (first-fit greedy), size compatibility, conflict detection, and suggestion ranking. Pure functions — no DB dependency. The caller pre-fetches data and passes it in. One interface, two consumers (AssignmentService for assignment creation, the suggestion endpoint for the frontend).
+
+## Assignment Repository
+
+The data-access seam for AssignmentService. Hides the multi-entity fetching complexity behind use-case-specific methods: `GetAssignmentContext` (ship + dock + terminal for assignment creation) and `GetSuggestionContext` (ship + terminal + docks + grouped assignments for suggestions). The repository adds entities; the service controls when to save and manages transactions.

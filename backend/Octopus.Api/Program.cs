@@ -22,6 +22,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=blueharbor.db"));
 
+builder.Services.AddScoped<IAssignmentRepository, EfAssignmentRepository>();
 builder.Services.AddScoped<ShipService>();
 builder.Services.AddScoped<DockService>();
 builder.Services.AddScoped<AssignmentService>();
