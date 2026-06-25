@@ -15,4 +15,5 @@ public class ShipListItem
     public int? AssignmentId { get; set; }
     public int? AssignmentStartDay { get; set; }
     public int? AssignmentEndDay { get; set; }
+    public string? ImageUrl { get; set; }
 }

@@ -82,7 +82,8 @@ public class ShipsController : ControllerBase
             BerthName = ship.Assignment?.Dock?.Name,
             AssignmentId = ship.Assignment?.Id,
             AssignmentStartDay = ship.Assignment?.StartDay,
-            AssignmentEndDay = ship.Assignment?.EndDay
+            AssignmentEndDay = ship.Assignment?.EndDay,
+            ImageUrl = ship.ImageUrl
         };
     }
 }

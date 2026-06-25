@@ -102,12 +102,22 @@
       <tbody>
         <tr *ngFor="let ship of pageShips; trackBy: trackByShip">
           <td class="ship-cell">
-            <svg viewBox="0 0 48 48" aria-hidden="true">
-              <path d="M7 30h34l-5 9H12z" />
-              <path d="M15 30V17h18v13" />
-              <path d="M20 17v-6h8v6" />
-              <path d="M12 39c3 0 3-2 6-2s3 2 6 2 3-2 6-2 3 2 6 2" />
-            </svg>
+            <!-- TODO (frontend-dev): la miniature ci-dessous s'affiche
+                 automatiquement dès que ship.imageUrl est renseignée -->
+            <img
+              *ngIf="ship.imageUrl; else shipSvgIcon"
+              [src]="ship.imageUrl"
+              [alt]="ship.name"
+              class="ship-thumbnail"
+            >
+            <ng-template #shipSvgIcon>
+              <svg viewBox="0 0 48 48" aria-hidden="true">
+                <path d="M7 30h34l-5 9H12z" />
+                <path d="M15 30V17h18v13" />
+                <path d="M20 17v-6h8v6" />
+                <path d="M12 39c3 0 3-2 6-2s3 2 6 2 3-2 6-2 3 2 6 2" />
+              </svg>
+            </ng-template>
             <button type="button" (click)="viewShip(ship)">{{ ship.name }}</button>
           </td>
           <td>{{ getImo(ship) }}</td>
@@ -208,6 +218,23 @@
       <textarea name="newShipNotes" [(ngModel)]="shipForm.notes" placeholder="IMO: 1234567 or operational notes"></textarea>
     </label>
 
+    <!-- ═══════════════════════════════════════════════════════════════════
+         ZONE IMAGE NAVIRE (formulaire) — À compléter par le dev frontend
+         ───────────────────────────────────────────────────────────────────
+         Option A – URL directe (temporaire, pour tests) :
+           Décommenter le label ci-dessous et brancher shipForm.imageUrl.
+         Option B – Upload fichier :
+           Remplacer par un <input type="file"> + logique d'envoi vers
+           le backend (ex. POST /api/ships/{id}/image) et stocker l'URL
+           retournée dans shipForm.imageUrl avant la soumission.
+         ═══════════════════════════════════════════════════════════════════ -->
+    <!-- TODO (frontend-dev): décommenter ou remplacer selon la stratégie choisie
+    <label>
+      <span>Image URL</span>
+      <input name="newShipImageUrl" type="url" [(ngModel)]="shipForm.imageUrl" placeholder="https://..." />
+    </label>
+    -->
+
     <footer>
       <button type="button" class="ghost-button" (click)="closeNewShip()">Cancel</button>
       <button type="submit" class="primary-button" [disabled]="isSaving">{{ isSaving ? 'Saving...' : 'Register Ship' }}</button>
@@ -224,6 +251,35 @@
       </div>
       <button type="button" class="icon-close" aria-label="Close" (click)="closeDetails()">×</button>
     </header>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         ZONE IMAGE NAVIRE — À compléter par le développeur frontend
+         ───────────────────────────────────────────────────────────────────
+         • Quand imageUrl est renseignée : la photo du navire s'affiche.
+         • Quand imageUrl est null/vide  : un placeholder SVG est affiché.
+         • Pour ajouter l'upload : brancher un champ <input type="file">
+           dans le formulaire "New Ship" et envoyer l'URL obtenue via le
+           champ `imageUrl` du CreateShipRequest.
+         ═══════════════════════════════════════════════════════════════════ -->
+    <div class="ship-image-zone">
+      <img
+        *ngIf="selectedShip.imageUrl"
+        [src]="selectedShip.imageUrl"
+        [alt]="selectedShip.name + ' — photo'"
+        class="ship-photo"
+      >
+      <!-- TODO (frontend-dev): remplacer ce bloc par un vrai composant
+           d'upload ou un sélecteur d'image une fois la logique prête -->
+      <div *ngIf="!selectedShip.imageUrl" class="ship-photo-placeholder" aria-hidden="true">
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <path d="M7 30h34l-5 9H12z" />
+          <path d="M15 30V17h18v13" />
+          <path d="M20 17v-6h8v6" />
+          <path d="M12 39c3 0 3-2 6-2s3 2 6 2 3-2 6-2 3 2 6 2" />
+        </svg>
+        <span>Image non disponible</span>
+      </div>
+    </div>
 
     <dl>
       <div>

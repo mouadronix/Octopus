@@ -43,7 +43,8 @@ public class ShipService
             Size = request.Size,
             ArrivalDay = request.ArrivalDay,
             Duration = request.Duration,
-            Status = ShipStatus.Pending
+            Status = ShipStatus.Pending,
+            ImageUrl = request.ImageUrl
         };
 
         _context.Ships.Add(ship);

@@ -13,6 +13,7 @@ export interface Ship {
   assignmentId?: number | null;
   assignmentStartDay?: number | null;
   assignmentEndDay?: number | null;
+  imageUrl?: string | null;
 }
 
 export interface CreateShipRequest {
@@ -21,4 +22,5 @@ export interface CreateShipRequest {
   size: Exclude<ShipSize, number>;
   arrivalDay: number;
   duration: number;
+  imageUrl?: string;
 }
