@@ -21,6 +21,7 @@ builder.Services.AddScoped<ShipService>();
 builder.Services.AddScoped<DockService>();
 builder.Services.AddScoped<AssignmentService>();
 builder.Services.AddScoped<SystemService>();
+builder.Services.AddScoped<AuthService>();
 
 builder.Services.AddCors(options =>
 {

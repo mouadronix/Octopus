@@ -10,11 +10,15 @@ export class SystemService {
 
   constructor(private readonly http: HttpClient) {}
 
+
+  //get current system state
   getState(): Observable<SystemState> {
     return this.http.get<SystemState>(`${this.apiUrl}/state`);
   }
 
+
+  //advance to the next day
   nextDay(): Observable<SystemState> {
-    return this.http.post<SystemState>(`${this.apiUrl}/next-day`, {});
+    return this.http.post<SystemState>(`${this.apiUrl}/advance-day`, {});
   }
 }

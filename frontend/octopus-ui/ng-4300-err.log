@@ -1,0 +1,194 @@
+[1m[33mPrebundling has been configured but will not be used because scripts optimization is enabled.[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG1: Object is possibly 'null'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/operator/operator.component.html:105:28:
+[37m      105 │         <h2>{{ selectedShip.[32mname[37m }}</h2>
+          ╵                             [32m~~~~[0m
+
+  Error occurs in the template of component OperatorComponent.
+
+    src/app/pages/operator/operator.component.ts:52:15:
+[37m      52 │   templateUrl: [32m'./operator.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG1: Object is possibly 'null'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/operator/operator.component.html:106:35:
+[37m      106 │         <span>IMO: {{ selectedShip.[32mimo[37m }}</span>
+          ╵                                    [32m~~~[0m
+
+  Error occurs in the template of component OperatorComponent.
+
+    src/app/pages/operator/operator.component.ts:52:15:
+[37m      52 │   templateUrl: [32m'./operator.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG1: Object is possibly 'null'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/operator/operator.component.html:113:28:
+[37m      113 │         <dd>{{ selectedShip.[32msize[37m }}</dd>
+          ╵                             [32m~~~~[0m
+
+  Error occurs in the template of component OperatorComponent.
+
+    src/app/pages/operator/operator.component.ts:52:15:
+[37m      52 │   templateUrl: [32m'./operator.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG1: Object is possibly 'null'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/operator/operator.component.html:117:28:
+[37m      117 │         <dd>{{ selectedShip.[32marrivalDay[37m }}</dd>
+          ╵                             [32m~~~~~~~~~~[0m
+
+  Error occurs in the template of component OperatorComponent.
+
+    src/app/pages/operator/operator.component.ts:52:15:
+[37m      52 │   templateUrl: [32m'./operator.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG1: Object is possibly 'null'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/operator/operator.component.html:121:28:
+[37m      121 │         <dd>{{ selectedShip.[32mduration[37m }} Days</dd>
+          ╵                             [32m~~~~~~~~[0m
+
+  Error occurs in the template of component OperatorComponent.
+
+    src/app/pages/operator/operator.component.ts:52:15:
+[37m      52 │   templateUrl: [32m'./operator.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG1: Object is possibly 'null'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/operator/operator.component.html:125:57:
+[37m      125 │ ...  <dd class="pending"><span></span>{{ selectedShip.[32mstatus[37m }}</dd>
+          ╵                                                       [32m~~~~~~[0m
+
+  Error occurs in the template of component OperatorComponent.
+
+    src/app/pages/operator/operator.component.ts:52:15:
+[37m      52 │   templateUrl: [32m'./operator.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[2m12:15:23[22m[1m [31m[1m[vite][22m[1m[31m [31mhttp proxy error: /api/system/state[31m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)[39m[22m
+[1m[31m[2m12:15:23[22m[1m [31m[1m[vite][22m[1m[31m [31mhttp proxy error: /api/ships[31m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)[39m[22m
+[1m[31m[2m12:15:23[22m[1m [31m[1m[vite][22m[1m[31m [31mhttp proxy error: /api/docks[31m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)[39m[22m
+[1m[31m[2m12:15:24[22m[1m [31m[1m[vite][22m[1m[31m [31mhttp proxy error: /api/system/state[31m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)[39m[22m
+[1m[31m[2m12:41:07[22m[1m [31m[1m[vite][22m[1m[31m [31mhttp proxy error: /api/ships[31m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)[39m[22m
+[1m[31m[2m12:43:14[22m[1m [31m[1m[vite][22m[1m[31m [31mhttp proxy error: /api/ships[31m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1002: Unterminated string literal.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/login/login.component.ts:39:14:
+[37m      39 │       title: '[32m[37m
+         ╵               [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'Ship'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/login/login.component.ts:40:6:
+[37m      40 │     },[32mShip[37m Management',
+         ╵       [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/login/login.component.ts:40:11:
+[37m      40 │     },Ship [32mManagement[37m',
+         ╵            [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'Management'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/login/login.component.ts:40:11:
+[37m      40 │     },Ship [32mManagement[37m',
+         ╵            [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/login/login.component.ts:40:21:
+[37m      40 │     },Ship Management[32m',[37m
+         ╵                      [32m~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1002: Unterminated string literal.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/login/login.component.ts:40:23:
+[37m      40 │     },Ship Management',[32m[37m
+         ╵                        [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/login/login.component.ts:41:6:
+[37m      41 │       [32mdescription[37m: 'Register and track ships with real-time status...
+         ╵       [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'description'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/login/login.component.ts:41:6:
+[37m      41 │       [32mdescription[37m: 'Register and track ships with real-time status...
+         ╵       [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/login/login.component.ts:41:17:
+[37m      41 │       description[32m:[37m 'Register and track ships with real-time status...
+         ╵                  [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'icon'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/login/login.component.ts:42:6:
+[37m      42 │       [32micon[37m: 'ship'
+         ╵       [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/login/login.component.ts:42:10:
+[37m      42 │       icon[32m:[37m 'ship'
+         ╵           [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/login/login.component.ts:43:4:
+[37m      43 │     [32m{[37m
+         ╵     [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mUnterminated string literal[0m
+
+    src/app/pages/login/login.component.ts:164:20:
+[37m      164 │             title: '[32m[37m
+          ╵                     [32m^[0m
+
+[39m[22m

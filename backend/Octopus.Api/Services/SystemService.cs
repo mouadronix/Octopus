@@ -14,13 +14,28 @@ public class SystemService
 
     public int GetCurrentDay()
     {
-        return _context.TerminalStates.First().CurrentDay;
+        return GetOrCreateTerminalState().CurrentDay;
     }
 
-    public int AdvanceDay()
+    public SystemState GetState()
     {
-        var state = _context.TerminalStates.First();
-        state.CurrentDay++;
+        var terminal = GetOrCreateTerminalState();
+
+        return new SystemState
+        {
+            Environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development",
+            ServerTimeUtc = DateTime.UtcNow,
+            CurrentDay = terminal.CurrentDay,
+            ShipCount = _context.Ships.Count(),
+            BerthCount = _context.Docks.Count(),
+            ActiveAssignmentCount = _context.Assignments.Count(a => a.EndDay >= terminal.CurrentDay)
+        };
+    }
+
+    public SystemState AdvanceDay()
+    {
+        var terminal = GetOrCreateTerminalState();
+        terminal.CurrentDay += 1;
 
         var assignedShips = _context.Ships
             .Where(s => s.Status == ShipStatus.Assigned)
@@ -29,13 +44,27 @@ public class SystemService
         foreach (var ship in assignedShips)
         {
             var assignment = _context.Assignments.FirstOrDefault(a => a.ShipId == ship.Id);
-            if (assignment != null && assignment.EndDay < state.CurrentDay)
+            if (assignment != null && assignment.EndDay < terminal.CurrentDay)
             {
                 ship.Status = ShipStatus.Departed;
             }
         }
 
         _context.SaveChanges();
-        return state.CurrentDay;
+        return GetState();
+    }
+
+    private TerminalState GetOrCreateTerminalState()
+    {
+        var terminal = _context.TerminalStates.FirstOrDefault();
+        if (terminal != null)
+        {
+            return terminal;
+        }
+
+        terminal = new TerminalState { CurrentDay = 1, PlanningHorizon = 30 };
+        _context.TerminalStates.Add(terminal);
+        _context.SaveChanges();
+        return terminal;
     }
 }

@@ -6,7 +6,10 @@
     </header>
 
     <section class="stepper" aria-label="New ship steps">
-      <span class="step-line"><span [style.width]="progressWidth"></span></span>
+      <span class="step-line">
+        <span [style.width]="progressWidth"></span>
+      </span>
+
       <button
         *ngFor="let step of steps; trackBy: trackByStepNumber"
         type="button"
@@ -26,33 +29,62 @@
           <section class="form-grid">
             <article class="panel basic-panel">
               <h2>Basic Information</h2>
+
               <label>
                 Ship Name <span>*</span>
                 <input type="text" name="shipName" placeholder="Enter ship name" [(ngModel)]="shipName" />
               </label>
+
               <label>
                 IMO Number <em>(Optional)</em>
                 <input type="text" name="imoNumber" placeholder="Enter IMO number" [(ngModel)]="imoNumber" />
               </label>
+
               <label>
                 Notes <em>(Optional)</em>
-                <textarea name="notes" maxlength="200" placeholder="Enter any notes about the ship..." [(ngModel)]="notes"></textarea>
+                <textarea
+                  name="notes"
+                  maxlength="200"
+                  placeholder="Enter any notes about the ship..."
+                  [(ngModel)]="notes"
+                ></textarea>
                 <small>{{ notesLength }} / 200</small>
               </label>
             </article>
 
             <article class="panel generated-panel">
-              <h2>Automatic Details (Live Preview)</h2>
+              <h2>Automatic Details</h2>
+
               <div class="detail-card size-card">
-                <div><span class="detail-icon ship-icon"></span><div><strong>Ship Size</strong><p>Updates when the ship name changes</p></div></div>
+                <div>
+                  <span class="detail-icon ship-icon"></span>
+                  <div>
+                    <strong>Ship Size</strong>
+                    <p>Updates when the ship name changes</p>
+                  </div>
+                </div>
                 <b>{{ generatedDetails.size }}</b>
               </div>
+
               <div class="detail-card">
-                <div><span class="detail-icon calendar-icon"></span><div><strong>Arrival Day</strong><p>Generated from current simulation day</p></div></div>
+                <div>
+                  <span class="detail-icon calendar-icon"></span>
+                  <div>
+                    <strong>Arrival Day</strong>
+                    <p>Generated from current simulation day</p>
+                  </div>
+                </div>
                 <b>{{ generatedDetails.arrivalDay }}</b>
               </div>
+
               <div class="detail-card">
-                <div><span class="detail-icon clock-icon"></span><div><strong>Occupation Duration</strong><p>Generated from size and rules</p></div></div>
+                <div>
+                  <span class="detail-icon clock-icon"></span>
+                  <div>
+                    <strong>Occupation Duration</strong>
+                    <p>Generated from size and rules</p>
+                  </div>
+                </div>
                 <b>{{ generatedDetails.duration }} <small>Days</small></b>
               </div>
             </article>
@@ -63,12 +95,26 @@
           <section class="details-layout">
             <article class="panel details-panel">
               <h2>Ship Details Preview</h2>
+
               <div class="generated-summary">
-                <div><span>Ship</span><strong>{{ cleanShipName }}</strong></div>
-                <div><span>Size</span><strong>{{ generatedDetails.size }}</strong></div>
-                <div><span>Arrival</span><strong>Day {{ generatedDetails.arrivalDay }}</strong></div>
-                <div><span>Duration</span><strong>{{ generatedDetails.duration }} days</strong></div>
+                <div>
+                  <span>Ship</span>
+                  <strong>{{ cleanShipName }}</strong>
+                </div>
+                <div>
+                  <span>Size</span>
+                  <strong>{{ generatedDetails.size }}</strong>
+                </div>
+                <div>
+                  <span>Arrival</span>
+                  <strong>Day {{ generatedDetails.arrivalDay }}</strong>
+                </div>
+                <div>
+                  <span>Duration</span>
+                  <strong>{{ generatedDetails.duration }} days</strong>
+                </div>
               </div>
+
               <section class="timeline-preview">
                 <span class="today">Day {{ currentDay }}</span>
                 <span class="arrival">Arrival {{ generatedDetails.arrivalDay }}</span>
@@ -80,8 +126,14 @@
               <h2>Review Notes</h2>
               <p>{{ notes || 'No notes added for this ship.' }}</p>
               <dl>
-                <div><dt>IMO</dt><dd>{{ imoNumber || 'Optional' }}</dd></div>
-                <div><dt>Status</dt><dd>Pending</dd></div>
+                <div>
+                  <dt>IMO</dt>
+                  <dd>{{ imoNumber || 'Optional' }}</dd>
+                </div>
+                <div>
+                  <dt>Status</dt>
+                  <dd>Pending</dd>
+                </div>
               </dl>
             </article>
           </section>
@@ -92,15 +144,35 @@
             <article class="panel confirmation-card">
               <h2>Confirmation</h2>
               <p class="confirm-copy">Confirm the generated details before creating the ship.</p>
+
               <dl class="confirm-grid">
-                <div><dt>Name</dt><dd>{{ cleanShipName }}</dd></div>
-                <div><dt>IMO</dt><dd>{{ imoNumber || 'Optional' }}</dd></div>
-                <div><dt>Size</dt><dd>{{ generatedDetails.size }}</dd></div>
-                <div><dt>Arrival</dt><dd>Day {{ generatedDetails.arrivalDay }}</dd></div>
-                <div><dt>Departure</dt><dd>Day {{ generatedDetails.arrivalDay + generatedDetails.duration }}</dd></div>
-                <div><dt>Duration</dt><dd>{{ generatedDetails.duration }} days</dd></div>
+                <div>
+                  <dt>Name</dt>
+                  <dd>{{ cleanShipName }}</dd>
+                </div>
+                <div>
+                  <dt>IMO</dt>
+                  <dd>{{ imoNumber || 'Optional' }}</dd>
+                </div>
+                <div>
+                  <dt>Size</dt>
+                  <dd>{{ generatedDetails.size }}</dd>
+                </div>
+                <div>
+                  <dt>Arrival</dt>
+                  <dd>Day {{ generatedDetails.arrivalDay }}</dd>
+                </div>
+                <div>
+                  <dt>Departure</dt>
+                  <dd>Day {{ generatedDetails.arrivalDay + generatedDetails.duration }}</dd>
+                </div>
+                <div>
+                  <dt>Duration</dt>
+                  <dd>{{ generatedDetails.duration }} days</dd>
+                </div>
               </dl>
             </article>
+
             <article class="panel final-check">
               <h2>Ready to Create</h2>
               <p>The ship will be created with status <strong>Pending</strong>.</p>
@@ -116,17 +188,28 @@
       <p>Ship size, arrival day, and occupation duration are generated automatically by deterministic rules.</p>
     </section>
 
-    <p *ngIf="feedbackMessage" class="feedback" [class.success]="feedbackType === 'success'" [class.warning]="feedbackType === 'warning'">
+    <p
+      *ngIf="feedbackMessage"
+      class="feedback"
+      [class.success]="feedbackType === 'success'"
+      [class.warning]="feedbackType === 'warning'"
+    >
       {{ feedbackMessage }}
     </p>
 
     <footer class="workflow-actions">
       <a routerLink="/operator" class="cancel-btn">Cancel</a>
+
       <div>
         <button *ngIf="currentStep > 1" type="button" class="secondary-btn" (click)="previousStep()">Back</button>
         <button type="button" class="secondary-btn" (click)="resetForm()">Reset</button>
-        <button *ngIf="currentStep < 3" type="button" class="next-btn" aria-label="Next Step" (click)="nextStep()">Next Step <span aria-hidden="true">></span></button>
-        <button *ngIf="currentStep === 3" type="button" class="next-btn" [disabled]="isSaving" (click)="createShip()">{{ isSaving ? 'Saving...' : 'Create Ship' }}</button>
+        <button *ngIf="currentStep < 3" type="button" class="next-btn" (click)="nextStep()">
+          Next Step
+          <span aria-hidden="true">></span>
+        </button>
+        <button *ngIf="currentStep === 3" type="button" class="next-btn" [disabled]="isSaving" (click)="createShip()">
+          {{ isSaving ? 'Saving...' : 'Create Ship' }}
+        </button>
       </div>
     </footer>
   </main>
@@ -134,18 +217,26 @@
   <aside class="rules-sidebar">
     <section class="side-panel">
       <h2>Generation Rules</h2>
-      <article *ngFor="let rule of rules; trackBy: trackByRuleTitle" class="rule-card" [class]="rule.tone">
+      <article *ngFor="let rule of rules; trackBy: trackByRuleTitle" class="rule-card" [ngClass]="rule.tone">
         <span></span>
-        <div><strong>{{ rule.title }}</strong><p>{{ rule.description }}</p></div>
+        <div>
+          <strong>{{ rule.title }}</strong>
+          <p>{{ rule.description }}</p>
+        </div>
       </article>
     </section>
+
     <section class="side-panel">
       <h2>Size Categories</h2>
       <article *ngFor="let category of sizeCategories; trackBy: trackBySize" class="size-row">
         <b>{{ category.size }}</b>
-        <div><strong>{{ category.label }}</strong><p>{{ category.description }}</p></div>
+        <div>
+          <strong>{{ category.label }}</strong>
+          <p>{{ category.description }}</p>
+        </div>
       </article>
     </section>
+
     <section class="side-panel tips-panel">
       <h2>Tips</h2>
       <p>Make sure the ship name is unique for better tracking and management.</p>

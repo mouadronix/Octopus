@@ -6,7 +6,7 @@ import { of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { ShipService } from '../../services/ship.service';
 
-type ShipSize = 'XL' | 'L' | 'M' | 'S';
+type ShipSizeValue = 'XL' | 'L' | 'M' | 'S';
 type FeedbackType = 'info' | 'success' | 'warning';
 
 interface Step {
@@ -15,7 +15,7 @@ interface Step {
 }
 
 interface GeneratedDetails {
-  size: ShipSize;
+  size: ShipSizeValue;
   arrivalDay: number;
   duration: number;
 }
@@ -27,7 +27,7 @@ interface RuleCard {
 }
 
 interface SizeCategory {
-  size: ShipSize;
+  size: ShipSizeValue;
   label: string;
   description: string;
 }
@@ -49,19 +49,31 @@ export class ShipsComponent {
   feedbackMessage = '';
   feedbackType: FeedbackType = 'info';
 
-  steps: Step[] = [
+  readonly steps: Step[] = [
     { number: 1, title: 'Basic Information' },
     { number: 2, title: 'Ship Details' },
     { number: 3, title: 'Confirmation' }
   ];
 
-  rules: RuleCard[] = [
-    { title: 'Ship Size', description: 'Determined from ship name hash and system rules.', tone: 'purple' },
-    { title: 'Arrival Day', description: 'Calculated from current day and simulation rules.', tone: 'cyan' },
-    { title: 'Occupation Duration', description: 'Generated from ship size and deterministic randomization.', tone: 'green' }
+  readonly rules: RuleCard[] = [
+    {
+      title: 'Ship Size',
+      description: 'Determined from ship name hash and system rules.',
+      tone: 'purple'
+    },
+    {
+      title: 'Arrival Day',
+      description: 'Calculated from current day and simulation rules.',
+      tone: 'cyan'
+    },
+    {
+      title: 'Occupation Duration',
+      description: 'Generated from ship size and deterministic randomization.',
+      tone: 'green'
+    }
   ];
 
-  sizeCategories: SizeCategory[] = [
+  readonly sizeCategories: SizeCategory[] = [
     { size: 'XL', label: 'Extra Large', description: 'For the largest vessels' },
     { size: 'L', label: 'Large', description: 'For large vessels' },
     { size: 'M', label: 'Medium', description: 'For medium vessels' },
@@ -75,9 +87,9 @@ export class ShipsComponent {
 
   get generatedDetails(): GeneratedDetails {
     const hash = this.hashName(this.shipName || 'OCTOPUS');
-    const sizes: ShipSize[] = ['XL', 'L', 'M', 'S'];
+    const sizes: ShipSizeValue[] = ['XL', 'L', 'M', 'S'];
     const size = sizes[hash % sizes.length];
-    const baseDuration: Record<ShipSize, number> = { XL: 8, L: 6, M: 4, S: 2 };
+    const baseDuration: Record<ShipSizeValue, number> = { XL: 8, L: 6, M: 4, S: 2 };
 
     return {
       size,
@@ -122,7 +134,7 @@ export class ShipsComponent {
       return;
     }
 
-    this.currentStep = Math.min(this.currentStep + 1, 3);
+    this.currentStep = Math.min(this.currentStep + 1, this.steps.length);
     this.feedbackMessage = '';
   }
 
@@ -138,14 +150,23 @@ export class ShipsComponent {
       return;
     }
 
+    const details = this.generatedDetails;
+
     this.isSaving = true;
     this.feedbackMessage = '';
-
     this.shipService
-      .createShip({ name: this.shipName.trim(), notes: this.notes.trim() })
+      .createShip({
+        name: this.shipName.trim(),
+        notes: this.notes.trim(),
+        size: details.size,
+        arrivalDay: details.arrivalDay,
+        duration: details.duration
+      })
       .pipe(
         catchError(() => of(null)),
-        finalize(() => (this.isSaving = false))
+        finalize(() => {
+          this.isSaving = false;
+        })
       )
       .subscribe((ship) => {
         if (ship) {
@@ -153,7 +174,7 @@ export class ShipsComponent {
           return;
         }
 
-        this.saveLocalDraft();
+        this.saveLocalDraft(details);
         this.setFeedback('Backend create endpoint is not ready yet. Ship saved locally as a frontend draft.', 'warning');
       });
   }
@@ -182,7 +203,7 @@ export class ShipsComponent {
     return rule.title;
   }
 
-  trackBySize(_index: number, category: SizeCategory): ShipSize {
+  trackBySize(_index: number, category: SizeCategory): ShipSizeValue {
     return category.size;
   }
 
@@ -191,10 +212,10 @@ export class ShipsComponent {
     this.feedbackType = type;
   }
 
-  private saveLocalDraft(): void {
-    const details = this.generatedDetails;
+  private saveLocalDraft(details: GeneratedDetails): void {
     const key = 'octopus.localShips';
-    const current = JSON.parse(localStorage.getItem(key) || '[]');
+    const current = JSON.parse(localStorage.getItem(key) || '[]') as unknown[];
+
     localStorage.setItem(
       key,
       JSON.stringify([

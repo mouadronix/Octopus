@@ -10,10 +10,14 @@ export class AssignmentService {
 
   constructor(private readonly http: HttpClient) {}
 
+
+  //get all assignments
   getAssignments(): Observable<Assignment[]> {
     return this.http.get<Assignment[]>(this.apiUrl);
   }
 
+
+  //create an assignment
   createAssignment(request: CreateAssignmentRequest): Observable<Assignment> {
     return this.http.post<Assignment>(this.apiUrl, request);
   }

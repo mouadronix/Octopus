@@ -4,7 +4,14 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 
 interface SidebarStat {
   label: string;
-  value: number;
+  value: string;
+  color: 'orange' | 'green' | 'cyan' | 'blue';
+}
+
+interface NavItem {
+  label: string;
+  route: string;
+  icon: 'dashboard' | 'ship' | 'pending' | 'berth' | 'calendar' | 'log' | 'time';
 }
 
 @Component({
@@ -15,11 +22,26 @@ interface SidebarStat {
   styleUrl: './app-sidebar.component.scss'
 })
 export class AppSidebarComponent {
-  stats: SidebarStat[] = [
-    { label: 'Pending', value: 0 },
-    { label: 'Assigned', value: 0 },
-    { label: 'Departed', value: 0 }
+  navItems: NavItem[] = [
+    { label: 'Dashboard', route: '/dashboard', icon: 'dashboard' },
+    { label: 'Ships', route: '/ships', icon: 'ship' },
+    { label: 'Pending Assignments', route: '/scheduler', icon: 'pending' },
+    { label: 'Berth Board', route: '/operator', icon: 'berth' },
+    { label: 'Planning Calendar', route: '/berths', icon: 'calendar' },
+    { label: 'Activity Log', route: '/activity-log', icon: 'log' },
+    { label: 'Virtual Time', route: '/virtual-time', icon: 'time' }
   ];
+
+  stats: SidebarStat[] = [
+    { label: 'Ships Pending', value: '6', color: 'orange' },
+    { label: 'Berths Occupied', value: '3', color: 'green' },
+    { label: 'Berths Available', value: '7', color: 'cyan' },
+    { label: 'Next Arrival Day 13', value: '', color: 'blue' }
+  ];
+
+  trackByNavLabel(_index: number, item: NavItem): string {
+    return item.label;
+  }
 
   trackByStatLabel(_index: number, stat: SidebarStat): string {
     return stat.label;
