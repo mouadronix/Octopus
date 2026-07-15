@@ -181,28 +181,6 @@
       <input name="newShipName" type="text" [(ngModel)]="shipForm.name" placeholder="e.g. MSC Aurora" />
     </label>
 
-    <div class="modal-grid">
-      <label>
-        <span>Size</span>
-        <select name="newShipSize" [(ngModel)]="shipForm.size">
-          <option value="XL">XL</option>
-          <option value="L">L</option>
-          <option value="M">M</option>
-          <option value="S">S</option>
-        </select>
-      </label>
-
-      <label>
-        <span>Arrival Day</span>
-        <input name="newArrivalDay" type="number" min="1" [(ngModel)]="shipForm.arrivalDay" />
-      </label>
-
-      <label>
-        <span>Duration</span>
-        <input name="newDuration" type="number" min="1" [(ngModel)]="shipForm.duration" />
-      </label>
-    </div>
-
     <label>
       <span>Notes / IMO</span>
       <textarea name="newShipNotes" [(ngModel)]="shipForm.notes" placeholder="IMO: 1234567 or operational notes"></textarea>

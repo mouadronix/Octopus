@@ -18,7 +18,4 @@ export interface Ship {
 export interface CreateShipRequest {
   name: string;
   notes?: string;
-  size: Exclude<ShipSize, number>;
-  arrivalDay: number;
-  duration: number;
 }

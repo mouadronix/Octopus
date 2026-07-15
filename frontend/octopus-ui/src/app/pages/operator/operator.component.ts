@@ -97,7 +97,7 @@ export class OperatorComponent implements OnInit {
       return;
     }
 
-    this.shipService.createShip({ name, notes, size: 'M', arrivalDay: this.currentDay, duration: 3 }).subscribe({
+    this.shipService.createShip({ name, notes }).subscribe({
       next: () => {
         this.showMessage('Ship "' + name + '" created successfully.', 'success');
         this.newShipName = '';

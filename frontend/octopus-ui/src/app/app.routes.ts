@@ -18,10 +18,10 @@ export const routes: Routes = [
     canActivateChild: [authGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'operator', component: OperatorComponent },
-      { path: 'scheduler', component: SchedulerComponent },
-      { path: 'ships', component: ShipsComponent },
-      { path: 'berths', component: BerthsComponent }
+      { path: 'operator', component: OperatorComponent, data: { roles: ['operator'] } },
+      { path: 'scheduler', component: SchedulerComponent, data: { roles: ['scheduler'] } },
+      { path: 'ships', component: ShipsComponent, data: { roles: ['operator'] } },
+      { path: 'berths', component: BerthsComponent, data: { roles: ['scheduler'] } }
     ]
   },
   { path: '**', redirectTo: '' }

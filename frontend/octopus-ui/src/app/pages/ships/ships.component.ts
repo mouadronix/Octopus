@@ -17,9 +17,6 @@ interface ShipMetric {
 interface ShipForm {
   name: string;
   notes: string;
-  size: 'XL' | 'L' | 'M' | 'S';
-  arrivalDay: number;
-  duration: number;
 }
 
 @Component({
@@ -146,21 +143,13 @@ export class ShipsComponent implements OnInit {
       return;
     }
 
-    if (this.shipForm.arrivalDay < 1 || this.shipForm.duration < 1) {
-      this.errorMessage = 'Arrival day and duration must be positive.';
-      return;
-    }
-
     this.isSaving = true;
     this.errorMessage = '';
 
     this.shipService
       .createShip({
         name,
-        notes: this.shipForm.notes.trim(),
-        size: this.shipForm.size,
-        arrivalDay: this.shipForm.arrivalDay,
-        duration: this.shipForm.duration
+        notes: this.shipForm.notes.trim()
       })
       .subscribe({
         next: () => {
@@ -273,10 +262,7 @@ export class ShipsComponent implements OnInit {
   private createEmptyForm(): ShipForm {
     return {
       name: '',
-      notes: '',
-      size: 'M',
-      arrivalDay: 13,
-      duration: 4
+      notes: ''
     };
   }
 }
