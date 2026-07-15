@@ -15,7 +15,7 @@ public class SystemService
 
     public int GetCurrentDay()
     {
-        return _context.TerminalStates.First().CurrentDay;
+        return _context.TerminalStates.FirstOrDefault()?.CurrentDay ?? 1;
     }
 
     public SystemState GetState()

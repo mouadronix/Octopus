@@ -39,7 +39,7 @@ public static class SeedData
             new Ship { Name = "Adriatic Pearl", Size = ShipSize.XL, Status = ShipStatus.Pending, ArrivalDay = 13, Duration = 7, Notes = "Priority cargo" },
             new Ship { Name = "North Wind", Size = ShipSize.L, Status = ShipStatus.Pending, ArrivalDay = 14, Duration = 5, Notes = "Late arrival" },
             new Ship { Name = "Blue Horizon", Size = ShipSize.M, Status = ShipStatus.Pending, ArrivalDay = 15, Duration = 4, Notes = "Refrigerated" },
-            new Ship { Name = "Port Runner", Size = ShipSize.S, Status = ShipStatus.Pending, ArrivalDay = 13, Duration = 2, Notes = "Short stay" },
+            new Ship { Name = "Port Runner", Size = ShipSize.S, Status = ShipStatus.Pending, ArrivalDay = 13, Duration = 3, Notes = "Short stay" },
             new Ship { Name = "Harbor Line", Size = ShipSize.S, Status = ShipStatus.Pending, ArrivalDay = 16, Duration = 3, Notes = "" },
             new Ship { Name = "Silver Dock", Size = ShipSize.M, Status = ShipStatus.Pending, ArrivalDay = 17, Duration = 3, Notes = "" },
             new Ship { Name = "Pacific Trader", Size = ShipSize.XL, Status = ShipStatus.Assigned, ArrivalDay = 3, Duration = 12, Notes = "IMO: 9102837" },
@@ -49,7 +49,7 @@ public static class SeedData
             new Ship { Name = "Atlantic Crown", Size = ShipSize.XL, Status = ShipStatus.Assigned, ArrivalDay = 4, Duration = 9, Notes = "IMO: 9044551" },
             new Ship { Name = "Red Harbor", Size = ShipSize.L, Status = ShipStatus.Assigned, ArrivalDay = 6, Duration = 5, Notes = "IMO: 9098123" },
             new Ship { Name = "Ionian Star", Size = ShipSize.M, Status = ShipStatus.Assigned, ArrivalDay = 8, Duration = 6, Notes = "IMO: 9307114" },
-            new Ship { Name = "Metro Cargo", Size = ShipSize.S, Status = ShipStatus.Assigned, ArrivalDay = 11, Duration = 2, Notes = "IMO: 9114007" },
+            new Ship { Name = "Metro Cargo", Size = ShipSize.S, Status = ShipStatus.Assigned, ArrivalDay = 11, Duration = 3, Notes = "IMO: 9114007" },
             new Ship { Name = "Blue Harbor", Size = ShipSize.L, Status = ShipStatus.Departed, ArrivalDay = 12, Duration = 4, Notes = "IMO: 9452220" },
         };
         context.Ships.AddRange(ships);
