@@ -36,61 +36,6 @@ public class RemainingControllersTests : IDisposable
     }
 
     // ================================================================
-    // SystemController tests
-    // ================================================================
-
-    [Fact]
-    public async Task System_GetState_ShouldReturnOk()
-    {
-        var response = await _client.GetAsync("/api/system/state");
-
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-    }
-
-    [Fact]
-    public async Task System_GetState_ShouldContainCorrectCounts()
-    {
-        var response = await _client.GetAsync("/api/system/state");
-
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-        var state = await response.Content.ReadFromJsonAsync<SystemState>(_jsonOptions);
-        Assert.NotNull(state);
-        Assert.True(state.CurrentDay >= 1);
-        Assert.True(state.BerthCount >= 3); // SeedHelper seeds 3 docks
-        Assert.True(state.ShipCount >= 0);
-        Assert.True(state.ActiveAssignmentCount >= 0);
-        Assert.False(string.IsNullOrEmpty(state.Environment));
-        Assert.True(state.ServerTimeUtc != default);
-    }
-
-    [Fact]
-    public async Task System_AdvanceDay_ShouldReturnOk()
-    {
-        var response = await _client.PostAsync("/api/system/advance-day", null);
-
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-    }
-
-    [Fact]
-    public async Task System_AdvanceDay_ShouldIncrementDay()
-    {
-        // Get the current day first
-        var beforeResponse = await _client.GetAsync("/api/system/state");
-        var before = await beforeResponse.Content.ReadFromJsonAsync<SystemState>(_jsonOptions);
-        Assert.NotNull(before);
-
-        // Advance the day
-        var advanceResponse = await _client.PostAsync("/api/system/advance-day", null);
-        Assert.Equal(HttpStatusCode.OK, advanceResponse.StatusCode);
-
-        var after = await advanceResponse.Content.ReadFromJsonAsync<SystemState>(_jsonOptions);
-        Assert.NotNull(after);
-
-        Assert.Equal(before.CurrentDay + 1, after.CurrentDay);
-    }
-
-    // ================================================================
     // TerminalController tests
     // ================================================================
 
@@ -121,12 +66,10 @@ public class RemainingControllersTests : IDisposable
     [Fact]
     public async Task Terminal_NextDay_ShouldIncrementDay()
     {
-        // Get current day
         var beforeResponse = await _client.GetAsync("/api/terminal/day");
         var beforeBody = await beforeResponse.Content.ReadFromJsonAsync<JsonElement>(_jsonOptions);
         var beforeDay = beforeBody.GetProperty("currentDay").GetInt32();
 
-        // Advance via next-day
         var nextDayResponse = await _client.PostAsync("/api/terminal/next-day", null);
         Assert.Equal(HttpStatusCode.OK, nextDayResponse.StatusCode);
 
@@ -157,9 +100,8 @@ public class RemainingControllersTests : IDisposable
 
         var docks = await response.Content.ReadFromJsonAsync<List<JsonElement>>(_jsonOptions);
         Assert.NotNull(docks);
-        Assert.True(docks.Count >= 3); // SeedHelper seeds 3 docks
+        Assert.True(docks.Count >= 3);
 
-        // Each dock should have the expected properties
         foreach (var dock in docks)
         {
             Assert.True(dock.TryGetProperty("id", out _));

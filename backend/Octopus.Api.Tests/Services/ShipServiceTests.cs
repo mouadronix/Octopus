@@ -1,3 +1,4 @@
+using System;
 using Xunit;
 using Octopus.Api.DTOs;
 using Octopus.Api.Models;
@@ -8,19 +9,11 @@ namespace Octopus.Api.Tests.Services;
 
 public class ShipServiceTests
 {
-    private static CreateShipRequest MakeRequest(
-        string name = "TestShip",
-        ShipSize size = ShipSize.M,
-        int arrivalDay = 1,
-        int duration = 5,
-        string notes = "")
+    private static CreateShipRequest MakeRequest(string name = "TestShip", string notes = "")
     {
         return new CreateShipRequest
         {
             Name = name,
-            Size = size,
-            ArrivalDay = arrivalDay,
-            Duration = duration,
             Notes = notes
         };
     }
@@ -32,8 +25,11 @@ public class ShipServiceTests
     public void Create_ShouldAddShipWithPendingStatus()
     {
         using var context = TestDbContextFactory.CreateDbContext();
-        var service = new ShipService(context);
+        // Ensure TerminalState exists for auto-generation
+        context.TerminalStates.Add(new TerminalState { CurrentDay = 1, PlanningHorizon = 30 });
+        context.SaveChanges();
 
+        var service = new ShipService(context);
         var result = service.Create(MakeRequest());
 
         Assert.Equal(ShipStatus.Pending, result.Status);
@@ -46,54 +42,53 @@ public class ShipServiceTests
     public void Create_ShouldPersistToDatabase()
     {
         using var context = TestDbContextFactory.CreateDbContext();
+        context.TerminalStates.Add(new TerminalState { CurrentDay = 1, PlanningHorizon = 30 });
+        context.SaveChanges();
+
         var service = new ShipService(context);
+        var created = service.Create(MakeRequest(name: "Persistent"));
 
-        var created = service.Create(MakeRequest(name: "Persistent", size: ShipSize.L));
-
-        // Verify via a fresh context read
         var persisted = context.Ships.Find(created.Id);
         Assert.NotNull(persisted);
         Assert.Equal("Persistent", persisted.Name);
-        Assert.Equal(ShipSize.L, persisted.Size);
         Assert.Equal(ShipStatus.Pending, persisted.Status);
     }
 
     // ---------------------------------------------------------------
-    // 3. GetAll_ShouldReturnAllShips
+    // 3. Create_ShouldAutoGenerateFields
+    // ---------------------------------------------------------------
+    [Fact]
+    public void Create_ShouldAutoGenerateFields()
+    {
+        using var context = TestDbContextFactory.CreateDbContext();
+        context.TerminalStates.Add(new TerminalState { CurrentDay = 10, PlanningHorizon = 30 });
+        context.SaveChanges();
+
+        var service = new ShipService(context);
+        var created = service.Create(MakeRequest());
+
+        Assert.True(Enum.IsDefined(created.Size));
+        Assert.True(created.ArrivalDay >= 10); // currentDay + random(0..30)
+        Assert.InRange(created.Duration, 3, 15);
+    }
+
+    // ---------------------------------------------------------------
+    // 4. GetAll_ShouldReturnAllShips
     // ---------------------------------------------------------------
     [Fact]
     public void GetAll_ShouldReturnAllShips()
     {
         using var context = TestDbContextFactory.CreateDbContext();
-        var service = new ShipService(context);
+        context.TerminalStates.Add(new TerminalState { CurrentDay = 1, PlanningHorizon = 30 });
+        context.SaveChanges();
 
-        service.Create(MakeRequest(name: "Alpha", arrivalDay: 1));
-        service.Create(MakeRequest(name: "Beta", arrivalDay: 2));
-        service.Create(MakeRequest(name: "Gamma", arrivalDay: 3));
+        var service = new ShipService(context);
+        service.Create(MakeRequest(name: "Alpha"));
+        service.Create(MakeRequest(name: "Beta"));
+        service.Create(MakeRequest(name: "Gamma"));
 
         var all = service.GetAll();
-
         Assert.Equal(3, all.Count);
-    }
-
-    // ---------------------------------------------------------------
-    // 4. GetAll_ShouldOrderByArrivalDay
-    // ---------------------------------------------------------------
-    [Fact]
-    public void GetAll_ShouldOrderByArrivalDay()
-    {
-        using var context = TestDbContextFactory.CreateDbContext();
-        var service = new ShipService(context);
-
-        service.Create(MakeRequest(name: "Late", arrivalDay: 10));
-        service.Create(MakeRequest(name: "Early", arrivalDay: 1));
-        service.Create(MakeRequest(name: "Middle", arrivalDay: 5));
-
-        var all = service.GetAll();
-
-        Assert.Equal(1, all[0].ArrivalDay);
-        Assert.Equal(5, all[1].ArrivalDay);
-        Assert.Equal(10, all[2].ArrivalDay);
     }
 
     // ---------------------------------------------------------------
@@ -103,12 +98,13 @@ public class ShipServiceTests
     public void GetById_ExistingId_ShouldReturnShip()
     {
         using var context = TestDbContextFactory.CreateDbContext();
-        var service = new ShipService(context);
+        context.TerminalStates.Add(new TerminalState { CurrentDay = 1, PlanningHorizon = 30 });
+        context.SaveChanges();
 
+        var service = new ShipService(context);
         var created = service.Create(MakeRequest(name: "FindMe"));
 
         var found = service.GetById(created.Id);
-
         Assert.NotNull(found);
         Assert.Equal("FindMe", found.Name);
     }
@@ -123,7 +119,6 @@ public class ShipServiceTests
         var service = new ShipService(context);
 
         var found = service.GetById(999);
-
         Assert.Null(found);
     }
 
@@ -134,8 +129,10 @@ public class ShipServiceTests
     public void GetById_ShouldIncludeAssignment()
     {
         using var context = TestDbContextFactory.CreateDbContext();
-        var service = new ShipService(context);
+        context.TerminalStates.Add(new TerminalState { CurrentDay = 1, PlanningHorizon = 30 });
+        context.SaveChanges();
 
+        var service = new ShipService(context);
         var ship = service.Create(MakeRequest());
 
         var dock = new Dock { Name = "Dock A", Size = ShipSize.L };
@@ -153,7 +150,6 @@ public class ShipServiceTests
         context.SaveChanges();
 
         var found = service.GetById(ship.Id);
-
         Assert.NotNull(found);
         Assert.NotNull(found.Assignment);
         Assert.Equal(dock.Id, found.Assignment.DockId);
@@ -162,66 +158,51 @@ public class ShipServiceTests
     }
 
     // ---------------------------------------------------------------
-    // 8. Delete_ExistingShip_ShouldReturnTrueAndRemove
+    // 8. Update_PendingShip_ShouldApplyChanges
     // ---------------------------------------------------------------
     [Fact]
-    public void Delete_ExistingShip_ShouldReturnTrueAndRemove()
+    public void Update_PendingShip_ShouldApplyChanges()
     {
         using var context = TestDbContextFactory.CreateDbContext();
+        context.TerminalStates.Add(new TerminalState { CurrentDay = 1, PlanningHorizon = 30 });
+        context.SaveChanges();
+
         var service = new ShipService(context);
+        var created = service.Create(MakeRequest(name: "OldName"));
 
-        var created = service.Create(MakeRequest());
-
-        var result = service.Delete(created.Id);
-
-        Assert.True(result);
-        Assert.Null(context.Ships.Find(created.Id));
-    }
-
-    // ---------------------------------------------------------------
-    // 9. Delete_NonExistingShip_ShouldReturnFalse
-    // ---------------------------------------------------------------
-    [Fact]
-    public void Delete_NonExistingShip_ShouldReturnFalse()
-    {
-        using var context = TestDbContextFactory.CreateDbContext();
-        var service = new ShipService(context);
-
-        var result = service.Delete(999);
-
-        Assert.False(result);
-    }
-
-    // ---------------------------------------------------------------
-    // 10. Update_ExistingShip_ShouldApplyChanges
-    // ---------------------------------------------------------------
-    [Fact]
-    public void Update_ExistingShip_ShouldApplyChanges()
-    {
-        using var context = TestDbContextFactory.CreateDbContext();
-        var service = new ShipService(context);
-
-        var created = service.Create(MakeRequest(name: "OldName", duration: 3));
-
-        var updated = service.Update(created.Id, ship =>
-        {
-            ship.Name = "NewName";
-            ship.Duration = 10;
-        });
+        var updated = service.Update(created.Id, "NewName", "New notes");
 
         Assert.NotNull(updated);
         Assert.Equal("NewName", updated.Name);
-        Assert.Equal(10, updated.Duration);
+        Assert.Equal("New notes", updated.Notes);
 
-        // Verify persistence
         var fromDb = context.Ships.Find(created.Id);
         Assert.NotNull(fromDb);
         Assert.Equal("NewName", fromDb.Name);
-        Assert.Equal(10, fromDb.Duration);
+        Assert.Equal("New notes", fromDb.Notes);
     }
 
     // ---------------------------------------------------------------
-    // 11. Update_NonExistingShip_ShouldReturnNull
+    // 9. Update_NonPendingShip_ShouldReturnNull
+    // ---------------------------------------------------------------
+    [Fact]
+    public void Update_NonPendingShip_ShouldReturnNull()
+    {
+        using var context = TestDbContextFactory.CreateDbContext();
+        context.TerminalStates.Add(new TerminalState { CurrentDay = 1, PlanningHorizon = 30 });
+        context.SaveChanges();
+
+        var service = new ShipService(context);
+        var ship = new Ship { Name = "Assigned", Size = ShipSize.M, Status = ShipStatus.Assigned, ArrivalDay = 1, Duration = 5 };
+        context.Ships.Add(ship);
+        context.SaveChanges();
+
+        var result = service.Update(ship.Id, "New", "Notes");
+        Assert.Null(result);
+    }
+
+    // ---------------------------------------------------------------
+    // 10. Update_NonExistingShip_ShouldReturnNull
     // ---------------------------------------------------------------
     [Fact]
     public void Update_NonExistingShip_ShouldReturnNull()
@@ -229,11 +210,7 @@ public class ShipServiceTests
         using var context = TestDbContextFactory.CreateDbContext();
         var service = new ShipService(context);
 
-        var result = service.Update(999, ship =>
-        {
-            ship.Name = "Ghost";
-        });
-
+        var result = service.Update(999, "Ghost", "Notes");
         Assert.Null(result);
     }
 }

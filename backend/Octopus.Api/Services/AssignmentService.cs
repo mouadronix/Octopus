@@ -23,6 +23,9 @@ public class AssignmentService
             .ToList();
     }
 
+    /// <summary>
+    /// Assign a ship to a specific dock.
+    /// </summary>
     public Assignment? AssignShip(int shipId, int dockId)
     {
         var ship = _context.Ships
@@ -32,27 +35,19 @@ public class AssignmentService
         var terminal = _context.TerminalStates.FirstOrDefault();
 
         if (ship is null || dock is null || terminal is null)
-        {
             return null;
-        }
 
         if (ship.Status != ShipStatus.Pending || ship.Assignment is not null)
-        {
             return null;
-        }
 
         if (!CanFitShip(dock.Size, ship.Size))
-        {
             return null;
-        }
 
         var startDay = Math.Max(ship.ArrivalDay, terminal.CurrentDay);
         var endDay = startDay + ship.Duration - 1;
 
         if (HasDockConflict(dock.Id, startDay, endDay))
-        {
             return null;
-        }
 
         var assignment = new Assignment
         {
@@ -69,31 +64,30 @@ public class AssignmentService
         return assignment;
     }
 
+    /// <summary>
+    /// Get a suggested dock for a ship using first-fit greedy algorithm.
+    /// Spec: scan docks in order, take the first that fits.
+    /// </summary>
     public SuggestionResponse? GetSuggestion(int shipId)
     {
         var ship = _context.Ships.Find(shipId);
         var terminal = _context.TerminalStates.FirstOrDefault();
 
         if (ship is null || terminal is null || ship.Status != ShipStatus.Pending)
-        {
             return null;
-        }
 
         var startDay = Math.Max(ship.ArrivalDay, terminal.CurrentDay);
         var endDay = startDay + ship.Duration - 1;
 
+        // First-fit: scan docks in natural DB order (by Id), take first that fits
         var dock = _context.Docks
             .AsEnumerable()
             .Where(d => CanFitShip(d.Size, ship.Size))
             .Where(d => !HasDockConflict(d.Id, startDay, endDay))
-            .OrderBy(d => SizeRank(d.Size))
-            .ThenBy(d => d.Name)
             .FirstOrDefault();
 
         if (dock is null)
-        {
             return null;
-        }
 
         return new SuggestionResponse
         {

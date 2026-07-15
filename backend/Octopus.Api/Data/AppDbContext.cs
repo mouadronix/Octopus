@@ -11,7 +11,6 @@ public class AppDbContext : DbContext
     public DbSet<Dock> Docks => Set<Dock>();
     public DbSet<Assignment> Assignments => Set<Assignment>();
     public DbSet<TerminalState> TerminalStates => Set<TerminalState>();
-    public DbSet<AppUser> Users => Set<AppUser>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -39,9 +38,5 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Dock>()
             .Property(d => d.Size)
             .HasConversion<string>();
-
-        modelBuilder.Entity<AppUser>()
-            .HasIndex(u => u.Username)
-            .IsUnique();
     }
 }

@@ -24,9 +24,9 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
     {
         builder.UseEnvironment("Testing");
 
-        // Keep the in-memory SQLite connection open for the lifetime of the factory.
-        // SQLite in-memory databases are destroyed when the connection closes.
-        _connection = new SqliteConnection("DataSource=:memory:");
+        // Use a unique named in-memory database per factory instance to avoid
+        // parallel test interference (shared :memory: databases are per-connection).
+        _connection = new SqliteConnection($"DataSource=file:{Guid.NewGuid()}?mode=memory&cache=shared");
         _connection.Open();
 
         builder.ConfigureServices(services =>
@@ -64,13 +64,9 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
         using var scope = services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        // Wipe everything Program.cs may have seeded
-        db.Assignments.RemoveRange(db.Assignments);
-        db.Ships.RemoveRange(db.Ships);
-        db.Docks.RemoveRange(db.Docks);
-        db.TerminalStates.RemoveRange(db.TerminalStates);
-        db.Users.RemoveRange(db.Users);
-        db.SaveChanges();
+        // Recreate schema from model (deletes + creates to start clean)
+        db.Database.EnsureDeleted();
+        db.Database.EnsureCreated();
 
         // Seed the minimal test dataset (3 docks, 1 terminal state)
         SeedHelper.SeedBasicData(db);

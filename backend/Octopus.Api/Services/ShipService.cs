@@ -8,6 +8,7 @@ namespace Octopus.Api.Services;
 public class ShipService
 {
     private readonly AppDbContext _context;
+    private static readonly Random _random = new();
 
     public ShipService(AppDbContext context)
     {
@@ -32,17 +33,27 @@ public class ShipService
             .FirstOrDefault(s => s.Id == id);
     }
 
-
-// Creates a new ship with Pending status
+    /// <summary>
+    /// Creates a new ship with auto-generated size, arrival day, and duration.
+    /// Spec: Operator only enters name and notes.
+    /// </summary>
     public Ship Create(CreateShipRequest request)
     {
+        var terminal = _context.TerminalStates.FirstOrDefault();
+        var currentDay = terminal?.CurrentDay ?? 1;
+
+        var sizes = Enum.GetValues<ShipSize>();
+        var size = sizes[_random.Next(sizes.Length)];
+        var arrivalDay = currentDay + _random.Next(0, 31); // 0–30 days from current day
+        var duration = _random.Next(3, 16); // 3–15 days
+
         var ship = new Ship
         {
             Name = request.Name,
             Notes = request.Notes,
-            Size = request.Size,
-            ArrivalDay = request.ArrivalDay,
-            Duration = request.Duration,
+            Size = size,
+            ArrivalDay = arrivalDay,
+            Duration = duration,
             Status = ShipStatus.Pending
         };
 
@@ -51,27 +62,19 @@ public class ShipService
         return ship;
     }
 
-
-
-// Updates an existing ship
-    public Ship? Update(int id, Action<Ship> apply)
+    /// <summary>
+    /// Updates name/notes of a Pending ship.
+    /// Spec: only Pending ships can be edited.
+    /// </summary>
+    public Ship? Update(int id, string name, string notes)
     {
         var ship = GetById(id);
         if (ship == null) return null;
-        apply(ship);
+        if (ship.Status != ShipStatus.Pending) return null;
+
+        ship.Name = name;
+        ship.Notes = notes;
         _context.SaveChanges();
         return ship;
-    }
-
-
-
-// Deletes a ship by id
-    public bool Delete(int id)
-    {
-        var ship = GetById(id);
-        if (ship == null) return false;
-        _context.Ships.Remove(ship);
-        _context.SaveChanges();
-        return true;
     }
 }

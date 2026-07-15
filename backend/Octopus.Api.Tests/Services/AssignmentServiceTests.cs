@@ -286,10 +286,10 @@ public class AssignmentServiceTests
     }
 
     // ---------------------------------------------------------------
-    // 11. GetSuggestion_ValidPendingShip_ShouldReturnBestDock
+    // 11. GetSuggestion_ValidPendingShip_ShouldReturnFirstFittingDock
     // ---------------------------------------------------------------
     [Fact]
-    public void GetSuggestion_ValidPendingShip_ShouldReturnBestDock()
+    public void GetSuggestion_ValidPendingShip_ShouldReturnFirstFittingDock()
     {
         using var context = TestDbContextFactory.CreateDbContext();
         var service = new AssignmentService(context);
@@ -306,7 +306,8 @@ public class AssignmentServiceTests
         var result = service.GetSuggestion(ship.Id);
 
         Assert.NotNull(result);
-        // Should pick the smallest dock that fits: Medium (SizeRank 2) < Large (SizeRank 3)
+        // First-fit: scan in DB order, pick first that fits
+        // Small doesn't fit (S < M), Medium fits → pick Medium
         Assert.Equal(mediumDock.Id, result.DockId);
         Assert.Equal("Medium", result.DockName);
         Assert.Equal(1, result.StartDay);
@@ -368,10 +369,10 @@ public class AssignmentServiceTests
     }
 
     // ---------------------------------------------------------------
-    // 15. GetSuggestion_ShouldPreferSmallerDock
+    // 15. GetSuggestion_ShouldUseFirstFit
     // ---------------------------------------------------------------
     [Fact]
-    public void GetSuggestion_ShouldPreferSmallerDock()
+    public void GetSuggestion_ShouldUseFirstFit()
     {
         using var context = TestDbContextFactory.CreateDbContext();
         var service = new AssignmentService(context);
@@ -387,8 +388,8 @@ public class AssignmentServiceTests
         var result = service.GetSuggestion(ship.Id);
 
         Assert.NotNull(result);
-        // SizeRank(M)=2 < SizeRank(XL)=4, so medium dock should be preferred
-        Assert.Equal(mediumDock.Id, result.DockId);
-        Assert.Equal("Alpha", result.DockName);
+        // First-fit: Zulu (XL) is first in DB order and fits M → pick Zulu
+        Assert.Equal(largeDock.Id, result.DockId);
+        Assert.Equal("Zulu", result.DockName);
     }
 }
