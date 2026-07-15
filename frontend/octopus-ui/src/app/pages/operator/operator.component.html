@@ -1,166 +1,119 @@
-<section class="berth-page">
-  <div class="page-background" aria-hidden="true"></div>
+<section class="operator-page">
+  <header class="operator-hero">
+    <div>
+      <h1>Ship Operations</h1>
+      <p>Create and manage ships, track their status, and edit pending ship details.</p>
+    </div>
+  </header>
 
-  <section class="board-main">
-    <header class="hero">
-      <p>Berth Operations Center</p>
-      <h1>
-        <span>Smart berth</span>
-        <strong>allocation.</strong>
-      </h1>
-      <p class="hero-copy">
-        Monitor berth occupancy, assign incoming ships, and manage terminal capacity in real time.
-      </p>
-    </header>
+  <p *ngIf="isLoading" class="state-message">Loading ship data from backend...</p>
+  <p *ngIf="errorMessage" class="state-message error">{{ errorMessage }}</p>
+  <p *ngIf="message && !isLoading" class="state-message" [class.error]="messageType === 'error'">{{ message }}</p>
 
-    <section *ngIf="isLoading || errorMessage" class="data-state">
-      <span *ngIf="isLoading">Loading berth operations from backend...</span>
-      <span *ngIf="!isLoading && errorMessage">{{ errorMessage }}</span>
-    </section>
-
-    <section class="metric-grid" aria-label="Berth metrics">
-      <article *ngFor="let metric of metrics; trackBy: trackByMetric" class="metric-card" [class]="metric.tone">
-        <div class="metric-icon" [ngSwitch]="metric.icon" aria-hidden="true">
-          <svg *ngSwitchCase="'ship'" viewBox="0 0 48 48">
-            <path d="M7 29h34l-5 10H12z" />
-            <path d="M16 29V15h16v14" />
-            <path d="M20 15V9h8v6" />
-          </svg>
-          <svg *ngSwitchCase="'crane'" viewBox="0 0 48 48">
-            <path d="M13 39h22M24 39V12M16 16h24l-8-6M38 16v8M18 39l6-27 6 27" />
-          </svg>
-          <svg *ngSwitchCase="'berth'" viewBox="0 0 48 48">
-            <path d="M8 34h32M12 16v18M36 16v18M12 24h24" />
-          </svg>
-          <svg *ngSwitchCase="'calendar'" viewBox="0 0 48 48">
-            <path d="M12 13h24a4 4 0 0 1 4 4v19a4 4 0 0 1-4 4H12a4 4 0 0 1-4-4V17a4 4 0 0 1 4-4z" />
-            <path d="M16 8v9M32 8v9M8 21h32" />
-          </svg>
-        </div>
-        <div>
-          <span>{{ metric.label }}</span>
-          <strong>{{ metric.value }}</strong>
-        </div>
+  <ng-container *ngIf="!isLoading && !errorMessage">
+    <!-- Metrics -->
+    <section class="metrics-grid" aria-label="Ship metrics">
+      <article class="metric-card total">
+        <span>Total Ships</span>
+        <strong>{{ ships.length }}</strong>
+      </article>
+      <article class="metric-card pending">
+        <span>Pending</span>
+        <strong>{{ pendingCount }}</strong>
+      </article>
+      <article class="metric-card assigned">
+        <span>Assigned</span>
+        <strong>{{ assignedCount }}</strong>
+      </article>
+      <article class="metric-card departed">
+        <span>Departed</span>
+        <strong>{{ departedCount }}</strong>
       </article>
     </section>
 
-    <section class="berth-board" aria-label="Berth board">
-      <section
-        *ngFor="let group of berthGroups; trackBy: trackByGroup"
-        class="berth-group"
-        [class]="group.accent"
-      >
-        <h2>{{ group.label }}</h2>
-
-        <div class="berth-row">
-          <article
-            *ngFor="let berth of group.berths; trackBy: trackByBerth"
-            class="berth-slot"
-            [class.occupied]="berth.status === 'occupied'"
-            [class.selected]="selectedCompatibleBerth === berth.id"
-            (click)="selectCompatibleBerth(berth.id)"
-          >
-            <span class="berth-id">{{ berth.name }}</span>
-
-            <button
-              *ngIf="berth.status === 'available'"
-              type="button"
-              class="available-card"
-              [class.compatible]="compatibleBerths.includes(berth)"
-            >
-              <span>+</span>
-              Available
-            </button>
-
-            <button
-              *ngIf="berth.ship as ship"
-              type="button"
-              class="ship-card"
-              (click)="selectShip(ship); $event.stopPropagation()"
-            >
-              <svg viewBox="0 0 48 48" aria-hidden="true">
-                <path d="M7 29h34l-5 10H12z" />
-                <path d="M16 29V15h16v14" />
-                <path d="M20 15V9h8v6" />
-              </svg>
-              <div>
-                <strong>{{ ship.name }}</strong>
-                <span>Size: {{ ship.size }} &middot; Day {{ ship.arrivalDay }} &rarr; Day {{ ship.arrivalDay + ship.duration }}</span>
-                <small><i></i>{{ ship.status }}</small>
-              </div>
-            </button>
-          </article>
-        </div>
-      </section>
+    <!-- Create Ship Form -->
+    <section class="create-form" aria-label="Create new ship">
+      <h2>Create New Ship</h2>
+      <form (ngSubmit)="createShip()" class="form-fields">
+        <label>
+          <span>Ship Name</span>
+          <input type="text" [(ngModel)]="newShipName" name="shipName" placeholder="Enter ship name" required />
+        </label>
+        <label>
+          <span>Notes</span>
+          <textarea [(ngModel)]="newShipNotes" name="shipNotes" placeholder="Optional notes (e.g. IMO number)" rows="2"></textarea>
+        </label>
+        <button type="submit" class="create-button">Create Ship</button>
+      </form>
     </section>
-  </section>
 
-  <aside class="ship-panel" aria-label="Selected ship">
-    <ng-container *ngIf="selectedShip as ship; else noShipSelected">
-      <p class="panel-label">Selected Ship</p>
-
-      <div class="selected-ship">
-        <div class="ship-avatar">
-          <svg viewBox="0 0 48 48" aria-hidden="true">
-            <path d="M7 29h34l-5 10H12z" />
-            <path d="M16 29V15h16v14" />
-            <path d="M20 15V9h8v6" />
-          </svg>
-        </div>
-        <div>
-          <h2>{{ ship.name }}</h2>
-          <span>IMO: {{ ship.imo }}</span>
-        </div>
-      </div>
-
-      <dl class="ship-details">
-        <div>
-          <dt>Size</dt>
-          <dd>{{ ship.size }}</dd>
-        </div>
-        <div>
-          <dt>Arrival Day</dt>
-          <dd>{{ ship.arrivalDay }}</dd>
-        </div>
-        <div>
-          <dt>Duration</dt>
-          <dd>{{ ship.duration }} Days</dd>
-        </div>
-        <div>
-          <dt>Status</dt>
-          <dd class="pending"><span></span>{{ ship.status }}</dd>
-        </div>
-      </dl>
-
-      <section class="compatible-list">
-        <h3>Compatible Berths <span>i</span></h3>
-        <button
-          *ngFor="let berth of compatibleBerths; trackBy: trackByBerth"
-          type="button"
-          [class.active]="selectedCompatibleBerth === berth.id"
-          [class.disabled]="berth.status === 'occupied'"
-          (click)="selectCompatibleBerth(berth.id)"
-        >
-          <span></span>
-          {{ berth.name }}
-        </button>
-      </section>
-
-      <p *ngIf="assignmentMessage" class="assignment-message">{{ assignmentMessage }}</p>
-
-      <button type="button" class="assign-button" (click)="assignSelectedShip()">
-        <svg viewBox="0 0 48 48" aria-hidden="true">
-          <path d="M7 29h34l-5 10H12z" />
-          <path d="M16 29V15h16v14" />
-          <path d="M20 15V9h8v6" />
+    <!-- Filters -->
+    <section class="filters-panel" aria-label="Ship filters">
+      <label class="search-field">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" />
+          <path d="m16 16 5 5" />
         </svg>
-        Assign Ship
-      </button>
-    </ng-container>
+        <input type="search" placeholder="Search ship name..." [(ngModel)]="searchTerm" />
+      </label>
+      <label>
+        <span>Status</span>
+        <select [(ngModel)]="statusFilter">
+          <option *ngFor="let status of statusOptions" [ngValue]="status">{{ status }}</option>
+        </select>
+      </label>
+    </section>
 
-    <ng-template #noShipSelected>
-      <p class="panel-label">Selected Ship</p>
-      <p class="assignment-message">No ships available from the backend.</p>
-    </ng-template>
-  </aside>
+    <!-- Ship List -->
+    <section class="ship-list" aria-label="Ship list">
+      <article
+        *ngFor="let ship of filteredShips; trackBy: trackByShip"
+        class="ship-card"
+        [ngClass]="normalizeStatus(ship.status).toLowerCase()"
+      >
+        <ng-container *ngIf="editingShipId !== ship.id; else editMode">
+          <div class="ship-info">
+            <h3>{{ ship.name }}</h3>
+            <p *ngIf="ship.notes" class="ship-notes">{{ ship.notes }}</p>
+            <div class="ship-meta">
+              <span class="status-badge" [ngClass]="normalizeStatus(ship.status).toLowerCase()">{{ normalizeStatus(ship.status) }}</span>
+              <span class="meta-item">Day {{ ship.arrivalDay }}</span>
+              <span class="meta-item">{{ ship.duration }} days</span>
+            </div>
+          </div>
+          <button
+            *ngIf="normalizeStatus(ship.status) === 'Pending'"
+            type="button"
+            class="edit-button"
+            (click)="startEdit(ship)"
+          >
+            Edit
+          </button>
+        </ng-container>
+
+        <ng-template #editMode>
+          <div class="edit-fields">
+            <label>
+              <span>Name</span>
+              <input type="text" [(ngModel)]="editName" />
+            </label>
+            <label>
+              <span>Notes</span>
+              <textarea [(ngModel)]="editNotes" rows="2"></textarea>
+            </label>
+            <div class="edit-actions">
+              <button type="button" class="save-button" (click)="saveEdit(ship)">Save</button>
+              <button type="button" class="cancel-button" (click)="cancelEdit()">Cancel</button>
+            </div>
+          </div>
+        </ng-template>
+      </article>
+
+      <div *ngIf="filteredShips.length === 0" class="empty-state">
+        No ships match the selected filters.
+      </div>
+    </section>
+  </ng-container>
+
+  <footer class="page-footer">&copy; 2025 OCTOPUS Port &amp; Berth Management System. All rights reserved.</footer>
 </section>

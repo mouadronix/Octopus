@@ -40,6 +40,8 @@ export class SchedulerComponent implements OnInit {
   ships: Ship[] = [];
   berths: Berth[] = [];
   currentDay = 1;
+  timelineDays: number[] = [];
+  readonly timelineDayCount = 14;
   selectedShip: Ship | null = null;
   selectedBerthId = 0;
   searchTerm = '';
@@ -132,6 +134,7 @@ export class SchedulerComponent implements OnInit {
         this.ships = ships;
         this.berths = berths;
         this.currentDay = state.currentDay;
+        this.buildTimeline();
         this.selectedShip = this.filteredShips[0] ?? null;
         this.selectDefaultBerth();
         this.isLoading = false;
@@ -255,6 +258,38 @@ export class SchedulerComponent implements OnInit {
 
   trackByBerth(_index: number, berth: CompatibleBerth): number {
     return berth.id;
+  }
+
+  trackByDay(_index: number, day: number): number {
+    return day;
+  }
+
+  nextDay(): void {
+    this.systemService.nextDay().subscribe({
+      next: (state) => {
+        this.currentDay = state.currentDay;
+        this.showMessage('Advanced to day ' + state.currentDay + '.', 'success');
+        this.loadAssignments();
+      },
+      error: () => {
+        this.showMessage('Unable to advance the current day.', 'error');
+      }
+    });
+  }
+
+  getTimelineShip(berth: Berth, day: number): { name: string; isStart: boolean } | null {
+    const assignment = (berth.assignments ?? []).find((a) => a.startDay <= day && a.endDay >= day);
+    if (!assignment?.ship) {
+      return null;
+    }
+    return {
+      name: assignment.ship.name,
+      isStart: assignment.startDay === day
+    };
+  }
+
+  private buildTimeline(): void {
+    this.timelineDays = Array.from({ length: this.timelineDayCount }, (_, i) => this.currentDay + i);
   }
 
   private selectDefaultBerth(): void {

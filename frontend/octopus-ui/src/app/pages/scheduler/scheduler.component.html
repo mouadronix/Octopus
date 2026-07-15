@@ -4,6 +4,15 @@
       <h1>Pending Assignments</h1>
       <p>Incoming ships waiting for berth allocation. Select a ship to view compatible berths and assign.</p>
     </div>
+    <div class="hero-actions">
+      <span class="current-day-badge">Day {{ currentDay }}</span>
+      <button type="button" class="next-day-button" (click)="nextDay()" [disabled]="isLoading">
+        Next Day
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
   </header>
 
   <p *ngIf="isLoading" class="state-message">Loading pending assignments from backend...</p>
@@ -202,6 +211,37 @@
           <p>Select a pending ship to view compatible berths.</p>
         </aside>
       </ng-template>
+    </section>
+
+    <!-- Timeline View (CSS Grid dock x day) -->
+    <section class="timeline-section" aria-label="Berth timeline">
+      <h2>Berth Timeline</h2>
+      <div class="timeline-grid" [style.grid-template-columns]="'140px repeat(' + timelineDayCount + ', minmax(60px, 1fr))'">
+        <!-- Header row -->
+        <div class="timeline-corner">Berth</div>
+        <div
+          *ngFor="let day of timelineDays; trackBy: trackByDay"
+          class="timeline-day-header"
+          [class.today]="day === currentDay"
+        >
+          Day {{ day }}
+        </div>
+
+        <!-- Berth rows -->
+        <ng-container *ngFor="let berth of berths">
+          <div class="timeline-berth-label">{{ berth.name }}</div>
+          <div
+            *ngFor="let day of timelineDays; trackBy: trackByDay"
+            class="timeline-cell"
+            [class.occupied]="getTimelineShip(berth, day)"
+            [class.ship-start]="getTimelineShip(berth, day)?.isStart"
+          >
+            <span *ngIf="getTimelineShip(berth, day) as info" class="timeline-ship">
+              {{ info.isStart ? info.name : '' }}
+            </span>
+          </div>
+        </ng-container>
+      </div>
     </section>
   </ng-container>
 

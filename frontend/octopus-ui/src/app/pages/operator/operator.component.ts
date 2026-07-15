@@ -1,133 +1,84 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
-import { AssignmentService } from '../../services/assignment.service';
-import { BerthService } from '../../services/berth.service';
 import { ShipService } from '../../services/ship.service';
 import { SystemService } from '../../services/system.service';
-import { Berth } from '../../models/berth.model';
-import { Ship, ShipSize, ShipStatus } from '../../models/ship.model';
+import { Ship, ShipStatus } from '../../models/ship.model';
 
-type BerthStatus = 'available' | 'occupied';
-type MetricIcon = 'ship' | 'crane' | 'berth' | 'calendar';
-type MetricTone = 'purple' | 'green' | 'cyan' | 'blue';
-
-interface BoardShip {
-  id: number;
-  displayId: string;
-  name: string;
-  imo: string;
-  size: ShipSize;
-  arrivalDay: number;
-  duration: number;
-  status: ShipStatus;
-}
-
-interface BerthSlot {
-  id: number;
-  name: string;
-  size: ShipSize;
-  status: BerthStatus;
-  ship?: BoardShip;
-}
-
-interface BerthGroup {
-  size: ShipSize;
-  label: string;
-  accent: string;
-  berths: BerthSlot[];
-}
-
-interface MetricCard {
-  label: string;
-  value: number;
-  icon: MetricIcon;
-  tone: MetricTone;
-}
+type StatusFilter = 'All' | 'Pending' | 'Assigned' | 'Departed';
 
 @Component({
   selector: 'app-operator',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './operator.component.html',
   styleUrl: './operator.component.scss'
 })
 export class OperatorComponent implements OnInit {
-  currentDay = 12;
-  ships: BoardShip[] = [];
-  berthGroups: BerthGroup[] = [];
-  selectedShip: BoardShip | null = null;
-  selectedCompatibleBerth = 0;
-  assignmentMessage = '';
+  ships: Ship[] = [];
+  currentDay = 1;
   isLoading = true;
   errorMessage = '';
+  message = '';
+  messageType: 'success' | 'error' = 'success';
+
+  // Create ship form
+  newShipName = '';
+  newShipNotes = '';
+
+  // Edit ship
+  editingShipId: number | null = null;
+  editName = '';
+  editNotes = '';
+
+  // Filters
+  searchTerm = '';
+  statusFilter: StatusFilter = 'All';
+
+  readonly statusOptions: StatusFilter[] = ['All', 'Pending', 'Assigned', 'Departed'];
 
   constructor(
     private readonly shipService: ShipService,
-    private readonly berthService: BerthService,
-    private readonly assignmentService: AssignmentService,
     private readonly systemService: SystemService
   ) {}
 
   ngOnInit(): void {
-    this.loadBoard();
+    this.loadData();
   }
 
-  get metrics(): MetricCard[] {
-    return [
-      { label: 'Pending Ships', value: this.pendingShips.length, icon: 'ship', tone: 'purple' },
-      { label: 'Occupied Berths', value: this.occupiedBerths, icon: 'crane', tone: 'green' },
-      { label: 'Available Berths', value: this.availableBerths, icon: 'berth', tone: 'cyan' },
-      { label: 'Current Day', value: this.currentDay, icon: 'calendar', tone: 'blue' }
-    ];
+  get filteredShips(): Ship[] {
+    const term = this.searchTerm.trim().toLowerCase();
+    return this.ships.filter((ship) => {
+      const matchesSearch = !term || ship.name.toLowerCase().includes(term);
+      const matchesStatus = this.statusFilter === 'All' || this.normalizeStatus(ship.status) === this.statusFilter;
+      return matchesSearch && matchesStatus;
+    });
   }
 
-  //get ships that are pending assignment
-  get pendingShips(): BoardShip[] {
-    return this.ships.filter((ship) => this.normalizeStatus(ship.status) === 'Pending');
+  get pendingCount(): number {
+    return this.ships.filter((s) => this.normalizeStatus(s.status) === 'Pending').length;
   }
 
-  //get ships that are assigned to a berth
-  get occupiedBerths(): number {
-    return this.allBerths.filter((berth) => berth.status === 'occupied').length;
+  get assignedCount(): number {
+    return this.ships.filter((s) => this.normalizeStatus(s.status) === 'Assigned').length;
   }
 
-  //get berths that are available for assignment
-  get availableBerths(): number {
-    return this.allBerths.filter((berth) => berth.status === 'available').length;
+  get departedCount(): number {
+    return this.ships.filter((s) => this.normalizeStatus(s.status) === 'Departed').length;
   }
 
-
-  //get berths that can fit the selected ship
-  get compatibleBerths(): BerthSlot[] {
-    if (!this.selectedShip) return [];
-    return this.allBerths.filter((berth) => this.canFitShip(berth.size, this.selectedShip!.size));
-  }
-
-
-  //get all berths across groups
-  private get allBerths(): BerthSlot[] {
-    return this.berthGroups.flatMap((group) => group.berths);
-  }
-
-
-  //load the board data
-  loadBoard(): void {
+  loadData(): void {
     this.isLoading = true;
     this.errorMessage = '';
 
     forkJoin({
       ships: this.shipService.getShips(),
-      berths: this.berthService.getBerths(),
       state: this.systemService.getState()
     }).subscribe({
-      next: ({ ships, berths, state }) => {
+      next: ({ ships, state }) => {
+        this.ships = ships;
         this.currentDay = state.currentDay;
-        this.ships = ships.map((ship) => this.mapShip(ship));
-        this.berthGroups = this.buildBerthGroups(berths);
-        this.selectedShip = this.pendingShips[0] ?? this.ships[0] ?? null;
-        this.selectedCompatibleBerth =
-          this.compatibleBerths.find((berth) => berth.status === 'available')?.id ?? this.compatibleBerths[0]?.id ?? 0;
         this.isLoading = false;
       },
       error: () => {
@@ -137,135 +88,74 @@ export class OperatorComponent implements OnInit {
     });
   }
 
+  createShip(): void {
+    const name = this.newShipName.trim();
+    const notes = this.newShipNotes.trim();
 
-  //advance to the next day and refresh the board state
-  nextDay(): void {
-    this.systemService.nextDay().subscribe({
-      next: (state) => {
-        this.currentDay = state.currentDay;
-        this.assignmentMessage = `Planning advanced to day ${state.currentDay}.`;
+    if (!name) {
+      this.showMessage('Ship name is required.', 'error');
+      return;
+    }
+
+    this.shipService.createShip({ name, notes, size: 'M', arrivalDay: this.currentDay, duration: 3 }).subscribe({
+      next: () => {
+        this.showMessage('Ship "' + name + '" created successfully.', 'success');
+        this.newShipName = '';
+        this.newShipNotes = '';
+        this.loadData();
       },
       error: () => {
-        this.assignmentMessage = 'Unable to advance the current day from the backend.';
+        this.showMessage('Failed to create ship.', 'error');
       }
     });
   }
 
-
-  //handle ship selection and update compatible berths
-  selectShip(ship: BoardShip): void {
-    this.selectedShip = ship;
-    this.selectedCompatibleBerth =
-      this.compatibleBerths.find((berth) => berth.status === 'available')?.id ?? this.compatibleBerths[0]?.id ?? 0;
-    this.assignmentMessage = '';
+  startEdit(ship: Ship): void {
+    if (this.normalizeStatus(ship.status) !== 'Pending') {
+      return;
+    }
+    this.editingShipId = ship.id;
+    this.editName = ship.name;
+    this.editNotes = ship.notes || '';
   }
 
-
-  //handle berth selection for assignment
-  selectCompatibleBerth(berthId: number): void {
-    this.selectedCompatibleBerth = berthId;
-    this.assignmentMessage = '';
+  cancelEdit(): void {
+    this.editingShipId = null;
+    this.editName = '';
+    this.editNotes = '';
   }
 
-
-  //attempt to assign the selected ship to the selected compatible berth
-  assignSelectedShip(): void {
-    if (!this.selectedShip || !this.selectedCompatibleBerth) {
-      this.assignmentMessage = 'Select a ship and compatible berth first.';
+  saveEdit(ship: Ship): void {
+    const name = this.editName.trim();
+    if (!name) {
+      this.showMessage('Ship name is required.', 'error');
       return;
     }
 
-    this.assignmentService
-      .createAssignment({ shipId: this.selectedShip.id, dockId: this.selectedCompatibleBerth })
-      .subscribe({
-        next: () => {
-          this.assignmentMessage = `${this.selectedShip?.name} assigned successfully.`;
-          this.loadBoard();
-        },
-        error: () => {
-          this.assignmentMessage = 'The selected berth is occupied or incompatible for this ship.';
-        }
-      });
+    this.shipService.updateShip(ship.id, { name, notes: this.editNotes.trim() }).subscribe({
+      next: () => {
+        this.showMessage('Ship "' + name + '" updated.', 'success');
+        this.cancelEdit();
+        this.loadData();
+      },
+      error: () => {
+        this.showMessage('Failed to update ship.', 'error');
+      }
+    });
   }
 
-
-  trackByMetric(_index: number, metric: MetricCard): string {
-    return metric.label;
-  }
-
-  trackByGroup(_index: number, group: BerthGroup): string {
-    return String(group.size);
-  }
-
-  trackByBerth(_index: number, berth: BerthSlot): number {
-    return berth.id;
-  }
-
-  private buildBerthGroups(berths: Berth[]): BerthGroup[] {
-    const order: ShipSize[] = ['XL', 'L', 'M', 'S'];
-
-    return order
-      .map((size) => {
-        const groupBerths = berths
-          .filter((berth) => this.normalizeSize(berth.size) === size)
-          .sort((a, b) => a.name.localeCompare(b.name))
-          .map((berth) => this.mapBerth(berth));
-
-        return {
-          size,
-          label: `${size} Berths`,
-          accent: size === 'XL' ? 'purple' : size === 'S' ? 'orange' : 'cyan',
-          berths: groupBerths
-        };
-      })
-      .filter((group) => group.berths.length > 0);
-  }
-
-  private mapBerth(berth: Berth): BerthSlot {
-    const activeAssignment = berth.assignments?.[0];
-
-    return {
-      id: berth.id,
-      name: berth.name,
-      size: this.normalizeSize(berth.size),
-      status: activeAssignment ? 'occupied' : 'available',
-      ship: activeAssignment?.ship ? this.mapShip(activeAssignment.ship) : undefined
-    };
-  }
-
-  private mapShip(ship: Ship): BoardShip {
-    return {
-      id: ship.id,
-      displayId: `NF${String(100 + ship.id).padStart(3, '0')}`,
-      name: ship.name,
-      imo: this.extractImo(ship),
-      size: this.normalizeSize(ship.size),
-      arrivalDay: ship.arrivalDay,
-      duration: ship.duration,
-      status: this.normalizeStatus(ship.status)
-    };
-  }
-
-  private extractImo(ship: Ship): string {
-    const match = ship.notes?.match(/IMO:\s*([A-Za-z0-9-]+)/i);
-    return match?.[1] ?? String(9000000 + ship.id);
-  }
-
-  private normalizeStatus(status: ShipStatus): 'Pending' | 'Assigned' | 'Departed' {
+  normalizeStatus(status: ShipStatus): 'Pending' | 'Assigned' | 'Departed' {
     if (status === 1 || status === 'Assigned') return 'Assigned';
     if (status === 2 || status === 'Departed') return 'Departed';
     return 'Pending';
   }
 
-  private normalizeSize(size: ShipSize): 'XL' | 'L' | 'M' | 'S' {
-    if (size === 0 || size === 'XL') return 'XL';
-    if (size === 1 || size === 'L') return 'L';
-    if (size === 2 || size === 'M') return 'M';
-    return 'S';
+  trackByShip(_index: number, ship: Ship): number {
+    return ship.id;
   }
 
-  private canFitShip(berthSize: ShipSize, shipSize: ShipSize): boolean {
-    const rank: Record<'S' | 'M' | 'L' | 'XL', number> = { S: 1, M: 2, L: 3, XL: 4 };
-    return rank[this.normalizeSize(berthSize)] >= rank[this.normalizeSize(shipSize)];
+  private showMessage(msg: string, type: 'success' | 'error'): void {
+    this.message = msg;
+    this.messageType = type;
   }
 }
