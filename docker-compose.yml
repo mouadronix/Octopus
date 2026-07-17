@@ -1,6 +1,6 @@
 services:
   api:
-    image: mcr.microsoft.com/dotnet/sdk:8.0
+    image: mcr.microsoft.com/dotnet/sdk:10.0-preview
     working_dir: /src/backend/Octopus.Api
     command: dotnet run --urls http://0.0.0.0:5000
     ports:

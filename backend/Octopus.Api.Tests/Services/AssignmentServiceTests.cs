@@ -228,10 +228,10 @@ public class AssignmentServiceTests
     }
 
     // ---------------------------------------------------------------
-    // 9. AssignShip_DockConflict_ShouldReturnNull
+    // 9. AssignShip_DockConflict_ShouldFindNextAvailableSlot
     // ---------------------------------------------------------------
     [Fact]
-    public void AssignShip_DockConflict_ShouldReturnNull()
+    public void AssignShip_DockConflict_ShouldFindNextAvailableSlot()
     {
         using var context = TestDbContextFactory.CreateDbContext();
         var service = new AssignmentService(context);
@@ -254,10 +254,14 @@ public class AssignmentServiceTests
         });
         context.SaveChanges();
 
-        // New ship wants days 3-5 (overlaps with 1-5)
+        // New ship wants days 3-5 (overlaps with 1-5) — should be pushed to day 6
         var result = service.AssignShip(newShip.Id, dock.Id);
 
-        Assert.Null(result);
+        Assert.NotNull(result);
+        // earliestDay = max(ArrivalDay=3, CurrentDay=1) = 3
+        // Dock blocked 1-5, so slot found at 6-8
+        Assert.Equal(6, result.StartDay);
+        Assert.Equal(8, result.EndDay);
     }
 
     // ---------------------------------------------------------------

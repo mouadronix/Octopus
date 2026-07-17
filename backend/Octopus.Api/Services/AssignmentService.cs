@@ -44,15 +44,16 @@ public class AssignmentService
         if (!CanFitShip(dock.Size, ship.Size))
             return null;
 
-        var startDay = Math.Max(ship.ArrivalDay, terminal.CurrentDay);
-        var endDay = startDay + ship.Duration - 1;
+        var earliestDay = Math.Max(ship.ArrivalDay, terminal.CurrentDay);
+        var horizonEnd = terminal.CurrentDay + terminal.PlanningHorizon;
 
-        // Spec: check planning horizon
-        if (endDay > terminal.CurrentDay + terminal.PlanningHorizon)
+        // Find earliest available window (may be later than arrival if dock is occupied)
+        var slot = FindEarliestSlot(dock.Id, earliestDay, ship.Duration, horizonEnd);
+        if (slot is null)
             return null;
 
-        if (HasDockConflict(dock.Id, startDay, endDay))
-            return null;
+        var startDay = slot.Value.start;
+        var endDay = slot.Value.end;
 
         // Spec: wrap assignment in a database transaction
         using var transaction = _context.Database.BeginTransaction();
@@ -92,27 +93,29 @@ public class AssignmentService
         if (ship is null || terminal is null || ship.Status != ShipStatus.Pending)
             return null;
 
-        var startDay = Math.Max(ship.ArrivalDay, terminal.CurrentDay);
-        var endDay = startDay + ship.Duration - 1;
+        var earliestDay = Math.Max(ship.ArrivalDay, terminal.CurrentDay);
+        var horizonEnd = terminal.CurrentDay + terminal.PlanningHorizon;
 
-        // Spec: check planning horizon
-        if (endDay > terminal.CurrentDay + terminal.PlanningHorizon)
+        if (earliestDay + ship.Duration - 1 > horizonEnd)
             return null;
 
-        // First-fit: scan docks in natural DB order (by Id), take first that fits
+        // First-fit: scan docks in natural DB order (by Id), take first with an available slot
         var dock = _context.Docks
             .AsEnumerable()
             .Where(d => CanFitShip(d.Size, ship.Size))
-            .Where(d => !HasDockConflict(d.Id, startDay, endDay))
+            .Select(d => new { Dock = d, Slot = FindEarliestSlot(d.Id, earliestDay, ship.Duration, horizonEnd) })
+            .Where(x => x.Slot is not null)
             .FirstOrDefault();
 
         if (dock is null)
             return null;
 
+        var startDay = dock.Slot!.Value.start;
+
         return new SuggestionResponse
         {
-            DockId = dock.Id,
-            DockName = dock.Name,
+            DockId = dock.Dock.Id,
+            DockName = dock.Dock.Name,
             StartDay = startDay,
             Message = startDay <= ship.ArrivalDay
                 ? $"Available from Day {startDay}"
@@ -126,6 +129,37 @@ public class AssignmentService
             a.DockId == dockId &&
             a.StartDay <= endDay &&
             a.EndDay >= startDay);
+    }
+
+    /// <summary>
+    /// Find the earliest window [start, start+duration-1] on a dock with no conflicts.
+    /// Walks through existing assignments looking for gaps large enough to fit the ship.
+    /// </summary>
+    private (int start, int end)? FindEarliestSlot(int dockId, int earliestDay, int duration, int horizonEnd)
+    {
+        var assignments = _context.Assignments
+            .Where(a => a.DockId == dockId)
+            .OrderBy(a => a.StartDay)
+            .Select(a => new { a.StartDay, a.EndDay })
+            .ToList();
+
+        var candidate = earliestDay;
+
+        foreach (var a in assignments)
+        {
+            // Try to fit before this assignment
+            if (candidate + duration - 1 < a.StartDay)
+                return (candidate, candidate + duration - 1);
+
+            // Jump past this assignment
+            candidate = Math.Max(candidate, a.EndDay + 1);
+        }
+
+        // Try after all assignments
+        if (candidate + duration - 1 <= horizonEnd)
+            return (candidate, candidate + duration - 1);
+
+        return null;
     }
 
     private static bool CanFitShip(ShipSize dockSize, ShipSize shipSize)
