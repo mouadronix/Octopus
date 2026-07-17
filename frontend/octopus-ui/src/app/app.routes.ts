@@ -5,7 +5,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { OperatorComponent } from './pages/operator/operator.component';
 import { SchedulerComponent } from './pages/scheduler/scheduler.component';
 import { ShipsComponent } from './pages/ships/ships.component';
-import { BerthsComponent } from './pages/berths/berths.component';
+import { DocksComponent } from './pages/berths/berths.component';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -21,7 +21,7 @@ export const routes: Routes = [
       { path: 'operator', component: OperatorComponent, data: { roles: ['operator'] } },
       { path: 'scheduler', component: SchedulerComponent, data: { roles: ['scheduler'] } },
       { path: 'ships', component: ShipsComponent, data: { roles: ['operator'] } },
-      { path: 'berths', component: BerthsComponent, data: { roles: ['scheduler'] } }
+      { path: 'docks', component: DocksComponent, data: { roles: ['scheduler'] } }
     ]
   },
   { path: '**', redirectTo: '' }

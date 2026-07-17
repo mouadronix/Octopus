@@ -1,14 +1,14 @@
 import { ShipSize } from './ship.model';
 import { Assignment } from './assignment.model';
 
-export interface Berth {
+export interface Dock {
   id: number;
   name: string;
   size: ShipSize;
   assignments?: Assignment[];
 }
 
-export interface CreateBerthRequest {
+export interface CreateDockRequest {
   name: string;
   size: ShipSize;
 }

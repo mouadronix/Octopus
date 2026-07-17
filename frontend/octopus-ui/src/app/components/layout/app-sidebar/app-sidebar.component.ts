@@ -29,13 +29,13 @@ export class AppSidebarComponent {
     { label: 'Ships', route: '/ships', icon: 'ship', roles: ['operator'] },
     { label: 'Pending Assignments', route: '/scheduler', icon: 'pending', roles: ['scheduler'] },
     { label: 'Ship Operations', route: '/operator', icon: 'berth', roles: ['operator'] },
-    { label: 'Planning Calendar', route: '/berths', icon: 'calendar', roles: ['scheduler'] }
+    { label: 'Planning Calendar', route: '/docks', icon: 'calendar', roles: ['scheduler'] }
   ];
 
   stats: SidebarStat[] = [
     { label: 'Ships Pending', value: '6', color: 'orange' },
-    { label: 'Berths Occupied', value: '3', color: 'green' },
-    { label: 'Berths Available', value: '7', color: 'cyan' },
+    { label: 'Docks Occupied', value: '3', color: 'green' },
+    { label: 'Docks Available', value: '7', color: 'cyan' },
     { label: 'Next Arrival Day 13', value: '', color: 'blue' }
   ];
 

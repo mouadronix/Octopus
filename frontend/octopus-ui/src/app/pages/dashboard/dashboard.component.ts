@@ -3,11 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { Assignment } from '../../models/assignment.model';
-import { Berth } from '../../models/berth.model';
+import { Dock } from '../../models/dock.model';
 import { Ship, ShipSize, ShipStatus } from '../../models/ship.model';
 import { SystemState } from '../../models/system-state.model';
 import { AssignmentService } from '../../services/assignment.service';
-import { BerthService } from '../../services/berth.service';
+import { DockService } from '../../services/dock.service';
 import { ShipService } from '../../services/ship.service';
 import { SystemService } from '../../services/system.service';
 
@@ -48,7 +48,7 @@ interface ActivityItem {
 })
 export class DashboardComponent implements OnInit {
   ships: Ship[] = [];
-  berths: Berth[] = [];
+  docks: Dock[] = [];
   assignments: Assignment[] = [];
   state: SystemState | null = null;
   isLoading = true;
@@ -56,7 +56,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private readonly shipService: ShipService,
-    private readonly berthService: BerthService,
+    private readonly dockService: DockService,
     private readonly assignmentService: AssignmentService,
     private readonly systemService: SystemService
   ) {}
@@ -81,16 +81,16 @@ export class DashboardComponent implements OnInit {
     return this.ships.filter((ship) => this.normalizeStatus(ship.status) === 'Departed');
   }
 
-  get occupiedBerths(): number {
-    return this.berths.filter((berth) => (berth.assignments?.length ?? 0) > 0).length;
+  get occupiedDocks(): number {
+    return this.docks.filter((dock) => (dock.assignments?.length ?? 0) > 0).length;
   }
 
-  get availableBerths(): number {
-    return Math.max(this.berths.length - this.occupiedBerths, 0);
+  get availableDocks(): number {
+    return Math.max(this.docks.length - this.occupiedDocks, 0);
   }
 
   get utilizationPercentage(): number {
-    return this.berths.length ? Math.round((this.occupiedBerths / this.berths.length) * 100) : 0;
+    return this.docks.length ? Math.round((this.occupiedDocks / this.docks.length) * 100) : 0;
   }
 
   get metrics(): DashboardMetric[] {
@@ -112,16 +112,16 @@ export class DashboardComponent implements OnInit {
         trend: [4, 3, 3, 4, 2, 5, 3]
       },
       {
-        label: 'Occupied Berths',
-        value: this.occupiedBerths,
+        label: 'Occupied Docks',
+        value: this.occupiedDocks,
         caption: 'Currently in use',
         tone: 'green',
         icon: 'crane',
         trend: [3, 4, 2, 4, 3, 5, 4]
       },
       {
-        label: 'Available Berths',
-        value: this.availableBerths,
+        label: 'Available Docks',
+        value: this.availableDocks,
         caption: 'Ready for allocation',
         tone: 'cyan',
         icon: 'berth',
@@ -169,13 +169,13 @@ export class DashboardComponent implements OnInit {
       .sort((left, right) => right.startDay - left.startDay)
       .slice(0, 3)
       .map((assignment) => ({
-        message: `Ship ${assignment.ship?.name ?? `#${assignment.shipId}`} assigned to berth ${this.findBerthName(assignment.dockId)}`,
+        message: `Ship ${assignment.ship?.name ?? `#${assignment.shipId}`} assigned to dock ${this.findDockName(assignment.dockId)}`,
         meta: `Day ${assignment.startDay}`,
         tone: 'success' as const
       }));
 
     const departed = this.departedShips.slice(0, 1).map((ship) => ({
-      message: `Ship ${ship.name} departed from berth ${ship.berthName ?? '-'}`,
+      message: `Ship ${ship.name} departed from dock ${ship.berthName ?? '-'}`,
       meta: `Day ${Math.max(ship.arrivalDay + ship.duration - 1, 1)}`,
       tone: 'info' as const
     }));
@@ -197,13 +197,13 @@ export class DashboardComponent implements OnInit {
 
     forkJoin({
       ships: this.shipService.getShips(),
-      berths: this.berthService.getBerths(),
+      docks: this.dockService.getDocks(),
       assignments: this.assignmentService.getAssignments(),
       state: this.systemService.getState()
     }).subscribe({
-      next: ({ ships, berths, assignments, state }) => {
+      next: ({ ships, docks, assignments, state }) => {
         this.ships = ships;
-        this.berths = berths;
+        this.docks = docks;
         this.assignments = assignments;
         this.state = state;
         this.isLoading = false;
@@ -285,8 +285,8 @@ export class DashboardComponent implements OnInit {
     return 160 - (value / this.maxArrivalValue) * 130;
   }
 
-  private findBerthName(dockId: number): string {
-    return this.berths.find((berth) => berth.id === dockId)?.name ?? `#${dockId}`;
+  private findDockName(dockId: number): string {
+    return this.docks.find((dock) => dock.id === dockId)?.name ?? `#${dockId}`;
   }
 
   private percent(value: number, total: number): number {

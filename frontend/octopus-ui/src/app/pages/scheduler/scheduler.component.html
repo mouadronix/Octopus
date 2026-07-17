@@ -2,7 +2,7 @@
   <header class="assignments-hero">
     <div>
       <h1>Pending Assignments</h1>
-      <p>Incoming ships waiting for berth allocation. Select a ship to view compatible berths and assign.</p>
+      <p>Incoming ships waiting for dock allocation. Select a ship to view compatible docks and assign.</p>
     </div>
     <div class="hero-actions">
       <span class="current-day-badge">Day {{ currentDay }}</span>
@@ -103,11 +103,11 @@
             </div>
 
             <div class="compatible-inline">
-              <span>Compatible Berths</span>
-              <strong *ngIf="getCompatibleBerths(ship).length; else noBerths">
-                {{ getCompatibleBerthNames(ship) }}
+              <span>Compatible Docks</span>
+              <strong *ngIf="getCompatibleDocks(ship).length; else noDocks">
+                {{ getCompatibleDockNames(ship) }}
               </strong>
-              <ng-template #noBerths><strong>None</strong></ng-template>
+              <ng-template #noDocks><strong>None</strong></ng-template>
             </div>
 
             <button type="button" class="assign-shortcut" (click)="$event.stopPropagation(); selectShip(ship)">
@@ -161,37 +161,37 @@
         </dl>
 
         <section class="compatible-list">
-          <h3>Compatible Berths</h3>
+          <h3>Compatible Docks</h3>
           <button
-            *ngFor="let berth of selectedCompatibleBerths; trackBy: trackByBerth"
+            *ngFor="let dock of selectedCompatibleDocks; trackBy: trackByDock"
             type="button"
-            class="berth-option"
-            [class.active]="selectedBerthId === berth.id"
-            (click)="selectBerth(berth.id)"
+            class="dock-option"
+            [class.active]="selectedDockId === dock.id"
+            (click)="selectDock(dock.id)"
           >
-            <span class="berth-icon">{{ berth.size }}</span>
+            <span class="dock-icon">{{ dock.size }}</span>
             <span>
-              <strong>{{ berth.name }}</strong>
-              <small>{{ berth.size }} berth · Available from Day {{ berth.availableFromDay }}</small>
+              <strong>{{ dock.name }}</strong>
+              <small>{{ dock.size }} dock · Available from Day {{ dock.availableFromDay }}</small>
             </span>
-            <span class="checkmark" *ngIf="selectedBerthId === berth.id">✓</span>
+            <span class="checkmark" *ngIf="selectedDockId === dock.id">✓</span>
           </button>
 
-          <p *ngIf="selectedCompatibleBerths.length === 0" class="no-compatible">
-            No compatible berth is currently available for this ship.
+          <p *ngIf="selectedCompatibleDocks.length === 0" class="no-compatible">
+            No compatible dock is currently available for this ship.
           </p>
         </section>
 
-        <section class="allocation-summary" *ngIf="selectedBerth">
+        <section class="allocation-summary" *ngIf="selectedDock">
           <h3>Allocation Summary</h3>
           <dl>
             <div>
-              <dt>Berth</dt>
-              <dd>{{ selectedBerth.name }}</dd>
+              <dt>Dock</dt>
+              <dd>{{ selectedDock.name }}</dd>
             </div>
             <div>
               <dt>Start Day</dt>
-              <dd>{{ selectedBerth.availableFromDay }}</dd>
+              <dd>{{ selectedDock.availableFromDay }}</dd>
             </div>
             <div>
               <dt>End Day</dt>
@@ -200,7 +200,7 @@
           </dl>
         </section>
 
-        <button type="button" class="confirm-button" [disabled]="isAssigning || !selectedBerth" (click)="confirmAssignment()">
+        <button type="button" class="confirm-button" [disabled]="isAssigning || !selectedDock" (click)="confirmAssignment()">
           Confirm Assignment
         </button>
       </aside>
@@ -208,17 +208,17 @@
       <ng-template #noSelection>
         <aside class="preview-panel empty-preview">
           <h2>Assignment Preview</h2>
-          <p>Select a pending ship to view compatible berths.</p>
+          <p>Select a pending ship to view compatible docks.</p>
         </aside>
       </ng-template>
     </section>
 
     <!-- Timeline View (CSS Grid dock x day) -->
-    <section class="timeline-section" aria-label="Berth timeline">
-      <h2>Berth Timeline</h2>
+    <section class="timeline-section" aria-label="Dock timeline">
+      <h2>Dock Timeline</h2>
       <div class="timeline-grid" [style.grid-template-columns]="'140px repeat(' + timelineDayCount + ', minmax(60px, 1fr))'">
         <!-- Header row -->
-        <div class="timeline-corner">Berth</div>
+        <div class="timeline-corner">Dock</div>
         <div
           *ngFor="let day of timelineDays; trackBy: trackByDay"
           class="timeline-day-header"
@@ -227,16 +227,16 @@
           Day {{ day }}
         </div>
 
-        <!-- Berth rows -->
-        <ng-container *ngFor="let berth of berths">
-          <div class="timeline-berth-label">{{ berth.name }}</div>
+        <!-- Dock rows -->
+        <ng-container *ngFor="let dock of docks">
+          <div class="timeline-dock-label">{{ dock.name }}</div>
           <div
             *ngFor="let day of timelineDays; trackBy: trackByDay"
             class="timeline-cell"
-            [class.occupied]="getTimelineShip(berth, day)"
-            [class.ship-start]="getTimelineShip(berth, day)?.isStart"
+            [class.occupied]="getTimelineShip(dock, day)"
+            [class.ship-start]="getTimelineShip(dock, day)?.isStart"
           >
-            <span *ngIf="getTimelineShip(berth, day) as info" class="timeline-ship">
+            <span *ngIf="getTimelineShip(dock, day) as info" class="timeline-ship">
               {{ info.isStart ? info.name : '' }}
             </span>
           </div>
@@ -245,5 +245,5 @@
     </section>
   </ng-container>
 
-  <footer class="page-footer">&copy; 2025 OCTOPUS Port &amp; Berth Management System. All rights reserved.</footer>
+  <footer class="page-footer">&copy; 2025 OCTOPUS Port &amp; Dock Management System. All rights reserved.</footer>
 </section>
