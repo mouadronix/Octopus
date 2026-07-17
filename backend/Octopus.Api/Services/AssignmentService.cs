@@ -25,6 +25,7 @@ public class AssignmentService
 
     /// <summary>
     /// Assign a ship to a specific dock.
+    /// Spec: uses database transaction, checks planning horizon.
     /// </summary>
     public Assignment? AssignShip(int shipId, int dockId)
     {
@@ -46,22 +47,37 @@ public class AssignmentService
         var startDay = Math.Max(ship.ArrivalDay, terminal.CurrentDay);
         var endDay = startDay + ship.Duration - 1;
 
+        // Spec: check planning horizon
+        if (endDay > terminal.CurrentDay + terminal.PlanningHorizon)
+            return null;
+
         if (HasDockConflict(dock.Id, startDay, endDay))
             return null;
 
-        var assignment = new Assignment
+        // Spec: wrap assignment in a database transaction
+        using var transaction = _context.Database.BeginTransaction();
+        try
         {
-            ShipId = ship.Id,
-            DockId = dock.Id,
-            StartDay = startDay,
-            EndDay = endDay
-        };
+            var assignment = new Assignment
+            {
+                ShipId = ship.Id,
+                DockId = dock.Id,
+                StartDay = startDay,
+                EndDay = endDay
+            };
 
-        ship.Status = ShipStatus.Assigned;
-        _context.Assignments.Add(assignment);
-        _context.SaveChanges();
+            ship.Status = ShipStatus.Assigned;
+            _context.Assignments.Add(assignment);
+            _context.SaveChanges();
+            transaction.Commit();
 
-        return assignment;
+            return assignment;
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
     }
 
     /// <summary>
@@ -78,6 +94,10 @@ public class AssignmentService
 
         var startDay = Math.Max(ship.ArrivalDay, terminal.CurrentDay);
         var endDay = startDay + ship.Duration - 1;
+
+        // Spec: check planning horizon
+        if (endDay > terminal.CurrentDay + terminal.PlanningHorizon)
+            return null;
 
         // First-fit: scan docks in natural DB order (by Id), take first that fits
         var dock = _context.Docks

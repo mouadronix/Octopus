@@ -15,7 +15,7 @@ public static class SeedHelper
         );
 
         ctx.TerminalStates.Add(
-            new TerminalState { Id = 1, CurrentDay = 1, PlanningHorizon = 30 }
+            new TerminalState { Id = 1, CurrentDay = 1, PlanningHorizon = 60 }
         );
 
         ctx.SaveChanges();

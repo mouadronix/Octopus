@@ -10,7 +10,7 @@ public class AssignmentServiceTests
 {
     private static void SeedTerminal(AppDbContext context, int currentDay = 1)
     {
-        context.TerminalStates.Add(new TerminalState { Id = 1, CurrentDay = currentDay });
+        context.TerminalStates.Add(new TerminalState { Id = 1, CurrentDay = currentDay, PlanningHorizon = 60 });
         context.SaveChanges();
     }
 
