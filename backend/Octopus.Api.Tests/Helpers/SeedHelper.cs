@@ -8,9 +8,10 @@ public static class SeedHelper
     public static void SeedBasicData(AppDbContext ctx)
     {
         ctx.Docks.AddRange(
-            new Dock { Id = 1, Name = "Dock A", Size = ShipSize.L },
-            new Dock { Id = 2, Name = "Dock B", Size = ShipSize.M },
-            new Dock { Id = 3, Name = "Dock C", Size = ShipSize.S }
+            new Dock { Id = 1, Name = "XL-01", Size = ShipSize.XL },
+            new Dock { Id = 2, Name = "L-01", Size = ShipSize.L },
+            new Dock { Id = 3, Name = "M-01", Size = ShipSize.M },
+            new Dock { Id = 4, Name = "S-01", Size = ShipSize.S }
         );
 
         ctx.TerminalStates.Add(

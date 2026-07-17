@@ -20,7 +20,7 @@ public class DockServiceTests
 
         var all = service.GetAll();
 
-        Assert.Equal(3, all.Count);
+        Assert.Equal(4, all.Count);
     }
 
     // ---------------------------------------------------------------
@@ -97,8 +97,8 @@ public class DockServiceTests
         var found = service.GetById(1);
 
         Assert.NotNull(found);
-        Assert.Equal("Dock A", found.Name);
-        Assert.Equal(ShipSize.L, found.Size);
+        Assert.Equal("XL-01", found.Name);
+        Assert.Equal(ShipSize.XL, found.Size);
     }
 
     // ---------------------------------------------------------------
