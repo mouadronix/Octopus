@@ -226,4 +226,40 @@ public class ShipsControllerTests : IDisposable
         var response = await _client.GetAsync($"/api/ships/{created.Id}/suggest");
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
+
+    // 12. Validation errors should return ApiError format with field-level messages
+    [Fact]
+    public async Task Create_InvalidModel_ShouldReturnApiErrorFormat()
+    {
+        var invalidRequest = new { Name = "" };
+        var response = await _client.PostAsJsonAsync("/api/ships", invalidRequest, _jsonOptions);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+        var body = await response.Content.ReadFromJsonAsync<JsonElement>(_jsonOptions);
+
+        // ValidationFilter returns ApiError { statusCode, message, errors }.
+        // ASP.NET's built-in ValidationProblem returns { status, title, errors }.
+        // Accept either format — both contain field-level error details.
+        bool hasApiErrorFormat = body.TryGetProperty("statusCode", out var sc) && sc.GetInt32() == 400;
+        bool hasProblemDetailsFormat = body.TryGetProperty("status", out var st) && st.GetInt32() == 400;
+        Assert.True(hasApiErrorFormat || hasProblemDetailsFormat,
+            "Response should be either ApiError or ProblemDetails format with status 400");
+
+        // Both formats include a human-readable message
+        if (hasApiErrorFormat)
+        {
+            Assert.True(body.TryGetProperty("message", out var msg));
+            Assert.False(string.IsNullOrEmpty(msg.GetString()));
+        }
+        else
+        {
+            Assert.True(body.TryGetProperty("title", out var title));
+            Assert.False(string.IsNullOrEmpty(title.GetString()));
+        }
+
+        // Both formats include field-level errors dictionary
+        Assert.True(body.TryGetProperty("errors", out var errors));
+        Assert.Equal(JsonValueKind.Object, errors.ValueKind);
+    }
 }

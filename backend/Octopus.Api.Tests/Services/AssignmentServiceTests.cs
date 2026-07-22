@@ -396,4 +396,29 @@ public class AssignmentServiceTests
         Assert.Equal(largeDock.Id, result.DockId);
         Assert.Equal("Zulu", result.DockName);
     }
+
+    // ---------------------------------------------------------------
+    // 16. AssignShip_ExceedsPlanningHorizon_ShouldReturnNull
+    // ---------------------------------------------------------------
+    [Fact]
+    public void AssignShip_ExceedsPlanningHorizon_ShouldReturnNull()
+    {
+        using var context = TestDbContextFactory.CreateDbContext();
+        // PlanningHorizon = 5, CurrentDay = 1 → max day = 6
+        context.TerminalStates.Add(new TerminalState { Id = 1, CurrentDay = 1, PlanningHorizon = 5 });
+        context.SaveChanges();
+
+        var service = new AssignmentService(new EfAssignmentRepository(context), context);
+
+        // Ship needs 10 days (days 1-10), but max allowed is day 6
+        var ship = CreateShip(arrivalDay: 1, duration: 10);
+        var dock = CreateDock(size: ShipSize.L);
+        context.Ships.Add(ship);
+        context.Docks.Add(dock);
+        context.SaveChanges();
+
+        var result = service.AssignShip(ship.Id, dock.Id);
+
+        Assert.Null(result);
+    }
 }
