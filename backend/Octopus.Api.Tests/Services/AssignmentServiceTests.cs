@@ -43,7 +43,7 @@ public class AssignmentServiceTests
     public void GetAll_ShouldReturnAllAssignments()
     {
         using var context = TestDbContextFactory.CreateDbContext();
-        var service = new AssignmentService(context);
+        var service = new AssignmentService(new EfAssignmentRepository(context), context);
 
         var ship1 = CreateShip(name: "Ship1");
         var ship2 = CreateShip(name: "Ship2");
@@ -70,7 +70,7 @@ public class AssignmentServiceTests
     public void AssignShip_ValidInputs_ShouldCreateAssignment()
     {
         using var context = TestDbContextFactory.CreateDbContext();
-        var service = new AssignmentService(context);
+        var service = new AssignmentService(new EfAssignmentRepository(context), context);
         SeedTerminal(context);
 
         var ship = CreateShip(size: ShipSize.M, arrivalDay: 1, duration: 3);
@@ -93,7 +93,7 @@ public class AssignmentServiceTests
     public void AssignShip_ShouldSetCorrectStartAndEndDay()
     {
         using var context = TestDbContextFactory.CreateDbContext();
-        var service = new AssignmentService(context);
+        var service = new AssignmentService(new EfAssignmentRepository(context), context);
         SeedTerminal(context, currentDay: 3);
 
         var ship = CreateShip(arrivalDay: 1, duration: 4);
@@ -118,7 +118,7 @@ public class AssignmentServiceTests
     public void AssignShip_ShouldSetShipStatusToAssigned()
     {
         using var context = TestDbContextFactory.CreateDbContext();
-        var service = new AssignmentService(context);
+        var service = new AssignmentService(new EfAssignmentRepository(context), context);
         SeedTerminal(context);
 
         var ship = CreateShip();
@@ -141,7 +141,7 @@ public class AssignmentServiceTests
     public void AssignShip_NonExistentShip_ShouldReturnNull()
     {
         using var context = TestDbContextFactory.CreateDbContext();
-        var service = new AssignmentService(context);
+        var service = new AssignmentService(new EfAssignmentRepository(context), context);
         SeedTerminal(context);
 
         var dock = CreateDock();
@@ -160,7 +160,7 @@ public class AssignmentServiceTests
     public void AssignShip_NonExistentDock_ShouldReturnNull()
     {
         using var context = TestDbContextFactory.CreateDbContext();
-        var service = new AssignmentService(context);
+        var service = new AssignmentService(new EfAssignmentRepository(context), context);
         SeedTerminal(context);
 
         var ship = CreateShip();
@@ -179,7 +179,7 @@ public class AssignmentServiceTests
     public void AssignShip_AlreadyAssignedShip_ShouldReturnNull()
     {
         using var context = TestDbContextFactory.CreateDbContext();
-        var service = new AssignmentService(context);
+        var service = new AssignmentService(new EfAssignmentRepository(context), context);
         SeedTerminal(context);
 
         var ship = CreateShip(status: ShipStatus.Assigned);
@@ -213,7 +213,7 @@ public class AssignmentServiceTests
     public void AssignShip_ShipTooLargeForDock_ShouldReturnNull()
     {
         using var context = TestDbContextFactory.CreateDbContext();
-        var service = new AssignmentService(context);
+        var service = new AssignmentService(new EfAssignmentRepository(context), context);
         SeedTerminal(context);
 
         var ship = CreateShip(size: ShipSize.XL);
@@ -234,7 +234,7 @@ public class AssignmentServiceTests
     public void AssignShip_DockConflict_ShouldFindNextAvailableSlot()
     {
         using var context = TestDbContextFactory.CreateDbContext();
-        var service = new AssignmentService(context);
+        var service = new AssignmentService(new EfAssignmentRepository(context), context);
         SeedTerminal(context);
 
         var existingShip = CreateShip(name: "Existing", arrivalDay: 1, duration: 5);
@@ -271,7 +271,7 @@ public class AssignmentServiceTests
     public void AssignShip_ShipArrivesAfterCurrentDay_ShouldUseArrivalDay()
     {
         using var context = TestDbContextFactory.CreateDbContext();
-        var service = new AssignmentService(context);
+        var service = new AssignmentService(new EfAssignmentRepository(context), context);
         SeedTerminal(context, currentDay: 1);
 
         var ship = CreateShip(arrivalDay: 5, duration: 3);
@@ -296,7 +296,7 @@ public class AssignmentServiceTests
     public void GetSuggestion_ValidPendingShip_ShouldReturnFirstFittingDock()
     {
         using var context = TestDbContextFactory.CreateDbContext();
-        var service = new AssignmentService(context);
+        var service = new AssignmentService(new EfAssignmentRepository(context), context);
         SeedTerminal(context);
 
         var ship = CreateShip(size: ShipSize.M, arrivalDay: 1, duration: 3);
@@ -324,7 +324,7 @@ public class AssignmentServiceTests
     public void GetSuggestion_NonExistentShip_ShouldReturnNull()
     {
         using var context = TestDbContextFactory.CreateDbContext();
-        var service = new AssignmentService(context);
+        var service = new AssignmentService(new EfAssignmentRepository(context), context);
         SeedTerminal(context);
 
         var result = service.GetSuggestion(999);
@@ -339,7 +339,7 @@ public class AssignmentServiceTests
     public void GetSuggestion_AlreadyAssignedShip_ShouldReturnNull()
     {
         using var context = TestDbContextFactory.CreateDbContext();
-        var service = new AssignmentService(context);
+        var service = new AssignmentService(new EfAssignmentRepository(context), context);
         SeedTerminal(context);
 
         var ship = CreateShip(status: ShipStatus.Assigned);
@@ -358,7 +358,7 @@ public class AssignmentServiceTests
     public void GetSuggestion_NoDockAvailable_ShouldReturnNull()
     {
         using var context = TestDbContextFactory.CreateDbContext();
-        var service = new AssignmentService(context);
+        var service = new AssignmentService(new EfAssignmentRepository(context), context);
         SeedTerminal(context);
 
         var ship = CreateShip(size: ShipSize.XL, arrivalDay: 1, duration: 3);
@@ -379,7 +379,7 @@ public class AssignmentServiceTests
     public void GetSuggestion_ShouldUseFirstFit()
     {
         using var context = TestDbContextFactory.CreateDbContext();
-        var service = new AssignmentService(context);
+        var service = new AssignmentService(new EfAssignmentRepository(context), context);
         SeedTerminal(context);
 
         var ship = CreateShip(size: ShipSize.M, arrivalDay: 1, duration: 2);
