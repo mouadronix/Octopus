@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-Octopus is a working prototype that demonstrates basic CRUD operations for a port terminal simulation. It has a clean architectural skeleton (controller -> service -> EF Core), a functional Angular frontend with polished UI, and a recently added test suite with 87 tests. However, it has **significant gaps** that prevent it from being production-ready, most critically in security, error handling, and frontend-backend contract consistency. Several components are dead code. The naming is confused between "Berth" and "Dock" throughout.
+Octopus is a working prototype that demonstrates basic CRUD operations for a port terminal simulation. It has a clean architectural skeleton (controller -> service -> EF Core), a functional Angular frontend with polished UI, and a recently added test suite with 62 tests. However, it has **significant gaps** that prevent it from being production-ready, most critically in security, error handling, and frontend-backend contract consistency. Several components are dead code. The naming is confused between "Berth" and "Dock" throughout.
 
 **Overall Grade: C-** (functional prototype, not production-ready)
 
@@ -231,16 +231,18 @@ This allows any website to make authenticated requests to the API.
 
 ## 6. Test Coverage -- Grade: B-
 
-### What exists (87 tests)
+### What exists (62 tests)
 
 | Test Class | Count | Type | Quality |
 |-----------|-------|------|---------|
-| ShipsControllerTests | 11 | Integration | Good |
-| AssignmentsControllerTests | 7 | Integration | Good |
-| RemainingControllersTests | 9 | Integration | Adequate |
-| ShipServiceTests | 11 | Unit | Good |
-| AssignmentServiceTests | 15 | Unit | Good |
+| ShipsControllerTests | 12 | Integration | Good |
+| AssignmentsControllerTests | 5 | Integration | Good |
+| RemainingControllersTests | 5 | Integration | Adequate |
+| EndToEndTests | 2 | Integration | Good |
+| ShipServiceTests | 10 | Unit | Good |
+| AssignmentServiceTests | 16 | Unit | Good |
 | SystemServiceTests | 7 | Unit | Good |
+| DockServiceTests | 5 | Unit | Good |
 
 ### What's good
 - Proper `TestWebApplicationFactory` with in-memory SQLite (not EF InMemory -- good choice)

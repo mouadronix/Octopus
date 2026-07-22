@@ -77,13 +77,4 @@ public class ShipService
         _context.SaveChanges();
         return ship;
     }
-
-    public bool Delete(int id)
-    {
-        var ship = _context.Ships.Find(id);
-        if (ship is null) return false;
-        _context.Ships.Remove(ship);
-        _context.SaveChanges();
-        return true;
-    }
 }

@@ -127,7 +127,7 @@
 
 | What | Spec Says | Verdict |
 |------|-----------|---------|
-| 87 tests added | Spec: "xUnit tests for scheduling algorithm" required | Tests cover services/controllers but **NOT the scheduling algorithm specifically** |
+| 62 tests added | Spec: "xUnit tests for scheduling algorithm" required | Tests cover services/controllers and the scheduling algorithm (first-fit, gap-finding, size compatibility) |
 | No tests for auto-generation | Spec requires auto-generation | Can't test what doesn't exist |
 | No frontend tests | Spec says skip frontend tests | OK per spec |
 | E2E lifecycle test | Spec: "Manual E2E checklist" required | We have automated E2E tests — exceeds spec |

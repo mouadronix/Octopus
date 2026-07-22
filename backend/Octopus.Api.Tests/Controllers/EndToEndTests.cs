@@ -7,6 +7,8 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Octopus.Api.Data;
 using Octopus.Api.DTOs;
 using Octopus.Api.Models;
 using Octopus.Api.Tests.Helpers;
@@ -114,7 +116,7 @@ public class EndToEndTests : IDisposable
     [Fact]
     public async Task FullLifecycle_DockConflictPreventsDoubleBooking()
     {
-        // Create two ships
+        // Create two ships via the API
         var ship1Resp = await _client.PostAsJsonAsync("/api/ships", new { name = "Ship A", notes = "" });
         var ship2Resp = await _client.PostAsJsonAsync("/api/ships", new { name = "Ship B", notes = "" });
 
@@ -123,7 +125,24 @@ public class EndToEndTests : IDisposable
         var ship1Id = ship1Body.GetProperty("id").GetInt32();
         var ship2Id = ship2Body.GetProperty("id").GetInt32();
 
-        // Get a suggestion for ship 1
+        // Force both ships to M-size with overlapping dates via the database.
+        // Also shrink the planning horizon so the second ship cannot be
+        // squeezed into a later slot on the same dock.
+        using var scope = _factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var ship1 = db.Ships.Find(ship1Id)!;
+        var ship2 = db.Ships.Find(ship2Id)!;
+        ship1.Size = ShipSize.M;
+        ship1.ArrivalDay = 1;
+        ship1.Duration = 5;
+        ship2.Size = ShipSize.M;
+        ship2.ArrivalDay = 1;
+        ship2.Duration = 5;
+        var terminal = db.TerminalStates.First();
+        terminal.PlanningHorizon = 5; // max day = 1+5 = 6; second ship needs days 6-10 => rejected
+        db.SaveChanges();
+
+        // Get a suggestion for ship 1 — should find M-01 dock
         var suggestionResp = await _client.GetAsync($"/api/ships/{ship1Id}/suggest");
         Assert.Equal(HttpStatusCode.OK, suggestionResp.StatusCode);
         var suggestion = await suggestionResp.Content.ReadFromJsonAsync<JsonElement>(_jsonOptions);
@@ -133,9 +152,8 @@ public class EndToEndTests : IDisposable
         var assign1Resp = await _client.PostAsJsonAsync($"/api/docks/{dockId}/assign", new { shipId = ship1Id });
         Assert.Equal(HttpStatusCode.Created, assign1Resp.StatusCode);
 
-        // Assign ship 2 to same dock — should fail if overlapping
+        // Assign ship 2 to same dock — must fail (dock occupied with overlapping dates)
         var assign2Resp = await _client.PostAsJsonAsync($"/api/docks/{dockId}/assign", new { shipId = ship2Id });
-        // May succeed or fail depending on timing — but the endpoint should respond
-        Assert.True(assign2Resp.StatusCode is HttpStatusCode.Created or HttpStatusCode.BadRequest);
+        Assert.Equal(HttpStatusCode.BadRequest, assign2Resp.StatusCode);
     }
 }

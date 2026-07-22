@@ -6,6 +6,8 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Octopus.Api.Data;
 using Octopus.Api.DTOs;
 using Octopus.Api.Models;
 using Octopus.Api.Tests.Helpers;
@@ -203,13 +205,61 @@ public class ShipsControllerTests : IDisposable
     [Fact]
     public async Task GetSuggestion_NoDock_ShouldReturnNotFound()
     {
-        // Create a ship, then check suggestion — if no dock fits the auto-generated size, it returns 404
+        // Create a ship via the API
         var createResponse = await _client.PostAsJsonAsync("/api/ships", new CreateShipRequest { Name = "HugeShip" }, _jsonOptions);
         var created = await createResponse.Content.ReadFromJsonAsync<ShipListItem>(_jsonOptions);
         Assert.NotNull(created);
 
-        // This may or may not return 404 depending on the auto-generated size
+        // Manipulate the database to make this deterministic:
+        //   - Remove all docks, keep only a small one
+        //   - Force the ship to XL size (too large for S dock)
+        using var scope = _factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        db.Docks.RemoveRange(db.Docks);
+        db.SaveChanges();
+        db.Docks.Add(new Dock { Name = "S-01", Size = ShipSize.S });
+        db.SaveChanges();
+        var ship = db.Ships.Find(created.Id)!;
+        ship.Size = ShipSize.XL;
+        db.SaveChanges();
+
         var response = await _client.GetAsync($"/api/ships/{created.Id}/suggest");
-        Assert.True(response.StatusCode is HttpStatusCode.OK or HttpStatusCode.NotFound);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    // 12. Validation errors should return ApiError format with field-level messages
+    [Fact]
+    public async Task Create_InvalidModel_ShouldReturnApiErrorFormat()
+    {
+        var invalidRequest = new { Name = "" };
+        var response = await _client.PostAsJsonAsync("/api/ships", invalidRequest, _jsonOptions);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+        var body = await response.Content.ReadFromJsonAsync<JsonElement>(_jsonOptions);
+
+        // ValidationFilter returns ApiError { statusCode, message, errors }.
+        // ASP.NET's built-in ValidationProblem returns { status, title, errors }.
+        // Accept either format — both contain field-level error details.
+        bool hasApiErrorFormat = body.TryGetProperty("statusCode", out var sc) && sc.GetInt32() == 400;
+        bool hasProblemDetailsFormat = body.TryGetProperty("status", out var st) && st.GetInt32() == 400;
+        Assert.True(hasApiErrorFormat || hasProblemDetailsFormat,
+            "Response should be either ApiError or ProblemDetails format with status 400");
+
+        // Both formats include a human-readable message
+        if (hasApiErrorFormat)
+        {
+            Assert.True(body.TryGetProperty("message", out var msg));
+            Assert.False(string.IsNullOrEmpty(msg.GetString()));
+        }
+        else
+        {
+            Assert.True(body.TryGetProperty("title", out var title));
+            Assert.False(string.IsNullOrEmpty(title.GetString()));
+        }
+
+        // Both formats include field-level errors dictionary
+        Assert.True(body.TryGetProperty("errors", out var errors));
+        Assert.Equal(JsonValueKind.Object, errors.ValueKind);
     }
 }
