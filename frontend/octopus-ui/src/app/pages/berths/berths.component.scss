@@ -233,8 +233,8 @@ select:focus {
 
 .month-cell,
 .day-cell,
-.berth-label,
-.berth-track,
+.dock-label,
+.dock-track,
 .group-row {
   border-bottom: 1px solid rgba(83, 161, 222, 0.13);
 }
@@ -305,25 +305,25 @@ select:focus {
   color: #20d9ff;
 }
 
-.berth-label {
+.dock-label {
   align-content: center;
   background: rgba(5, 17, 32, 0.76);
   min-height: 72px;
   padding: 0 14px;
 }
 
-.berth-label span {
+.dock-label span {
   color: #dcecff;
   display: block;
 }
 
-.berth-label small {
+.dock-label small {
   color: #7fa0c3;
   display: block;
   margin-top: 4px;
 }
 
-.berth-track {
+.dock-track {
   display: grid;
   grid-column: 2 / -1;
   grid-template-columns: repeat(var(--day-count), minmax(112px, 1fr));
