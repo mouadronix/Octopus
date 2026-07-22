@@ -2,7 +2,7 @@
   <header class="planning-hero">
     <div>
       <h1>Planning Calendar</h1>
-      <p>Visualize berth occupancy and plan future allocations. Drag and drop ships to adjust schedules.</p>
+      <p>Visualize dock occupancy and plan future allocations. Drag and drop ships to adjust schedules.</p>
     </div>
   </header>
 
@@ -29,7 +29,7 @@
     <label>
       <span>Group By</span>
       <select [(ngModel)]="groupBy">
-        <option>Berth Size</option>
+        <option>Dock Size</option>
       </select>
     </label>
 
@@ -55,22 +55,22 @@
             <span>{{ getDayLabel(dayIndex) }}</span>
           </div>
 
-          <ng-container *ngFor="let group of berthGroups; trackBy: trackByGroupSize">
+          <ng-container *ngFor="let group of dockGroups; trackBy: trackByGroupSize">
             <div class="group-row" [class]="group.size.toLowerCase()">
-              <span>{{ group.size }} Berths</span>
+              <span>{{ group.size }} Docks</span>
             </div>
 
-            <ng-container *ngFor="let berth of group.berths; trackBy: trackByBerthId">
-              <div class="berth-label">
-                <span>{{ berth.name }}</span>
-                <small>{{ getBerthAssignmentsCount(berth) ? getBerthAssignmentsCount(berth) + ' planned' : 'Free' }}</small>
+            <ng-container *ngFor="let dock of group.docks; trackBy: trackByDockId">
+              <div class="dock-label">
+                <span>{{ dock.name }}</span>
+                <small>{{ getDockAssignmentsCount(dock) ? getDockAssignmentsCount(dock) + ' planned' : 'Free' }}</small>
               </div>
 
-              <div class="berth-track">
+              <div class="dock-track">
                 <span *ngFor="let day of days" class="track-day"></span>
 
                 <article
-                  *ngFor="let assignment of rowAssignments(berth); trackBy: trackByAssignmentId"
+                  *ngFor="let assignment of rowAssignments(dock); trackBy: trackByAssignmentId"
                   class="assignment-bar"
                   [class]="getAssignmentClass(assignment)"
                   [style.grid-column]="getGridColumn(assignment)"
@@ -80,7 +80,7 @@
                   <small>{{ getRangeLabel(assignment) }}</small>
                 </article>
 
-                <div *ngIf="!hasAssignments(berth)" class="available-bar">
+                <div *ngIf="!hasAssignments(dock)" class="available-bar">
                   Available
                 </div>
               </div>
@@ -132,17 +132,17 @@
         <h2>Filters</h2>
 
         <label>
-          <span>Berth Size</span>
+          <span>Dock Size</span>
           <select [(ngModel)]="selectedSize">
             <option *ngFor="let size of sizeOptions" [ngValue]="size">{{ size }}</option>
           </select>
         </label>
 
         <label>
-          <span>Berth</span>
-          <select [(ngModel)]="berthFilter">
+          <span>Dock</span>
+          <select [(ngModel)]="dockFilter">
             <option value="All">All</option>
-            <option *ngFor="let berth of berths" [value]="berth.name">{{ berth.name }}</option>
+            <option *ngFor="let dock of docks" [value]="dock.name">{{ dock.name }}</option>
           </select>
         </label>
 
@@ -185,5 +185,5 @@
     </aside>
   </div>
 
-  <footer class="page-footer">&copy; 2025 OCTOPUS Port &amp; Berth Management System. All rights reserved.</footer>
+  <footer class="page-footer">&copy; 2025 OCTOPUS Port &amp; Dock Management System. All rights reserved.</footer>
 </section>

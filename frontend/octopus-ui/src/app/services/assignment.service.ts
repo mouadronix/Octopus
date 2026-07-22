@@ -6,19 +6,18 @@ import { Assignment, CreateAssignmentRequest } from '../models/assignment.model'
 
 @Injectable({ providedIn: 'root' })
 export class AssignmentService {
-  private readonly apiUrl = `${environment.apiBaseUrl}/assignments`;
+  private readonly apiUrl = `${environment.apiBaseUrl}/docks`;
 
   constructor(private readonly http: HttpClient) {}
 
 
   //get all assignments
   getAssignments(): Observable<Assignment[]> {
-    return this.http.get<Assignment[]>(this.apiUrl);
+    return this.http.get<Assignment[]>(`${this.apiUrl}/assignments`);
   }
-
 
   //create an assignment
   createAssignment(request: CreateAssignmentRequest): Observable<Assignment> {
-    return this.http.post<Assignment>(this.apiUrl, request);
+    return this.http.post<Assignment>(`${this.apiUrl}/${request.dockId}/assign`, { shipId: request.shipId });
   }
 }

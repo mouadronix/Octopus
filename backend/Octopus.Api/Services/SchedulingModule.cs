@@ -24,8 +24,6 @@ public static class SchedulingModule
     public static (bool CanAssign, int StartDay) FindEarliestSlot(
         Ship ship, Dock dock, List<Assignment> dockAssignments, int currentDay, int horizon)
     {
-        if (ship.ArrivalDay < currentDay)
-            return (false, -1);
         if (ship.Duration < 1)
             return (false, -1);
 

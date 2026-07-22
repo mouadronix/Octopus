@@ -11,7 +11,13 @@ type SizeFilter = 'All' | 'XL' | 'L' | 'M' | 'S';
 interface ShipMetric {
   label: string;
   value: number;
-  tone: 'cyan' | 'orange' | 'green' | 'muted';
+  caption: string;
+  tone: 'blue' | 'orange' | 'green' | 'muted';
+}
+
+interface ShipForm {
+  name: string;
+  notes: string;
 }
 
 @Component({
@@ -31,6 +37,14 @@ export class ShipsComponent implements OnInit {
   successMessage = '';
   selectedShip: Ship | null = null;
 
+  // Modal state
+  showNewShipModal = false;
+  isSaving = false;
+  shipForm: ShipForm = { name: '', notes: '' };
+
+  // Sort state
+  sortDirection: 'asc' | 'desc' = 'asc';
+
   readonly statusOptions: StatusFilter[] = ['All', 'Pending', 'Assigned', 'Departed'];
   readonly sizeOptions: SizeFilter[] = ['All', 'XL', 'L', 'M', 'S'];
   readonly defaultShipImage = 'assets/default-ship.svg';
@@ -43,10 +57,10 @@ export class ShipsComponent implements OnInit {
 
   get metrics(): ShipMetric[] {
     return [
-      { label: 'Total Ships', value: this.ships.length, tone: 'cyan' },
-      { label: 'Pending', value: this.countByStatus('Pending'), tone: 'orange' },
-      { label: 'Assigned', value: this.countByStatus('Assigned'), tone: 'green' },
-      { label: 'Departed', value: this.countByStatus('Departed'), tone: 'muted' }
+      { label: 'Total Ships', value: this.ships.length, caption: 'All registered', tone: 'blue' },
+      { label: 'Pending', value: this.countByStatus('Pending'), caption: 'Awaiting dock', tone: 'orange' },
+      { label: 'Assigned', value: this.countByStatus('Assigned'), caption: 'Currently docked', tone: 'green' },
+      { label: 'Departed', value: this.countByStatus('Departed'), caption: 'Left terminal', tone: 'muted' }
     ];
   }
 
@@ -63,6 +77,15 @@ export class ShipsComponent implements OnInit {
       const matchesSize = this.sizeFilter === 'All' || this.normalizeSize(ship.size) === this.sizeFilter;
       return matchesSearch && matchesStatus && matchesSize;
     });
+  }
+
+  get pageShips(): Ship[] {
+    const sorted = [...this.filteredShips].sort((a, b) =>
+      this.sortDirection === 'asc'
+        ? a.name.localeCompare(b.name)
+        : b.name.localeCompare(a.name)
+    );
+    return sorted;
   }
 
   loadShips(): void {
@@ -82,8 +105,57 @@ export class ShipsComponent implements OnInit {
     });
   }
 
-  selectShip(ship: Ship): void {
+  openNewShip(): void {
+    this.shipForm = this.createEmptyForm();
+    this.successMessage = '';
+    this.errorMessage = '';
+    this.showNewShipModal = true;
+  }
+
+  closeNewShip(): void {
+    if (this.isSaving) {
+      return;
+    }
+
+    this.showNewShipModal = false;
+  }
+
+  createShip(): void {
+    const name = this.shipForm.name.trim();
+
+    if (!name) {
+      this.errorMessage = 'Ship name is required.';
+      return;
+    }
+
+    this.isSaving = true;
+    this.errorMessage = '';
+
+    this.shipService
+      .createShip({
+        name,
+        notes: this.shipForm.notes.trim()
+      })
+      .subscribe({
+        next: () => {
+          this.isSaving = false;
+          this.showNewShipModal = false;
+          this.successMessage = `${name} has been registered.`;
+          this.loadShips();
+        },
+        error: () => {
+          this.isSaving = false;
+          this.errorMessage = 'Ship could not be registered.';
+        }
+      });
+  }
+
+  viewShip(ship: Ship): void {
     this.selectedShip = ship;
+  }
+
+  closeDetails(): void {
+    this.selectedShip = null;
   }
 
   deleteShip(ship: Ship): void {
@@ -98,6 +170,10 @@ export class ShipsComponent implements OnInit {
     });
   }
 
+  toggleSort(): void {
+    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+  }
+
   resetFilters(): void {
     this.searchTerm = '';
     this.statusFilter = 'All';
@@ -107,6 +183,10 @@ export class ShipsComponent implements OnInit {
   getImo(ship: Ship): string {
     const match = ship.notes?.match(/IMO:\s*([A-Za-z0-9-]+)/i);
     return match?.[1] ?? `NF-${String(ship.id).padStart(4, '0')}`;
+  }
+
+  getBerth(ship: Ship): string {
+    return ship.berthName ?? '-';
   }
 
   getShipImage(ship: Ship): string {
@@ -140,5 +220,12 @@ export class ShipsComponent implements OnInit {
 
   private countByStatus(status: StatusFilter): number {
     return this.ships.filter((ship) => this.normalizeStatus(ship.status) === status).length;
+  }
+
+  private createEmptyForm(): ShipForm {
+    return {
+      name: '',
+      notes: ''
+    };
   }
 }

@@ -41,7 +41,7 @@
 
     <section class="dashboard-grid">
       <article class="panel utilization-panel">
-        <h2>Berth Utilization</h2>
+        <h2>Dock Utilization</h2>
         <div class="utilization-content">
           <div
             class="donut utilization-donut"
@@ -55,16 +55,16 @@
 
           <dl class="legend-list">
             <div>
-              <dt><span class="dot green"></span>Occupied Berths</dt>
-              <dd>{{ occupiedBerths }} ({{ utilizationPercentage }}%)</dd>
+              <dt><span class="dot green"></span>Occupied Docks</dt>
+              <dd>{{ occupiedDocks }} ({{ utilizationPercentage }}%)</dd>
             </div>
             <div>
-              <dt><span class="dot cyan"></span>Available Berths</dt>
-              <dd>{{ availableBerths }} ({{ 100 - utilizationPercentage }}%)</dd>
+              <dt><span class="dot cyan"></span>Available Docks</dt>
+              <dd>{{ availableDocks }} ({{ 100 - utilizationPercentage }}%)</dd>
             </div>
             <div class="total-row">
-              <dt>Total Berths</dt>
-              <dd>{{ berths.length }}</dd>
+              <dt>Total Docks</dt>
+              <dd>{{ docks.length }}</dd>
             </div>
           </dl>
         </div>
@@ -150,5 +150,5 @@
     </section>
   </ng-container>
 
-  <footer class="dashboard-footer">&copy; 2025 OCTOPUS Port &amp; Berth Management System. All rights reserved.</footer>
+  <footer class="dashboard-footer">&copy; 2025 OCTOPUS Port &amp; Dock Management System. All rights reserved.</footer>
 </section>

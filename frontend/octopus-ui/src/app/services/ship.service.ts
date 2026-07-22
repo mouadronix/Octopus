@@ -26,6 +26,10 @@ export class ShipService {
     return this.http.post<Ship>(this.apiUrl, request);
   }
 
+  updateShip(id: number, data: Partial<CreateShipRequest>): Observable<Ship> {
+    return this.http.put<Ship>(`${this.apiUrl}/${id}`, data);
+  }
+
   deleteShip(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }

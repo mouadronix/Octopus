@@ -5,8 +5,12 @@ using Octopus.Api.Services;
 
 namespace Octopus.Api.Controllers;
 
+/// <summary>
+/// Manage ships and retrieve berth-assignment suggestions.
+/// </summary>
 [ApiController]
 [Route("api/ships")]
+[Tags("Ships")]
 public class ShipsController : ControllerBase
 {
     private readonly ShipService _shipService;
@@ -18,8 +22,13 @@ public class ShipsController : ControllerBase
         _assignmentService = assignmentService;
     }
 
-    // GET: api/ships?status=Pending
+    /// <summary>
+    /// List all ships, optionally filtered by status.
+    /// </summary>
+    /// <param name="status">Optional ship status filter (e.g. Available, Pending).</param>
+    /// <returns>A list of ships.</returns>
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<ShipListItem>), StatusCodes.Status200OK)]
     public IActionResult GetAll([FromQuery] string? status)
     {
         var ships = _shipService.GetAll();
@@ -28,8 +37,14 @@ public class ShipsController : ControllerBase
         return Ok(ships.Select(ToListItem));
     }
 
-    // GET: api/ships/1
+    /// <summary>
+    /// Get a single ship by its identifier.
+    /// </summary>
+    /// <param name="id">The ship ID.</param>
+    /// <returns>The ship details.</returns>
     [HttpGet("{id:int}")]
+    [ProducesResponseType(typeof(ShipListItem), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult GetById(int id)
     {
         var ship = _shipService.GetById(id);
@@ -37,8 +52,14 @@ public class ShipsController : ControllerBase
         return Ok(ToListItem(ship));
     }
 
-    // POST: api/ships
+    /// <summary>
+    /// Register a new ship in the terminal. Size, arrival day, and duration are auto-generated.
+    /// </summary>
+    /// <param name="request">Ship name and notes.</param>
+    /// <returns>The created ship with auto-generated fields.</returns>
     [HttpPost]
+    [ProducesResponseType(typeof(ShipListItem), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Create([FromBody] CreateShipRequest request)
     {
         if (!ModelState.IsValid) return ValidationProblem(ModelState);
@@ -46,19 +67,37 @@ public class ShipsController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = ship.Id }, ToListItem(ship));
     }
 
-    // PUT: api/ships/1 — edit name/notes (Pending only)
+    /// <summary>
+    /// Edit a ship's name and notes. Only allowed for ships with Pending status.
+    /// </summary>
+    /// <param name="id">The ship ID.</param>
+    /// <param name="request">Updated name and notes.</param>
+    /// <returns>The updated ship.</returns>
     [HttpPut("{id:int}")]
-    public IActionResult Update(int id, [FromBody] EditShipRequest request)
+    [ProducesResponseType(typeof(ShipListItem), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult Update(int id, [FromBody] UpdateShipRequest request)
     {
         if (!ModelState.IsValid) return ValidationProblem(ModelState);
-        var ship = _shipService.UpdateNameNotes(id, request);
+        var ship = _shipService.Update(id, request.Name, request.Notes);
         if (ship is null)
-            return NotFound(new { message = "Ship not found or not in Pending status" });
+        {
+            var existing = _shipService.GetById(id);
+            if (existing is null) return NotFound();
+            return BadRequest(new { message = "Only ships with Pending status can be edited." });
+        }
         return Ok(ToListItem(ship));
     }
 
-    // GET: api/ships/1/suggest
+    /// <summary>
+    /// Get a suggested dock assignment for a specific ship.
+    /// </summary>
+    /// <param name="id">The ship ID.</param>
+    /// <returns>A suggestion containing the recommended dock, start day, and message.</returns>
     [HttpGet("{id:int}/suggest")]
+    [ProducesResponseType(typeof(SuggestionResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult GetSuggestion(int id)
     {
         var suggestion = _assignmentService.GetSuggestion(id);

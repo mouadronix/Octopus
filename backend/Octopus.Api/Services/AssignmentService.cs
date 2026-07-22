@@ -20,6 +20,10 @@ public class AssignmentService
         return _repo.GetAllWithDetails();
     }
 
+    /// <summary>
+    /// Assign a ship to a specific dock.
+    /// Spec: uses database transaction, checks planning horizon.
+    /// </summary>
     public Assignment? AssignShip(int shipId, int dockId)
     {
         var ctx = _repo.GetAssignmentContext(shipId, dockId);
@@ -29,7 +33,7 @@ public class AssignmentService
         if (ctx.Ship.Status != ShipStatus.Pending || ctx.Ship.Assignment is not null)
             return null;
 
-        if (ctx.Dock.Size != ctx.Ship.Size)
+        if (!CanFitShip(ctx.Dock.Size, ctx.Ship.Size))
             return null;
 
         var (canAssign, startDay) = SchedulingModule.FindEarliestSlot(
@@ -76,5 +80,22 @@ public class AssignmentService
         return SchedulingModule.Suggest(
             ctx.Ship, ctx.AllDocks, ctx.AssignmentsByDock,
             ctx.Terminal.CurrentDay, ctx.Terminal.PlanningHorizon);
+    }
+
+    private static bool CanFitShip(ShipSize dockSize, ShipSize shipSize)
+    {
+        return SizeRank(dockSize) >= SizeRank(shipSize);
+    }
+
+    private static int SizeRank(ShipSize size)
+    {
+        return size switch
+        {
+            ShipSize.S => 1,
+            ShipSize.M => 2,
+            ShipSize.L => 3,
+            ShipSize.XL => 4,
+            _ => 0
+        };
     }
 }

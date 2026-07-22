@@ -2,7 +2,16 @@
   <header class="assignments-hero">
     <div>
       <h1>Pending Assignments</h1>
-      <p>Incoming ships waiting for berth allocation. Select a ship to view compatible berths and assign.</p>
+      <p>Incoming ships waiting for dock allocation. Select a ship to view compatible docks and assign.</p>
+    </div>
+    <div class="hero-actions">
+      <span class="current-day-badge">Day {{ currentDay }}</span>
+      <button type="button" class="next-day-button" (click)="nextDay()" [disabled]="isLoading">
+        Next Day
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+      </button>
     </div>
   </header>
 
@@ -94,11 +103,11 @@
             </div>
 
             <div class="compatible-inline">
-              <span>Compatible Berths</span>
-              <strong *ngIf="getCompatibleBerthCount(ship) > 0; else noBerths">
+              <span>Compatible Docks</span>
+              <strong *ngIf="getCompatibleBerthCount(ship) > 0; else noDocks">
                 {{ getCompatibleBerthNames(ship) }}
               </strong>
-              <ng-template #noBerths><strong>None</strong></ng-template>
+              <ng-template #noDocks><strong>None</strong></ng-template>
             </div>
 
             <button type="button" class="assign-shortcut" (click)="$event.stopPropagation(); selectShip(ship)">
@@ -152,25 +161,25 @@
         </dl>
 
         <section class="compatible-list">
-          <h3>Compatible Berths</h3>
-          <p *ngIf="isLoadingSuggestion" class="no-compatible">Loading compatible berths...</p>
+          <h3>Compatible Docks</h3>
+          <p *ngIf="isLoadingSuggestion" class="no-compatible">Loading compatible docks...</p>
           <button
             *ngFor="let berth of compatibleBerths; trackBy: trackByBerth"
             type="button"
-            class="berth-option"
+            class="dock-option"
             [class.active]="selectedBerthId === berth.dockId"
             (click)="selectBerth(berth.dockId)"
           >
-            <span class="berth-icon">{{ berth.size }}</span>
+            <span class="dock-icon">{{ berth.size }}</span>
             <span>
               <strong>{{ berth.dockName }}</strong>
-              <small>{{ berth.size }} berth · Available from Day {{ berth.startDay }}</small>
+              <small>{{ berth.size }} dock · Available from Day {{ berth.startDay }}</small>
             </span>
             <span class="checkmark" *ngIf="selectedBerthId === berth.dockId">✓</span>
           </button>
 
           <p *ngIf="!isLoadingSuggestion && compatibleBerths.length === 0" class="no-compatible">
-            No compatible berth is currently available for this ship.
+            No compatible dock is currently available for this ship.
           </p>
         </section>
 
@@ -178,7 +187,7 @@
           <h3>Allocation Summary</h3>
           <dl>
             <div>
-              <dt>Berth</dt>
+              <dt>Dock</dt>
               <dd>{{ selectedBerth.dockName }}</dd>
             </div>
             <div>
@@ -192,7 +201,7 @@
           </dl>
         </section>
 
-        <button type="button" class="confirm-button" [disabled]="isAssigning || isLoadingSuggestion || !selectedBerth" (click)="confirmAssignment()">
+        <button type="button" class="confirm-button" [disabled]="isAssigning || isLoadingSuggestion || !selectedBerth" (click)="confirmAssignment()"
           Confirm Assignment
         </button>
       </aside>
@@ -200,11 +209,42 @@
       <ng-template #noSelection>
         <aside class="preview-panel empty-preview">
           <h2>Assignment Preview</h2>
-          <p>Select a pending ship to view compatible berths.</p>
+          <p>Select a pending ship to view compatible docks.</p>
         </aside>
       </ng-template>
     </section>
+
+    <!-- Timeline View (CSS Grid dock x day) -->
+    <section class="timeline-section" aria-label="Dock timeline">
+      <h2>Dock Timeline</h2>
+      <div class="timeline-grid" [style.grid-template-columns]="'140px repeat(' + timelineDayCount + ', minmax(60px, 1fr))'">
+        <!-- Header row -->
+        <div class="timeline-corner">Dock</div>
+        <div
+          *ngFor="let day of timelineDays; trackBy: trackByDay"
+          class="timeline-day-header"
+          [class.today]="day === currentDay"
+        >
+          Day {{ day }}
+        </div>
+
+        <!-- Dock rows -->
+        <ng-container *ngFor="let dock of docks">
+          <div class="timeline-dock-label">{{ dock.name }}</div>
+          <div
+            *ngFor="let day of timelineDays; trackBy: trackByDay"
+            class="timeline-cell"
+            [class.occupied]="getTimelineShip(dock, day)"
+            [class.ship-start]="getTimelineShip(dock, day)?.isStart"
+          >
+            <span *ngIf="getTimelineShip(dock, day) as info" class="timeline-ship">
+              {{ info.isStart ? info.name : '' }}
+            </span>
+          </div>
+        </ng-container>
+      </div>
+    </section>
   </ng-container>
 
-  <footer class="page-footer">&copy; 2025 OCTOPUS Port &amp; Berth Management System. All rights reserved.</footer>
+  <footer class="page-footer">&copy; 2025 OCTOPUS Port &amp; Dock Management System. All rights reserved.</footer>
 </section>

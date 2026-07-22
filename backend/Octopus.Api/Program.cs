@@ -17,7 +17,23 @@ builder.Services.AddControllers(options =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "Octopus – Port Terminal API",
+        Version = "v1",
+        Description = "REST API for managing ships, docks (berths), and berth assignments in a port terminal simulation.",
+        Contact = new Microsoft.OpenApi.Models.OpenApiContact
+        {
+            Name = "Octopus Team"
+        }
+    });
+
+    // Include XML doc comments from the generated XML file
+    var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=blueharbor.db"));
@@ -38,21 +54,23 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Auto-migrate and seed only in Development
 if (app.Environment.IsDevelopment())
 {
-    using (var scope = app.Services.CreateScope())
-    {
-        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        context.Database.Migrate();
-        SeedData.Initialize(context);
-    }
-
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    using var scope = app.Services.CreateScope();
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    context.Database.Migrate();
+    SeedData.Initialize(context);
 }
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseCors("AllowFrontend");
 app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Required for WebApplicationFactory<Program> in integration tests
+public partial class Program { }

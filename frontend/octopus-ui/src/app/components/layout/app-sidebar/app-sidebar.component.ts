@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService, UserRole } from '../../../services/auth.service';
 
 interface SidebarStat {
   label: string;
@@ -11,7 +12,8 @@ interface SidebarStat {
 interface NavItem {
   label: string;
   route: string;
-  icon: 'dashboard' | 'ship' | 'pending' | 'berth' | 'calendar' | 'log' | 'time';
+  icon: 'dashboard' | 'ship' | 'pending' | 'berth' | 'calendar';
+  roles?: UserRole[];
 }
 
 @Component({
@@ -22,23 +24,27 @@ interface NavItem {
   styleUrl: './app-sidebar.component.scss'
 })
 export class AppSidebarComponent {
-  navItems: NavItem[] = [
+  private readonly allNavItems: NavItem[] = [
     { label: 'Dashboard', route: '/dashboard', icon: 'dashboard' },
-    { label: 'Ships', route: '/ships', icon: 'ship' },
-    { label: 'New Ship', route: '/ships/new', icon: 'ship' },
-    { label: 'Pending Assignments', route: '/scheduler', icon: 'pending' },
-    { label: 'Berth Board', route: '/operator', icon: 'berth' },
-    { label: 'Planning Calendar', route: '/berths', icon: 'calendar' },
-    { label: 'Activity Log', route: '/activity-log', icon: 'log' },
-    { label: 'Virtual Time', route: '/virtual-time', icon: 'time' }
+    { label: 'Ships', route: '/ships', icon: 'ship', roles: ['operator'] },
+    { label: 'Pending Assignments', route: '/scheduler', icon: 'pending', roles: ['scheduler'] },
+    { label: 'Ship Operations', route: '/operator', icon: 'berth', roles: ['operator'] },
+    { label: 'Planning Calendar', route: '/docks', icon: 'calendar', roles: ['scheduler'] }
   ];
 
   stats: SidebarStat[] = [
     { label: 'Ships Pending', value: '6', color: 'orange' },
-    { label: 'Berths Occupied', value: '3', color: 'green' },
-    { label: 'Berths Available', value: '7', color: 'cyan' },
+    { label: 'Docks Occupied', value: '3', color: 'green' },
+    { label: 'Docks Available', value: '7', color: 'cyan' },
     { label: 'Next Arrival Day 13', value: '', color: 'blue' }
   ];
+
+  constructor(private readonly authService: AuthService) {}
+
+  get navItems(): NavItem[] {
+    const role = this.authService.currentRole;
+    return this.allNavItems.filter((item) => !item.roles || item.roles.includes(role!));
+  }
 
   trackByNavLabel(_index: number, item: NavItem): string {
     return item.label;

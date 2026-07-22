@@ -9,35 +9,12 @@
     </svg>
     <span>
       <strong>Octopus</strong>
-      <small>Port &amp; Berth Management System</small>
+      <small>Port &amp; Dock Management System</small>
     </span>
   </a>
 
   <section class="header-actions" aria-label="Terminal controls">
-    <div class="day-block">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M8 2v4M16 2v4M3 10h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" />
-      </svg>
-      <span>
-        <small>Current Day</small>
-        <strong>Day {{ currentDay }}</strong>
-      </span>
-    </div>
-
-    <button type="button" class="next-day" (click)="nextDay()">
-      Next Day
-      <span aria-hidden="true">&raquo;</span>
-    </button>
-
-    <button type="button" class="notification" aria-label="Notifications">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
-        <path d="M10 21h4" />
-      </svg>
-      <span>3</span>
-    </button>
-
-    <div class="user-menu" *ngIf="currentSession$ | async as session">
+    <div class="user-menu" *ngIf="role$ | async as role">
       <div class="avatar" aria-hidden="true">
         <svg viewBox="0 0 24 24">
           <path d="M20 21a8 8 0 0 0-16 0" />
@@ -45,8 +22,8 @@
         </svg>
       </div>
       <span>
-        <strong>{{ session.fullName }}</strong>
-        <small>{{ session.role }} &middot; BlueHarbor Terminal</small>
+        <strong>{{ role === 'operator' ? 'Operator' : 'Scheduler' }}</strong>
+        <small>OCTOPUS Platform</small>
       </span>
       <button type="button" class="logout-button" aria-label="Logout" title="Logout" (click)="logout()">
         <svg viewBox="0 0 24 24" aria-hidden="true">

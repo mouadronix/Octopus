@@ -38,6 +38,7 @@ public class SystemService
         var terminal = GetOrCreateTerminalState();
         terminal.CurrentDay++;
 
+        // Eagerly load assignments to avoid N+1 query
         var assignedShips = _context.Ships
             .Include(s => s.Assignment)
             .Where(s => s.Status == ShipStatus.Assigned)

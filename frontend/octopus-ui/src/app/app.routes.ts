@@ -5,8 +5,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { OperatorComponent } from './pages/operator/operator.component';
 import { SchedulerComponent } from './pages/scheduler/scheduler.component';
 import { ShipsComponent } from './pages/ships/ships.component';
-import { NewShipComponent } from './pages/new-ship/new-ship.component';
-import { BerthsComponent } from './pages/berths/berths.component';
+import { DocksComponent } from './pages/berths/berths.component';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -19,11 +18,10 @@ export const routes: Routes = [
     canActivateChild: [authGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'operator', component: OperatorComponent },
-      { path: 'scheduler', component: SchedulerComponent },
-      { path: 'ships', component: ShipsComponent },
-      { path: 'ships/new', component: NewShipComponent },
-      { path: 'berths', component: BerthsComponent }
+      { path: 'operator', component: OperatorComponent, data: { roles: ['operator'] } },
+      { path: 'scheduler', component: SchedulerComponent, data: { roles: ['scheduler'] } },
+      { path: 'ships', component: ShipsComponent, data: { roles: ['operator'] } },
+      { path: 'docks', component: DocksComponent, data: { roles: ['scheduler'] } }
     ]
   },
   { path: '**', redirectTo: '' }

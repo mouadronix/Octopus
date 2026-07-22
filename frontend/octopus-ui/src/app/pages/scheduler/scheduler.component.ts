@@ -2,10 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
-import { Berth } from '../../models/berth.model';
+import { Dock } from '../../models/dock.model';
 import { CompatibleBerth, Ship, ShipSize, ShipStatus, SuggestionResponse } from '../../models/ship.model';
 import { AssignmentService } from '../../services/assignment.service';
-import { BerthService } from '../../services/berth.service';
+import { DockService } from '../../services/dock.service';
 import { ShipService } from '../../services/ship.service';
 import { SystemService } from '../../services/system.service';
 
@@ -30,8 +30,10 @@ interface AssignmentMetric {
 })
 export class SchedulerComponent implements OnInit {
   ships: Ship[] = [];
-  berths: Berth[] = [];
+  docks: Dock[] = [];
   currentDay = 1;
+  timelineDays: number[] = [];
+  readonly timelineDayCount = 14;
   selectedShip: Ship | null = null;
   selectedBerthId = 0;
   searchTerm = '';
@@ -63,7 +65,7 @@ export class SchedulerComponent implements OnInit {
 
   constructor(
     private readonly shipService: ShipService,
-    private readonly berthService: BerthService,
+    private readonly dockService: DockService,
     private readonly assignmentService: AssignmentService,
     private readonly systemService: SystemService
   ) {}
@@ -101,13 +103,13 @@ export class SchedulerComponent implements OnInit {
   get metrics(): AssignmentMetric[] {
     const xlPending = this.pendingShips.filter((ship) => this.normalizeSize(ship.size) === 'XL').length;
     const arrivalsNext7 = this.ships.filter((ship) => ship.arrivalDay >= this.currentDay && ship.arrivalDay <= this.currentDay + 7).length;
-    const availableBerths = this.berths.filter((berth) => (berth.assignments?.length ?? 0) === 0).length;
+    const availableDocks = this.docks.filter((dock) => (dock.assignments?.length ?? 0) === 0).length;
 
     return [
       { label: 'Pending Ships', value: this.pendingShips.length, caption: 'Awaiting assignment', tone: 'orange', trend: [3, 2, 4, 2, 5, 3, 4] },
       { label: 'XL Pending', value: xlPending, caption: 'Extra large vessels', tone: 'purple', trend: [2, 1, 3, 2, 1, 2, 2] },
       { label: 'Total Arrivals', value: arrivalsNext7, caption: 'Next 7 days', tone: 'blue', trend: [1, 2, 1, 3, 2, 4, 2] },
-      { label: 'Available Berths', value: availableBerths, caption: 'Ready for allocation', tone: 'green', trend: [4, 5, 3, 4, 2, 3, 4] }
+      { label: 'Available Docks', value: availableDocks, caption: 'Ready for allocation', tone: 'green', trend: [4, 5, 3, 4, 2, 3, 4] }
     ];
   }
 
@@ -117,13 +119,14 @@ export class SchedulerComponent implements OnInit {
 
     forkJoin({
       ships: this.shipService.getShips(),
-      berths: this.berthService.getBerths(),
+      docks: this.dockService.getDocks(),
       state: this.systemService.getState()
     }).subscribe({
-      next: ({ ships, berths, state }) => {
+      next: ({ ships, docks, state }) => {
         this.ships = ships;
-        this.berths = berths;
+        this.docks = docks;
         this.currentDay = state.currentDay;
+        this.buildTimeline();
         this.selectedShip = this.filteredShips[0] ?? null;
         if (this.selectedShip) {
           this.loadSuggestion(this.selectedShip.id);
@@ -161,7 +164,7 @@ export class SchedulerComponent implements OnInit {
 
   confirmAssignment(): void {
     if (!this.selectedShip || !this.selectedBerth) {
-      this.showMessage('Select a ship and compatible berth before confirming.', 'error');
+      this.showMessage('Select a ship and compatible dock before confirming.', 'error');
       return;
     }
 
@@ -173,25 +176,21 @@ export class SchedulerComponent implements OnInit {
         this.loadAssignments();
       },
       error: () => {
-        this.showMessage('Assignment failed. The berth may be occupied or incompatible.', 'error');
+        this.showMessage('Assignment failed. The dock may be occupied or incompatible.', 'error');
         this.isAssigning = false;
       }
     });
   }
 
-  /**
-   * Count compatible berths by size only (for the ship list cards).
-   * This is a lightweight client-side check — no conflict detection.
-   */
   getCompatibleBerthCount(ship: Ship): number {
-    return this.berths.filter((berth) => this.sizeRank(this.normalizeSize(berth.size)) >= this.sizeRank(this.normalizeSize(ship.size))).length;
+    return this.docks.filter((dock) => this.sizeRank(this.normalizeSize(dock.size)) >= this.sizeRank(this.normalizeSize(ship.size))).length;
   }
 
   getCompatibleBerthNames(ship: Ship): string {
-    return this.berths
-      .filter((berth) => this.sizeRank(this.normalizeSize(berth.size)) >= this.sizeRank(this.normalizeSize(ship.size)))
+    return this.docks
+      .filter((dock) => this.sizeRank(this.normalizeSize(dock.size)) >= this.sizeRank(this.normalizeSize(ship.size)))
       .slice(0, 4)
-      .map((berth) => berth.name)
+      .map((dock) => dock.name)
       .join(', ');
   }
 
@@ -245,6 +244,38 @@ export class SchedulerComponent implements OnInit {
 
   trackByBerth(_index: number, berth: CompatibleBerth): number {
     return berth.dockId;
+  }
+
+  trackByDay(_index: number, day: number): number {
+    return day;
+  }
+
+  nextDay(): void {
+    this.systemService.nextDay().subscribe({
+      next: (state) => {
+        this.currentDay = state.currentDay;
+        this.showMessage('Advanced to day ' + state.currentDay + '.', 'success');
+        this.loadAssignments();
+      },
+      error: () => {
+        this.showMessage('Unable to advance the current day.', 'error');
+      }
+    });
+  }
+
+  getTimelineShip(dock: Dock, day: number): { name: string; isStart: boolean } | null {
+    const assignment = (dock.assignments ?? []).find((a) => a.startDay <= day && a.endDay >= day);
+    if (!assignment?.ship) {
+      return null;
+    }
+    return {
+      name: assignment.ship.name,
+      isStart: assignment.startDay === day
+    };
+  }
+
+  private buildTimeline(): void {
+    this.timelineDays = Array.from({ length: this.timelineDayCount }, (_, i) => this.currentDay + i);
   }
 
   /**

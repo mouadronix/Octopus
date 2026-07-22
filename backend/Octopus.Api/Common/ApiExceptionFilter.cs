@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Octopus.Api.Common;
 
+/// <summary>
+/// Global exception filter that catches unhandled exceptions and returns a standardized ApiError response.
+/// </summary>
 public class ApiExceptionFilter : IExceptionFilter
 {
     private readonly ILogger<ApiExceptionFilter> _logger;
@@ -16,10 +19,14 @@ public class ApiExceptionFilter : IExceptionFilter
     {
         _logger.LogError(context.Exception, "Unhandled exception");
 
-        context.Result = new ObjectResult(
-            new ApiError(500, "An unexpected error occurred"))
+        var apiError = new ApiError(
+            StatusCodes.Status500InternalServerError,
+            "An unexpected error occurred."
+        );
+
+        context.Result = new ObjectResult(apiError)
         {
-            StatusCode = 500
+            StatusCode = StatusCodes.Status500InternalServerError
         };
 
         context.ExceptionHandled = true;

@@ -1,17 +1,20 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router, UrlTree } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { AuthService, UserRole } from '../services/auth.service';
 
-export const authGuard: CanActivateFn = (_route, state): boolean | UrlTree => {
+export const authGuard: CanActivateFn = (route): boolean | UrlTree => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (authService.isAuthenticated()) {
-    return true;
+  if (!authService.isAuthenticated()) {
+    return router.createUrlTree(['/login']);
   }
 
-  // Preserve the attempted URL so login can return the user to their original destination.
-  return router.createUrlTree(['/login'], {
-    queryParams: { returnUrl: state.url }
-  });
+  const allowedRoles = route.data?.['roles'] as UserRole[] | undefined;
+  if (allowedRoles && !allowedRoles.includes(authService.currentRole!)) {
+    const fallback = authService.currentRole === 'scheduler' ? '/scheduler' : '/operator';
+    return router.createUrlTree([fallback]);
+  }
+
+  return true;
 };

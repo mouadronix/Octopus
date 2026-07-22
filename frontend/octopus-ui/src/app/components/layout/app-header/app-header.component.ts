@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthService, AuthSession } from '../../../services/auth.service';
+import { AuthService, UserRole } from '../../../services/auth.service';
 import { SystemService } from '../../../services/system.service';
 
 @Component({
@@ -14,25 +14,18 @@ import { SystemService } from '../../../services/system.service';
 })
 export class AppHeaderComponent {
   currentDay = 12;
-  readonly currentSession$: Observable<AuthSession | null>;
+  readonly role$: Observable<UserRole | null>;
 
   constructor(
     private readonly systemService: SystemService,
     private readonly authService: AuthService,
     private readonly router: Router
   ) {
-    this.currentSession$ = this.authService.currentSession$;
+    this.role$ = this.authService.role$;
 
     this.systemService.getState().subscribe({
       next: (state) => (this.currentDay = state.currentDay),
       error: () => undefined
-    });
-  }
-
-  nextDay(): void {
-    this.systemService.nextDay().subscribe({
-      next: (state) => (this.currentDay = state.currentDay),
-      error: () => (this.currentDay += 1)
     });
   }
 

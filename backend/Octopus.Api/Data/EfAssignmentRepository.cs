@@ -45,6 +45,7 @@ public class EfAssignmentRepository : IAssignmentRepository
         var allDocks = _context.Docks.ToList();
 
         var assignmentsByDock = _context.Assignments
+            .ToList()
             .GroupBy(a => a.DockId)
             .ToDictionary(g => g.Key, g => g.ToList());
 

@@ -34,8 +34,8 @@ public class ShipService
     }
 
     /// <summary>
-    /// Creates a new ship with auto-generated Size, ArrivalDay, and Duration.
-    /// Operator only provides Name and Notes.
+    /// Creates a new ship with auto-generated size, arrival day, and duration.
+    /// Spec: Operator only enters name and notes.
     /// </summary>
     public Ship Create(CreateShipRequest request)
     {
@@ -43,14 +43,17 @@ public class ShipService
         var currentDay = terminal?.CurrentDay ?? 1;
 
         var sizes = Enum.GetValues<ShipSize>();
+        var size = sizes[_random.Next(sizes.Length)];
+        var arrivalDay = currentDay + _random.Next(0, 31); // 0–30 days from current day
+        var duration = _random.Next(3, 16); // 3–15 days
 
         var ship = new Ship
         {
             Name = request.Name,
             Notes = request.Notes,
-            Size = sizes[_random.Next(sizes.Length)],
-            ArrivalDay = currentDay + _random.Next(0, 31),
-            Duration = _random.Next(3, 16),
+            Size = size,
+            ArrivalDay = arrivalDay,
+            Duration = duration,
             Status = ShipStatus.Pending
         };
 
@@ -60,16 +63,17 @@ public class ShipService
     }
 
     /// <summary>
-    /// Updates name and notes of a Pending ship. Returns null if not found or not Pending.
+    /// Updates name/notes of a Pending ship.
+    /// Spec: only Pending ships can be edited.
     /// </summary>
-    public Ship? UpdateNameNotes(int id, EditShipRequest request)
+    public Ship? Update(int id, string name, string notes)
     {
-        var ship = _context.Ships.Find(id);
-        if (ship is null || ship.Status != ShipStatus.Pending)
-            return null;
+        var ship = GetById(id);
+        if (ship is null) return null;
+        if (ship.Status != ShipStatus.Pending) return null;
 
-        ship.Name = request.Name;
-        ship.Notes = request.Notes;
+        ship.Name = name;
+        ship.Notes = notes;
         _context.SaveChanges();
         return ship;
     }

@@ -3,39 +3,39 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { Assignment } from '../../models/assignment.model';
-import { Berth } from '../../models/berth.model';
+import { Dock } from '../../models/dock.model';
 import { ShipSize, ShipStatus } from '../../models/ship.model';
 import { AssignmentService } from '../../services/assignment.service';
-import { BerthService } from '../../services/berth.service';
+import { DockService } from '../../services/dock.service';
 import { SystemService } from '../../services/system.service';
 
 type SizeFilter = 'All' | 'XL' | 'L' | 'M' | 'S';
 type StatusFilter = 'All' | 'Assigned' | 'Pending' | 'Departed' | 'Available';
 
-interface BerthGroup {
+interface DockGroup {
   size: Exclude<SizeFilter, 'All'>;
-  berths: Berth[];
+  docks: Dock[];
 }
 
 @Component({
-  selector: 'app-berths',
+  selector: 'app-docks',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './berths.component.html',
   styleUrl: './berths.component.scss'
 })
-export class BerthsComponent implements OnInit {
+export class DocksComponent implements OnInit {
   readonly sizeOptions: SizeFilter[] = ['All', 'XL', 'L', 'M', 'S'];
   readonly statusOptions: StatusFilter[] = ['All', 'Assigned', 'Pending', 'Departed', 'Available'];
   readonly weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   readonly monthDays = [28, 29, 30, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 1];
 
   assignments: Assignment[] = [];
-  berths: Berth[] = [];
-  berthFilter = 'All';
+  docks: Dock[] = [];
+  dockFilter = 'All';
   currentDay = 12;
   errorMessage = '';
-  groupBy = 'Berth Size';
+  groupBy = 'Dock Size';
   isLoading = true;
   selectedStatus: StatusFilter = 'All';
   selectedSize: SizeFilter = 'All';
@@ -43,7 +43,7 @@ export class BerthsComponent implements OnInit {
 
   constructor(
     private readonly assignmentService: AssignmentService,
-    private readonly berthService: BerthService,
+    private readonly dockService: DockService,
     private readonly systemService: SystemService
   ) {}
 
@@ -55,30 +55,30 @@ export class BerthsComponent implements OnInit {
     return Array.from({ length: this.viewDays }, (_unused, index) => this.currentDay + index);
   }
 
-  get visibleBerths(): Berth[] {
-    return this.berths
-      .filter((berth) => this.selectedSize === 'All' || this.normalizeSize(berth.size) === this.selectedSize)
-      .filter((berth) => this.berthFilter === 'All' || berth.name === this.berthFilter)
+  get visibleDocks(): Dock[] {
+    return this.docks
+      .filter((dock) => this.selectedSize === 'All' || this.normalizeSize(dock.size) === this.selectedSize)
+      .filter((dock) => this.dockFilter === 'All' || dock.name === this.dockFilter)
       .sort((left, right) => {
         const rankDelta = this.sizeRank(left.size) - this.sizeRank(right.size);
         return rankDelta || left.name.localeCompare(right.name, undefined, { numeric: true });
       });
   }
 
-  get berthGroups(): BerthGroup[] {
+  get dockGroups(): DockGroup[] {
     return (['XL', 'L', 'M', 'S'] as const)
       .map((size) => ({
         size,
-        berths: this.visibleBerths.filter((berth) => this.normalizeSize(berth.size) === size)
+        docks: this.visibleDocks.filter((dock) => this.normalizeSize(dock.size) === size)
       }))
-      .filter((group) => group.berths.length > 0);
+      .filter((group) => group.docks.length > 0);
   }
 
   get visibleAssignments(): Assignment[] {
-    const visibleBerthIds = new Set(this.visibleBerths.map((berth) => berth.id));
+    const visibleDockIds = new Set(this.visibleDocks.map((dock) => dock.id));
     return this.assignments.filter((assignment) => {
       const status = this.normalizeStatus(assignment.ship?.status ?? 'Assigned');
-      return visibleBerthIds.has(assignment.dockId)
+      return visibleDockIds.has(assignment.dockId)
         && this.overlapsVisibleRange(assignment)
         && (this.selectedStatus === 'All' || this.selectedStatus === status);
     });
@@ -93,11 +93,11 @@ export class BerthsComponent implements OnInit {
   }
 
   get availableDays(): number {
-    return Math.max(this.visibleBerths.length * this.viewDays - this.occupiedDays, 0);
+    return Math.max(this.visibleDocks.length * this.viewDays - this.occupiedDays, 0);
   }
 
   get utilization(): number {
-    const totalDays = this.visibleBerths.length * this.viewDays;
+    const totalDays = this.visibleDocks.length * this.viewDays;
     return totalDays === 0 ? 0 : Math.round((this.occupiedDays / totalDays) * 1000) / 10;
   }
 
@@ -107,12 +107,12 @@ export class BerthsComponent implements OnInit {
 
     forkJoin({
       assignments: this.assignmentService.getAssignments(),
-      berths: this.berthService.getBerths(),
+      docks: this.dockService.getDocks(),
       state: this.systemService.getState()
     }).subscribe({
-      next: ({ assignments, berths, state }) => {
+      next: ({ assignments, docks, state }) => {
         this.assignments = assignments;
-        this.berths = berths;
+        this.docks = docks;
         this.currentDay = state.currentDay || this.currentDay;
         this.isLoading = false;
       },
@@ -141,7 +141,7 @@ export class BerthsComponent implements OnInit {
 
   resetFilters(): void {
     this.selectedSize = 'All';
-    this.berthFilter = 'All';
+    this.dockFilter = 'All';
     this.selectedStatus = 'All';
   }
 
@@ -156,14 +156,14 @@ export class BerthsComponent implements OnInit {
     ];
 
     this.visibleAssignments.forEach((assignment) => {
-      const berth = this.berths.find((item) => item.id === assignment.dockId);
+      const dock = this.docks.find((item) => item.id === assignment.dockId);
       const status = this.getShipStatus(assignment).toUpperCase();
       const startDate = this.formatIcsDate(assignment.startDay);
       const endDate = this.formatIcsDate(assignment.endDay + 1);
-      const summary = `${this.getShipName(assignment)} (${this.getShipSize(assignment)}) - ${berth?.name ?? 'Unassigned berth'}`;
+      const summary = `${this.getShipName(assignment)} (${this.getShipSize(assignment)}) - ${dock?.name ?? 'Unassigned dock'}`;
       const description = [
         `Ship: ${this.getShipName(assignment)}`,
-        `Berth: ${berth?.name ?? 'Unknown'}`,
+        `Dock: ${dock?.name ?? 'Unknown'}`,
         `Size: ${this.getShipSize(assignment)}`,
         `Status: ${this.getShipStatus(assignment)}`,
         `Simulation range: ${this.getRangeLabel(assignment)}`
@@ -177,7 +177,7 @@ export class BerthsComponent implements OnInit {
         `DTEND;VALUE=DATE:${endDate}`,
         `SUMMARY:${this.escapeIcsText(summary)}`,
         `DESCRIPTION:${this.escapeIcsText(description)}`,
-        `LOCATION:${this.escapeIcsText(berth?.name ?? 'Unknown berth')}`,
+        `LOCATION:${this.escapeIcsText(dock?.name ?? 'Unknown dock')}`,
         `STATUS:${status === 'DEPARTED' ? 'CANCELLED' : 'CONFIRMED'}`,
         'END:VEVENT'
       );
@@ -189,14 +189,14 @@ export class BerthsComponent implements OnInit {
     this.downloadFile(fileName, lines.join('\r\n'), 'text/calendar;charset=utf-8');
   }
 
-  rowAssignments(berth: Berth): Assignment[] {
+  rowAssignments(dock: Dock): Assignment[] {
     return this.visibleAssignments
-      .filter((assignment) => assignment.dockId === berth.id)
+      .filter((assignment) => assignment.dockId === dock.id)
       .sort((left, right) => left.startDay - right.startDay);
   }
 
-  hasAssignments(berth: Berth): boolean {
-    return this.rowAssignments(berth).length > 0;
+  hasAssignments(dock: Dock): boolean {
+    return this.rowAssignments(dock).length > 0;
   }
 
   getGridColumn(assignment: Assignment): string {
@@ -215,8 +215,8 @@ export class BerthsComponent implements OnInit {
     return `${size.toLowerCase()} ${status.toLowerCase()}`;
   }
 
-  getBerthAssignmentsCount(berth: Berth): number {
-    return this.rowAssignments(berth).length;
+  getDockAssignmentsCount(dock: Dock): number {
+    return this.rowAssignments(dock).length;
   }
 
   getMonthLabel(): string {
@@ -243,15 +243,15 @@ export class BerthsComponent implements OnInit {
     return `Day ${assignment.startDay} -> Day ${assignment.endDay}`;
   }
 
-  trackByBerthId(_index: number, berth: Berth): number {
-    return berth.id;
+  trackByDockId(_index: number, dock: Dock): number {
+    return dock.id;
   }
 
   trackByAssignmentId(_index: number, assignment: Assignment): number {
     return assignment.id;
   }
 
-  trackByGroupSize(_index: number, group: BerthGroup): string {
+  trackByGroupSize(_index: number, group: DockGroup): string {
     return group.size;
   }
 
