@@ -1,85 +1,52 @@
 <section class="ships-page">
   <header class="page-header">
     <div>
-      <h1>Ships</h1>
-      <p>View and manage all registered ships in the system.</p>
+      <h1>Ships Registry</h1>
+      <p>View, filter, and manage all ships registered in the terminal system.</p>
     </div>
 
-    <button type="button" class="new-ship-button" (click)="openNewShip()">
+    <button type="button" class="primary-action" (click)="openNewShip()">
       <span aria-hidden="true">+</span>
       New Ship
     </button>
   </header>
 
-  <section class="metrics-grid" aria-label="Ship summary">
+  <section class="metrics-grid" aria-label="Ship metrics">
     <article *ngFor="let metric of metrics; trackBy: trackByMetric" class="metric-card" [ngClass]="metric.tone">
-      <div class="metric-icon" aria-hidden="true">
-        <svg viewBox="0 0 48 48">
-          <path d="M7 30h34l-5 9H12z" />
-          <path d="M15 30V17h18v13" />
-          <path d="M20 17v-6h8v6" />
-          <path d="M12 39c3 0 3-2 6-2s3 2 6 2 3-2 6-2 3 2 6 2" />
-          <path d="M24 22v5M18 25h12" />
-        </svg>
-      </div>
-      <div>
-        <span>{{ metric.label }}</span>
-        <strong>{{ metric.value }}</strong>
-        <p>{{ metric.caption }}</p>
-      </div>
+      <span>{{ metric.label }}</span>
+      <strong>{{ metric.value }}</strong>
+      <small>{{ metric.caption }}</small>
     </article>
   </section>
 
   <section class="filters-panel" aria-label="Ship filters">
     <label class="search-field">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="11" cy="11" r="7" />
-        <path d="m16 16 5 5" />
-      </svg>
-      <input
-        type="search"
-        name="search"
-        placeholder="Search ship name or IMO..."
-        [(ngModel)]="searchTerm"
-        (ngModelChange)="applyFilters()"
-      />
+      Search
+      <input type="search" name="search" placeholder="Name, IMO, notes..." [(ngModel)]="searchTerm" />
     </label>
 
     <label>
-      <span>Status</span>
-      <select name="status" [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
-        <option *ngFor="let status of statusOptions" [ngValue]="status">{{ status }}</option>
+      Status
+      <select name="status" [(ngModel)]="statusFilter">
+        <option *ngFor="let status of statusOptions; trackBy: trackByOption" [ngValue]="status">{{ status }}</option>
       </select>
     </label>
 
     <label>
-      <span>Ship Size</span>
-      <select name="size" [(ngModel)]="sizeFilter" (ngModelChange)="applyFilters()">
-        <option *ngFor="let size of sizeOptions" [ngValue]="size">{{ size }}</option>
+      Size
+      <select name="size" [(ngModel)]="sizeFilter">
+        <option *ngFor="let size of sizeOptions; trackBy: trackByOption" [ngValue]="size">{{ size }}</option>
       </select>
     </label>
 
-    <label>
-      <span>Arrival Day</span>
-      <input type="number" name="arrivalFrom" placeholder="From" [(ngModel)]="arrivalFrom" (ngModelChange)="applyFilters()" />
-    </label>
-
-    <label>
-      <span>&nbsp;</span>
-      <input type="number" name="arrivalTo" placeholder="To" [(ngModel)]="arrivalTo" (ngModelChange)="applyFilters()" />
-    </label>
-
-    <div class="filter-actions">
-      <button type="button" class="ghost-button" (click)="resetFilters()">Reset</button>
-      <button type="button" class="primary-button" (click)="applyFilters()">Filter</button>
-    </div>
+    <button type="button" class="secondary-action" (click)="resetFilters()">Reset</button>
+    <button type="button" class="secondary-action" (click)="loadShips()">Refresh</button>
   </section>
 
   <p *ngIf="errorMessage" class="state-message error">{{ errorMessage }}</p>
   <p *ngIf="successMessage" class="state-message success">{{ successMessage }}</p>
 
-  <section class="table-panel" aria-label="Registered ships">
-    <div *ngIf="isLoading" class="loading-state">Loading ships from backend...</div>
+  <section *ngIf="isLoading" class="loading-state">Loading ships from backend...</section>
 
     <table *ngIf="!isLoading">
       <thead>
@@ -139,31 +106,6 @@
         </tr>
       </tbody>
     </table>
-
-    <footer class="table-footer" *ngIf="!isLoading">
-      <span>Showing {{ pageStart }} to {{ pageEnd }} of {{ filteredShips.length }} ships</span>
-
-      <nav aria-label="Pagination">
-        <button type="button" [disabled]="currentPage === 1" (click)="setPage(currentPage - 1)">‹</button>
-        <button
-          *ngFor="let page of pageNumbers"
-          type="button"
-          [class.active]="page === currentPage"
-          (click)="setPage(page)"
-        >
-          {{ page }}
-        </button>
-        <button type="button" [disabled]="currentPage === totalPages" (click)="setPage(currentPage + 1)">›</button>
-      </nav>
-
-      <label class="rows-select">
-        Rows per page
-        <select name="rowsPerPage" [(ngModel)]="rowsPerPage" (ngModelChange)="setPage(1)">
-          <option *ngFor="let option of rowsPerPageOptions" [ngValue]="option">{{ option }}</option>
-        </select>
-      </label>
-    </footer>
-  </section>
 </section>
 
 <section *ngIf="showNewShipModal" class="modal-backdrop" aria-label="New ship dialog">

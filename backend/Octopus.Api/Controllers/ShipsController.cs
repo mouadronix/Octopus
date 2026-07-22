@@ -48,7 +48,7 @@ public class ShipsController : ControllerBase
     public IActionResult GetById(int id)
     {
         var ship = _shipService.GetById(id);
-        if (ship == null) return NotFound();
+        if (ship is null) return NotFound();
         return Ok(ToListItem(ship));
     }
 
@@ -81,11 +81,10 @@ public class ShipsController : ControllerBase
     {
         if (!ModelState.IsValid) return ValidationProblem(ModelState);
         var ship = _shipService.Update(id, request.Name, request.Notes);
-        if (ship == null)
+        if (ship is null)
         {
-            // Could be not found or not Pending — check which
             var existing = _shipService.GetById(id);
-            if (existing == null) return NotFound();
+            if (existing is null) return NotFound();
             return BadRequest(new { message = "Only ships with Pending status can be edited." });
         }
         return Ok(ToListItem(ship));
@@ -102,7 +101,8 @@ public class ShipsController : ControllerBase
     public IActionResult GetSuggestion(int id)
     {
         var suggestion = _assignmentService.GetSuggestion(id);
-        if (suggestion == null) return NotFound(new { message = "No dock available for this ship" });
+        if (suggestion is null)
+            return NotFound(new { message = "No dock available for this ship" });
         return Ok(suggestion);
     }
 
@@ -117,6 +117,7 @@ public class ShipsController : ControllerBase
             Status = ship.Status,
             ArrivalDay = ship.ArrivalDay,
             Duration = ship.Duration,
+            ImageUrl = ship.ImageUrl,
             BerthName = ship.Assignment?.Dock?.Name,
             AssignmentId = ship.Assignment?.Id,
             AssignmentStartDay = ship.Assignment?.StartDay,

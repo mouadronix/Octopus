@@ -6,16 +6,20 @@ public static class SeedData
 {
     public static void Initialize(AppDbContext context)
     {
-        // Skip if data already seeded
+        // Ensure terminal state exists
+        if (!context.TerminalStates.Any())
+        {
+            context.TerminalStates.Add(new TerminalState
+            {
+                CurrentDay = 1,
+                PlanningHorizon = 30
+            });
+            context.SaveChanges();
+        }
+
+        // Skip if docks already seeded
         if (context.Docks.Any())
             return;
-
-        var terminalState = new TerminalState
-        {
-            CurrentDay = 0,
-            PlanningHorizon = 30
-        };
-        context.TerminalStates.Add(terminalState);
 
         // Spec: 8 docks — 1 XL, 1 L, 2 M, 4 S
         var docks = new List<Dock>
@@ -42,7 +46,7 @@ public static class SeedData
             new Ship { Name = "Nordic Voyager",   Size = ShipSize.XL, Status = ShipStatus.Pending, ArrivalDay = 22, Duration = 7,  Notes = "Ro-Ro" },
 
             // ── L-01 schedule ───────────────────────────────────────
-            new Ship { Name = "Sea Navigator",    Size = ShipSize.L,  Status = ShipStatus.Pending, ArrivalDay = 0,  Duration = 5,  Notes = "General cargo" },
+            new Ship { Name = "Sea Navigator",    Size = ShipSize.L,  Status = ShipStatus.Pending, ArrivalDay = 1,  Duration = 5,  Notes = "General cargo" },
             new Ship { Name = "Atlantic Pride",   Size = ShipSize.L,  Status = ShipStatus.Pending, ArrivalDay = 6,  Duration = 8,  Notes = "Tanker" },
             new Ship { Name = "Gulf Runner",      Size = ShipSize.L,  Status = ShipStatus.Pending, ArrivalDay = 16, Duration = 5,  Notes = "Reefer" },
             new Ship { Name = "Caribbean Breeze",  Size = ShipSize.L,  Status = ShipStatus.Pending, ArrivalDay = 24, Duration = 4,  Notes = "Passenger" },
@@ -60,7 +64,7 @@ public static class SeedData
             new Ship { Name = "Ruby Harbor",      Size = ShipSize.M,  Status = ShipStatus.Pending, ArrivalDay = 23, Duration = 5,  Notes = "Tanker" },
 
             // ── S-01 schedule ───────────────────────────────────────
-            new Ship { Name = "Swift Arrow",      Size = ShipSize.S,  Status = ShipStatus.Pending, ArrivalDay = 0,  Duration = 3,  Notes = "Tug supply" },
+            new Ship { Name = "Swift Arrow",      Size = ShipSize.S,  Status = ShipStatus.Pending, ArrivalDay = 1,  Duration = 3,  Notes = "Tug supply" },
             new Ship { Name = "Delta Fox",        Size = ShipSize.S,  Status = ShipStatus.Pending, ArrivalDay = 4,  Duration = 3,  Notes = "Pilot boat" },
             new Ship { Name = "Vega Star",        Size = ShipSize.S,  Status = ShipStatus.Pending, ArrivalDay = 8,  Duration = 4,  Notes = "Research" },
             new Ship { Name = "Orion Mist",       Size = ShipSize.S,  Status = ShipStatus.Pending, ArrivalDay = 14, Duration = 3,  Notes = "Patrol" },
@@ -76,7 +80,7 @@ public static class SeedData
             new Ship { Name = "Osprey",           Size = ShipSize.S,  Status = ShipStatus.Pending, ArrivalDay = 24, Duration = 2,  Notes = "Pilot" },
 
             // ── S-03 schedule ───────────────────────────────────────
-            new Ship { Name = "Tide",             Size = ShipSize.S,  Status = ShipStatus.Pending, ArrivalDay = 0,  Duration = 2,  Notes = "Supply" },
+            new Ship { Name = "Tide",             Size = ShipSize.S,  Status = ShipStatus.Pending, ArrivalDay = 1,  Duration = 2,  Notes = "Supply" },
             new Ship { Name = "Wave",             Size = ShipSize.S,  Status = ShipStatus.Pending, ArrivalDay = 3,  Duration = 3,  Notes = "Research" },
             new Ship { Name = "Surge",            Size = ShipSize.S,  Status = ShipStatus.Pending, ArrivalDay = 7,  Duration = 4,  Notes = "Tug supply" },
             new Ship { Name = "Ripple",           Size = ShipSize.S,  Status = ShipStatus.Pending, ArrivalDay = 14, Duration = 2,  Notes = "Patrol" },
@@ -95,32 +99,32 @@ public static class SeedData
         context.SaveChanges();
 
         // Assign currently-docked ships (arrival <= currentDay, arrival+duration > currentDay)
-        // CurrentDay = 0, so only ships arriving on day 0 are docked right now
+        // CurrentDay = 1, so ships arriving on day 1 are docked
         var assignments = new List<Assignment>
         {
-            // Sea Navigator on L-01 (days 0–4)
+            // Sea Navigator on L-01 (days 1–5)
             new Assignment
             {
                 ShipId = ships.Single(s => s.Name == "Sea Navigator").Id,
                 DockId = docks.Single(d => d.Name == "L-01").Id,
-                StartDay = 0,
-                EndDay = 4
+                StartDay = 1,
+                EndDay = 5
             },
-            // Swift Arrow on S-01 (days 0–2)
+            // Swift Arrow on S-01 (days 1–3)
             new Assignment
             {
                 ShipId = ships.Single(s => s.Name == "Swift Arrow").Id,
                 DockId = docks.Single(d => d.Name == "S-01").Id,
-                StartDay = 0,
-                EndDay = 2
+                StartDay = 1,
+                EndDay = 3
             },
-            // Tide on S-03 (days 0–1)
+            // Tide on S-03 (days 1–2)
             new Assignment
             {
                 ShipId = ships.Single(s => s.Name == "Tide").Id,
                 DockId = docks.Single(d => d.Name == "S-03").Id,
-                StartDay = 0,
-                EndDay = 1
+                StartDay = 1,
+                EndDay = 2
             },
         };
 

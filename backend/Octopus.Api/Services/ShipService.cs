@@ -1,7 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using Octopus.Api.Data;
 using Octopus.Api.DTOs;
 using Octopus.Api.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Octopus.Api.Services;
 
@@ -18,7 +18,7 @@ public class ShipService
     public List<Ship> GetAll()
     {
         return _context.Ships
-            .Include(s => s.Assignment!)
+            .Include(s => s.Assignment)
                 .ThenInclude(a => a.Dock)
             .OrderBy(s => s.ArrivalDay)
             .ThenBy(s => s.Name)
@@ -28,7 +28,7 @@ public class ShipService
     public Ship? GetById(int id)
     {
         return _context.Ships
-            .Include(s => s.Assignment!)
+            .Include(s => s.Assignment)
                 .ThenInclude(a => a.Dock)
             .FirstOrDefault(s => s.Id == id);
     }
@@ -69,12 +69,21 @@ public class ShipService
     public Ship? Update(int id, string name, string notes)
     {
         var ship = GetById(id);
-        if (ship == null) return null;
+        if (ship is null) return null;
         if (ship.Status != ShipStatus.Pending) return null;
 
         ship.Name = name;
         ship.Notes = notes;
         _context.SaveChanges();
         return ship;
+    }
+
+    public bool Delete(int id)
+    {
+        var ship = _context.Ships.Find(id);
+        if (ship is null) return false;
+        _context.Ships.Remove(ship);
+        _context.SaveChanges();
+        return true;
     }
 }

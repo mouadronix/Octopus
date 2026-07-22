@@ -41,7 +41,7 @@ public class BerthsController : ControllerBase
                 a.DockId,
                 a.StartDay,
                 a.EndDay,
-                Ship = new
+                Ship = a.Ship is null ? null : new
                 {
                     a.Ship.Id,
                     a.Ship.Name,
@@ -73,7 +73,7 @@ public class BerthsController : ControllerBase
         var assignment = _assignmentService.AssignShip(request.ShipId, dockId);
         if (assignment is null)
         {
-            return BadRequest(new { message = "Ship or dock not found, ship is not Pending, dock size mismatch, or dock is occupied for this time range." });
+            return BadRequest(new { message = "Cannot assign ship: dock/ship not found, size mismatch, dock occupied, or ship not pending." });
         }
 
         return CreatedAtAction(nameof(GetAll), new { id = assignment.Id }, new

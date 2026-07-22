@@ -104,8 +104,8 @@
 
             <div class="compatible-inline">
               <span>Compatible Docks</span>
-              <strong *ngIf="getCompatibleDocks(ship).length; else noDocks">
-                {{ getCompatibleDockNames(ship) }}
+              <strong *ngIf="getCompatibleBerthCount(ship) > 0; else noDocks">
+                {{ getCompatibleBerthNames(ship) }}
               </strong>
               <ng-template #noDocks><strong>None</strong></ng-template>
             </div>
@@ -162,36 +162,37 @@
 
         <section class="compatible-list">
           <h3>Compatible Docks</h3>
+          <p *ngIf="isLoadingSuggestion" class="no-compatible">Loading compatible docks...</p>
           <button
-            *ngFor="let dock of selectedCompatibleDocks; trackBy: trackByDock"
+            *ngFor="let berth of compatibleBerths; trackBy: trackByBerth"
             type="button"
             class="dock-option"
-            [class.active]="selectedDockId === dock.id"
-            (click)="selectDock(dock.id)"
+            [class.active]="selectedBerthId === berth.dockId"
+            (click)="selectBerth(berth.dockId)"
           >
-            <span class="dock-icon">{{ dock.size }}</span>
+            <span class="dock-icon">{{ berth.size }}</span>
             <span>
-              <strong>{{ dock.name }}</strong>
-              <small>{{ dock.size }} dock · Available from Day {{ dock.availableFromDay }}</small>
+              <strong>{{ berth.dockName }}</strong>
+              <small>{{ berth.size }} dock · Available from Day {{ berth.startDay }}</small>
             </span>
-            <span class="checkmark" *ngIf="selectedDockId === dock.id">✓</span>
+            <span class="checkmark" *ngIf="selectedBerthId === berth.dockId">✓</span>
           </button>
 
-          <p *ngIf="selectedCompatibleDocks.length === 0" class="no-compatible">
+          <p *ngIf="!isLoadingSuggestion && compatibleBerths.length === 0" class="no-compatible">
             No compatible dock is currently available for this ship.
           </p>
         </section>
 
-        <section class="allocation-summary" *ngIf="selectedDock">
+        <section class="allocation-summary" *ngIf="selectedBerth">
           <h3>Allocation Summary</h3>
           <dl>
             <div>
               <dt>Dock</dt>
-              <dd>{{ selectedDock.name }}</dd>
+              <dd>{{ selectedBerth.dockName }}</dd>
             </div>
             <div>
               <dt>Start Day</dt>
-              <dd>{{ selectedDock.availableFromDay }}</dd>
+              <dd>{{ selectedBerth.startDay }}</dd>
             </div>
             <div>
               <dt>End Day</dt>
@@ -200,7 +201,7 @@
           </dl>
         </section>
 
-        <button type="button" class="confirm-button" [disabled]="isAssigning || !selectedDock" (click)="confirmAssignment()">
+        <button type="button" class="confirm-button" [disabled]="isAssigning || isLoadingSuggestion || !selectedBerth" (click)="confirmAssignment()"
           Confirm Assignment
         </button>
       </aside>
