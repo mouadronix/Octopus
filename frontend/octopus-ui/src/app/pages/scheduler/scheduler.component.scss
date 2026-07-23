@@ -309,8 +309,16 @@ select:focus {
   color: #b55dff;
 }
 
+.ship-badge.L {
+  color: #ff9f1c;
+}
+
 .ship-badge.M {
   color: #28d982;
+}
+
+.ship-badge.S {
+  color: #23d9ff;
 }
 
 .ship-badge svg {
@@ -428,9 +436,12 @@ select:focus {
 
 .preview-ship h3,
 .preview-ship p {
-  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.preview-ship p {
+  overflow: hidden;
 }
 
 .preview-ship h3 span {
