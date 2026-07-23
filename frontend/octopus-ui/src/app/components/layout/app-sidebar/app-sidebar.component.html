@@ -5,8 +5,7 @@
       class="nav-btn"
       [routerLink]="item.route"
       routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: item.label === 'Ship Operations' }"
-      [class.featured]="item.label === 'Ship Operations'"
+      [routerLinkActiveOptions]="{ exact: true }"
     >
       <span class="nav-icon" [class]="item.icon" aria-hidden="true"></span>
       <span>{{ item.label }}</span>
