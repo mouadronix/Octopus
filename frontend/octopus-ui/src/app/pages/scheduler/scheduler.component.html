@@ -238,7 +238,7 @@
             [class.ship-start]="getTimelineShip(dock, day)?.isStart"
           >
             <span *ngIf="getTimelineShip(dock, day) as info" class="timeline-ship" [title]="info.name">
-              {{ info.isStart ? info.name : '·' }}
+              {{ info.isStart ? info.name : '▸' }}
             </span>
           </div>
         </ng-container>
