@@ -537,10 +537,26 @@ dd {
 .dock-icon {
   border: 1px solid currentColor;
   border-radius: 6px;
-  color: #b55dff;
+  color: #23d9ff;
   font-family: var(--font-mono);
   padding: 8px 0;
   text-align: center;
+}
+
+.dock-icon.XL {
+  color: #b55dff;
+}
+
+.dock-icon.L {
+  color: #29a8ff;
+}
+
+.dock-icon.M {
+  color: #28d982;
+}
+
+.dock-icon.S {
+  color: #23d9ff;
 }
 
 .checkmark {
