@@ -95,7 +95,6 @@ export class ShipsComponent implements OnInit {
     this.shipService.getShips().subscribe({
       next: (ships) => {
         this.ships = ships;
-        this.selectedShip = ships[0] ?? null;
         this.isLoading = false;
       },
       error: () => {

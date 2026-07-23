@@ -69,11 +69,10 @@
       <tbody>
         <tr *ngFor="let ship of pageShips; trackBy: trackByShip">
           <td class="ship-cell">
-            <svg viewBox="0 0 48 48" aria-hidden="true">
-              <path d="M7 30h34l-5 9H12z" />
-              <path d="M15 30V17h18v13" />
-              <path d="M20 17v-6h8v6" />
-              <path d="M12 39c3 0 3-2 6-2s3 2 6 2 3-2 6-2 3 2 6 2" />
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M2 20h20l-3-5H5z" />
+              <path d="M7 15V9h10v6" />
+              <path d="M10 9V5h4v4" />
             </svg>
             <button type="button" (click)="viewShip(ship)">{{ ship.name }}</button>
           </td>
@@ -88,13 +87,13 @@
           </td>
           <td>{{ getBerth(ship) }}</td>
           <td class="actions-cell">
-            <button type="button" title="View details" (click)="viewShip(ship)">
+            <button type="button" class="action-btn view-btn" title="View details" (click)="viewShip(ship)">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" />
                 <circle cx="12" cy="12" r="3" />
               </svg>
             </button>
-            <button type="button" title="Delete ship" (click)="deleteShip(ship)">
+            <button type="button" class="action-btn delete-btn" title="Delete ship" (click)="deleteShip(ship)">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M4 7h16M9 7V4h6v3M7 7l1 14h8l1-14" />
               </svg>
@@ -102,7 +101,10 @@
           </td>
         </tr>
         <tr *ngIf="pageShips.length === 0">
-          <td colspan="8" class="empty-state">No ships match the selected filters.</td>
+          <td colspan="8" class="empty-state">
+            <strong>No ships found</strong>
+            <span>Try adjusting the filters or register a new ship.</span>
+          </td>
         </tr>
       </tbody>
     </table>
