@@ -237,8 +237,13 @@
             [class.occupied]="getTimelineShip(dock, day)"
             [class.ship-start]="getTimelineShip(dock, day)?.isStart"
           >
-            <span *ngIf="getTimelineShip(dock, day) as info" class="timeline-ship" [title]="info.name">
-              {{ info.isStart ? info.name : '▸' }}
+            <span *ngIf="getTimelineShip(dock, day) as info" class="timeline-ship" [ngClass]="info.size">
+              <span class="timeline-tooltip">
+                <strong>{{ info.name }}</strong>
+                <span>{{ info.size }} · Day {{ info.startDay }}–{{ info.endDay }}</span>
+              </span>
+              {{ info.isStart ? info.name : '' }}
+              <span *ngIf="!info.isStart" class="timeline-dot"></span>
             </span>
           </div>
         </ng-container>
