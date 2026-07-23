@@ -75,6 +75,7 @@
             *ngFor="let ship of filteredShips; trackBy: trackByShip"
             class="ship-card"
             [class.selected]="selectedShip?.id === ship.id"
+            [class.assigned]="isAssigned(ship)"
             (click)="selectShip(ship)"
           >
             <div class="ship-badge" [ngClass]="normalizeSize(ship.size)">
@@ -110,8 +111,8 @@
               <ng-template #noDocks><strong>None</strong></ng-template>
             </div>
 
-            <button type="button" class="assign-shortcut" (click)="$event.stopPropagation(); selectShip(ship)">
-              Assign
+            <button type="button" class="assign-shortcut" [disabled]="isAssigned(ship)" (click)="$event.stopPropagation(); selectShip(ship)">
+              {{ isAssigned(ship) ? 'Assigned' : 'Assign' }}
               <span aria-hidden="true">&rsaquo;</span>
             </button>
           </article>
