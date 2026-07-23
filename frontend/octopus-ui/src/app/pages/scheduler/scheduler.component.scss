@@ -436,9 +436,24 @@ select:focus {
 .preview-ship h3 span {
   border: 1px solid currentColor;
   border-radius: 5px;
-  color: #b55dff;
   font-size: 0.82rem;
   padding: 3px 7px;
+}
+
+.preview-ship h3 span.XL {
+  color: #b55dff;
+}
+
+.preview-ship h3 span.L {
+  color: #29a8ff;
+}
+
+.preview-ship h3 span.M {
+  color: #28d982;
+}
+
+.preview-ship h3 span.S {
+  color: #23d9ff;
 }
 
 .preview-details,

@@ -136,7 +136,7 @@
             </svg>
           </div>
           <div>
-            <h3>{{ selectedShip.name }} <span>{{ normalizeSize(selectedShip.size) }}</span></h3>
+            <h3>{{ selectedShip.name }} <span [ngClass]="normalizeSize(selectedShip.size)">{{ normalizeSize(selectedShip.size) }}</span></h3>
             <p>IMO: {{ getImo(selectedShip) }}</p>
           </div>
         </div>

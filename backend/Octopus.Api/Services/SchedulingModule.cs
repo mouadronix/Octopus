@@ -102,7 +102,9 @@ public static class SchedulingModule
                 : $"Delayed: earliest slot Day {best.StartDay}",
             CompatibleBerths = compatibleBerths
                 .Where(b => b.Available)
-                .OrderBy(b => b.StartDay)
+                .OrderBy(b => b.Size != ship.Size.ToString()) // same-size docks first
+                .ThenBy(b => SizeRank.GetValueOrDefault(Enum.Parse<ShipSize>(b.Size), 0)) // smaller docks next
+                .ThenBy(b => b.StartDay)
                 .ToList()
         };
     }
