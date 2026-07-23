@@ -173,7 +173,7 @@
             <span class="dock-icon" [ngClass]="berth.size">{{ berth.size }}</span>
             <span>
               <strong>{{ berth.dockName }}</strong>
-              <small>{{ berth.size }} dock · Available from Day {{ berth.startDay }}</small>
+              <small>{{ berth.size }} · Available from Day {{ berth.startDay }}</small>
             </span>
             <span class="checkmark" *ngIf="selectedBerthId === berth.dockId">✓</span>
           </button>
