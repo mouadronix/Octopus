@@ -21,6 +21,10 @@
   position: relative;
 }
 
+.app-body.sidebar-collapsed .content-area {
+  flex: 1;
+}
+
 @media (max-width: 900px) {
   .terminal-shell {
     height: auto;

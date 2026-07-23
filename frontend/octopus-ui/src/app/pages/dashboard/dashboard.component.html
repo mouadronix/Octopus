@@ -118,18 +118,22 @@
 
       <article class="panel chart-panel">
         <h2>Ship Arrivals (Next 7 Days)</h2>
-        <svg viewBox="0 0 100 190" preserveAspectRatio="none" aria-label="Ship arrivals chart">
-          <g class="grid-lines">
-            <path d="M0 30H100M0 63H100M0 96H100M0 129H100M0 160H100" />
-          </g>
-          <polygon [attr.points]="getChartArea()" />
-          <polyline [attr.points]="getChartPolyline()" />
-          <g *ngFor="let point of arrivalChart; let index = index; trackBy: trackByArrival">
-            <circle [attr.cx]="chartX(index)" [attr.cy]="chartY(point.value)" r="1.2" />
-          </g>
-        </svg>
-        <div class="chart-labels">
-          <span *ngFor="let point of arrivalChart; trackBy: trackByArrival">{{ point.label }}</span>
+        <div class="bar-chart">
+          <div class="y-axis">
+            <span *ngFor="let tick of yTicks; trackBy: trackByTick">{{ tick }}</span>
+          </div>
+          <div class="chart-area">
+            <div class="grid-lines">
+              <span *ngFor="let tick of yTicks; trackBy: trackByTick"></span>
+            </div>
+            <div class="bars">
+              <div *ngFor="let point of arrivalChart; trackBy: trackByArrival" class="bar-col">
+                <span class="bar-value" *ngIf="point.value > 0">{{ point.value }}</span>
+                <div class="bar" [style.height.%]="barHeight(point.value)"></div>
+                <span class="bar-label">{{ point.label }}</span>
+              </div>
+            </div>
+          </div>
         </div>
       </article>
 

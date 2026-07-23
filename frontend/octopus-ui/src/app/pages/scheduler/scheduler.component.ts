@@ -263,14 +263,17 @@ export class SchedulerComponent implements OnInit {
     });
   }
 
-  getTimelineShip(dock: Dock, day: number): { name: string; isStart: boolean } | null {
+  getTimelineShip(dock: Dock, day: number): { name: string; isStart: boolean; size: string; startDay: number; endDay: number } | null {
     const assignment = (dock.assignments ?? []).find((a) => a.startDay <= day && a.endDay >= day);
     if (!assignment?.ship) {
       return null;
     }
     return {
       name: assignment.ship.name,
-      isStart: assignment.startDay === day
+      isStart: assignment.startDay === day,
+      size: this.normalizeSize(assignment.ship.size),
+      startDay: assignment.startDay,
+      endDay: assignment.endDay
     };
   }
 

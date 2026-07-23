@@ -163,6 +163,27 @@ export class DashboardComponent implements OnInit {
     return Math.max(...this.arrivalChart.map((point) => point.value), 1);
   }
 
+  get yTicks(): number[] {
+    const max = this.maxArrivalValue;
+    const step = Math.max(1, Math.ceil(max / 4));
+    const ticks: number[] = [];
+    for (let i = max; i >= 0; i -= step) {
+      ticks.push(i);
+    }
+    if (ticks[ticks.length - 1] !== 0) {
+      ticks.push(0);
+    }
+    return ticks;
+  }
+
+  barHeight(value: number): number {
+    return this.maxArrivalValue > 0 ? (value / this.maxArrivalValue) * 100 : 0;
+  }
+
+  trackByTick(_index: number, tick: number): number {
+    return tick;
+  }
+
   get recentActivity(): ActivityItem[] {
     const assigned = this.assignments
       .slice()

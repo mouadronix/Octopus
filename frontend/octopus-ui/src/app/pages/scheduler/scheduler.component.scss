@@ -309,8 +309,16 @@ select:focus {
   color: #b55dff;
 }
 
+.ship-badge.L {
+  color: #ff9f1c;
+}
+
 .ship-badge.M {
   color: #28d982;
+}
+
+.ship-badge.S {
+  color: #23d9ff;
 }
 
 .ship-badge svg {
@@ -428,17 +436,35 @@ select:focus {
 
 .preview-ship h3,
 .preview-ship p {
-  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.preview-ship p {
+  overflow: hidden;
 }
 
 .preview-ship h3 span {
   border: 1px solid currentColor;
   border-radius: 5px;
-  color: #b55dff;
   font-size: 0.82rem;
   padding: 3px 7px;
+}
+
+.preview-ship h3 span.XL {
+  color: #b55dff;
+}
+
+.preview-ship h3 span.L {
+  color: #ff9f1c;
+}
+
+.preview-ship h3 span.M {
+  color: #28d982;
+}
+
+.preview-ship h3 span.S {
+  color: #23d9ff;
 }
 
 .preview-details,
@@ -522,10 +548,26 @@ dd {
 .dock-icon {
   border: 1px solid currentColor;
   border-radius: 6px;
-  color: #b55dff;
+  color: #23d9ff;
   font-family: var(--font-mono);
   padding: 8px 0;
   text-align: center;
+}
+
+.dock-icon.XL {
+  color: #b55dff;
+}
+
+.dock-icon.L {
+  color: #ff9f1c;
+}
+
+.dock-icon.M {
+  color: #28d982;
+}
+
+.dock-icon.S {
+  color: #23d9ff;
 }
 
 .checkmark {
@@ -799,7 +841,69 @@ dd {
   top: 50%;
   transform: translateY(-50%);
   white-space: nowrap;
+  width: 100%;
+  text-align: center;
   z-index: 2;
+  cursor: default;
+}
+
+.timeline-ship.XL {
+  color: #b55dff;
+}
+
+.timeline-ship.L {
+  color: #ff9f1c;
+}
+
+.timeline-ship.M {
+  color: #28d982;
+}
+
+.timeline-ship.S {
+  color: #23d9ff;
+}
+
+.timeline-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: currentColor;
+  vertical-align: middle;
+}
+
+.timeline-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(4, 15, 31, 0.96);
+  border: 1px solid rgba(92, 140, 190, 0.35);
+  border-radius: 6px;
+  color: #dceeff;
+  font-size: 0.72rem;
+  padding: 6px 10px;
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.timeline-tooltip strong {
+  display: block;
+  color: #fff;
+  font-size: 0.76rem;
+  margin-bottom: 2px;
+}
+
+.timeline-tooltip span {
+  color: #8fa9c8;
+  font-size: 0.68rem;
+}
+
+.timeline-ship:hover .timeline-tooltip {
+  display: block;
 }
 
 @media (max-width: 820px) {

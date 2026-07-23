@@ -136,7 +136,7 @@
             </svg>
           </div>
           <div>
-            <h3>{{ selectedShip.name }} <span>{{ normalizeSize(selectedShip.size) }}</span></h3>
+            <h3>{{ selectedShip.name }} <span [ngClass]="normalizeSize(selectedShip.size)">{{ normalizeSize(selectedShip.size) }}</span></h3>
             <p>IMO: {{ getImo(selectedShip) }}</p>
           </div>
         </div>
@@ -170,10 +170,11 @@
             [class.active]="selectedBerthId === berth.dockId"
             (click)="selectBerth(berth.dockId)"
           >
-            <span class="dock-icon">{{ berth.size }}</span>
+            <span class="dock-icon" [ngClass]="berth.size">{{ berth.size }}</span>
             <span>
               <strong>{{ berth.dockName }}</strong>
-              <small>{{ berth.size }} dock · Available from Day {{ berth.startDay }}</small>
+              {{ ' ' }}
+              <small>{{ berth.size }} · Available from Day {{ berth.startDay }}</small>
             </span>
             <span class="checkmark" *ngIf="selectedBerthId === berth.dockId">✓</span>
           </button>
@@ -237,8 +238,13 @@
             [class.occupied]="getTimelineShip(dock, day)"
             [class.ship-start]="getTimelineShip(dock, day)?.isStart"
           >
-            <span *ngIf="getTimelineShip(dock, day) as info" class="timeline-ship">
+            <span *ngIf="getTimelineShip(dock, day) as info" class="timeline-ship" [ngClass]="info.size">
+              <span class="timeline-tooltip">
+                <strong>{{ info.name }}</strong>
+                <span>{{ info.size }} · Day {{ info.startDay }}–{{ info.endDay }}</span>
+              </span>
               {{ info.isStart ? info.name : '' }}
+              <span *ngIf="!info.isStart" class="timeline-dot"></span>
             </span>
           </div>
         </ng-container>

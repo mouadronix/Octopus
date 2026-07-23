@@ -1,4 +1,4 @@
-<aside class="sidebar">
+<aside class="sidebar" [class.collapsed]="collapsed">
   <nav class="nav-section" aria-label="Terminal navigation">
     <a
       *ngFor="let item of navItems; trackBy: trackByNavLabel"
@@ -13,8 +13,8 @@
     </a>
   </nav>
 
-  <button type="button" class="collapse-btn">
-    <span aria-hidden="true">&lsaquo;</span>
+  <button type="button" class="collapse-btn" (click)="toggleCollapse()">
+    <span aria-hidden="true">{{ collapsed ? '&rsaquo;' : '&lsaquo;' }}</span>
     Collapse
   </button>
 
