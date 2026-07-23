@@ -35,8 +35,10 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
+var connectionString = builder.Configuration.GetConnectionString("OctopusDb")
+    ?? "Data Source=blueharbor.db";
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite("Data Source=blueharbor.db"));
+    options.UseSqlite(connectionString));
 
 builder.Services.AddScoped<IAssignmentRepository, EfAssignmentRepository>();
 builder.Services.AddScoped<ShipService>();

@@ -9,6 +9,12 @@ services:
       - ./:/src
     environment:
       ASPNETCORE_ENVIRONMENT: Development
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/swagger/index.html"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   ui:
     image: node:20
@@ -19,4 +25,5 @@ services:
     volumes:
       - ./:/src
     depends_on:
-      - api
+      api:
+        condition: service_healthy
