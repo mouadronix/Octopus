@@ -19,11 +19,13 @@ services:
   ui:
     image: node:20
     working_dir: /src/frontend/octopus-ui
-    command: sh -c "npm install && npm start -- --host 0.0.0.0"
+    command: sh -c "npm install && node set-proxy.js && npm start -- --host 0.0.0.0"
     ports:
       - "4200:4200"
     volumes:
       - ./:/src
+    environment:
+      API_PROXY_TARGET: http://api:5000
     depends_on:
       api:
         condition: service_healthy
