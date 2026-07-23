@@ -75,14 +75,7 @@ export class SchedulerComponent implements OnInit {
   }
 
   get pendingShips(): Ship[] {
-    return this.ships.filter((ship) => {
-      const status = this.normalizeStatus(ship.status);
-      return status === 'Pending' || status === 'Assigned';
-    });
-  }
-
-  isAssigned(ship: Ship): boolean {
-    return this.normalizeStatus(ship.status) === 'Assigned';
+    return this.ships.filter((ship) => this.normalizeStatus(ship.status) === 'Pending');
   }
 
   get filteredShips(): Ship[] {
