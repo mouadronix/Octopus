@@ -29,7 +29,6 @@ public static class SchedulingModule
 
         var sorted = dockAssignments.OrderBy(a => a.StartDay).ToList();
         int candidate = Math.Max(ship.ArrivalDay, currentDay);
-        int maxDay = currentDay + horizon;
 
         foreach (var a in sorted)
         {
@@ -39,8 +38,9 @@ public static class SchedulingModule
             candidate = a.EndDay + 1;
         }
 
-        int finalEnd = candidate + ship.Duration - 1;
-        return finalEnd <= maxDay ? (true, candidate) : (false, -1);
+        // No hard cap — assignments can extend beyond the planning horizon.
+        // The horizon only controls what the calendar view displays.
+        return (true, candidate);
     }
 
     /// <summary>
