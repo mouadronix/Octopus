@@ -28,7 +28,7 @@ export class DocksComponent implements OnInit {
   readonly sizeOptions: SizeFilter[] = ['All', 'XL', 'L', 'M', 'S'];
   readonly statusOptions: StatusFilter[] = ['All', 'Assigned', 'Pending', 'Departed', 'Available'];
   readonly weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  readonly monthDays = [28, 29, 30, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 1];
+  // monthDays is now a dynamic getter below
 
   assignments: Assignment[] = [];
   docks: Dock[] = [];
@@ -66,6 +66,20 @@ export class DocksComponent implements OnInit {
   }
 
   get dockGroups(): DockGroup[] {
+    if (this.groupBy === 'None') {
+      return this.visibleDocks.length > 0
+        ? [{ size: 'All Docks' as Exclude<SizeFilter, 'All'>, docks: this.visibleDocks }]
+        : [];
+    }
+    if (this.groupBy === 'Status') {
+      const groups: DockGroup[] = [];
+      const occupied = this.visibleDocks.filter((d) => this.rowAssignments(d).length > 0);
+      const available = this.visibleDocks.filter((d) => this.rowAssignments(d).length === 0);
+      if (occupied.length) groups.push({ size: 'Occupied' as Exclude<SizeFilter, 'All'>, docks: occupied });
+      if (available.length) groups.push({ size: 'Available' as Exclude<SizeFilter, 'All'>, docks: available });
+      return groups;
+    }
+    // Default: group by dock size
     return (['XL', 'L', 'M', 'S'] as const)
       .map((size) => ({
         size,
@@ -220,7 +234,7 @@ export class DocksComponent implements OnInit {
   }
 
   getMonthLabel(): string {
-    return 'May 2025';
+    return this.dayToDate(this.currentDay).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
   }
 
   getDayLabel(index: number): string {
@@ -266,6 +280,28 @@ export class DocksComponent implements OnInit {
       return 'M';
     }
     return 'S';
+  }
+
+  get monthDays(): number[] {
+    const date = this.dayToDate(this.currentDay);
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    return Array.from({ length: daysInMonth }, (_, i) => i + 1);
+  }
+
+  prevMonth(): void {
+    const date = this.dayToDate(this.currentDay);
+    date.setMonth(date.getMonth() - 1);
+    const base = new Date(2025, 4, 1);
+    this.currentDay = Math.max(1, Math.round((date.getTime() - base.getTime()) / 86400000) + 1);
+  }
+
+  nextMonth(): void {
+    const date = this.dayToDate(this.currentDay);
+    date.setMonth(date.getMonth() + 1);
+    const base = new Date(2025, 4, 1);
+    this.currentDay = Math.max(1, Math.round((date.getTime() - base.getTime()) / 86400000) + 1);
   }
 
   normalizeStatus(status: ShipStatus | undefined): Exclude<StatusFilter, 'All' | 'Available'> {
@@ -336,5 +372,9 @@ export class DocksComponent implements OnInit {
       String(date.getUTCSeconds()).padStart(2, '0'),
       'Z'
     ].join('');
+  }
+
+  private dayToDate(day: number): Date {
+    return new Date(2025, 4, day);
   }
 }

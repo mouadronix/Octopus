@@ -23,6 +23,8 @@
       <span>View</span>
       <select [(ngModel)]="viewDays">
         <option [ngValue]="7">7 Days</option>
+        <option [ngValue]="14">14 Days</option>
+        <option [ngValue]="30">30 Days</option>
       </select>
     </label>
 
@@ -30,6 +32,8 @@
       <span>Group By</span>
       <select [(ngModel)]="groupBy">
         <option>Dock Size</option>
+        <option>Status</option>
+        <option>None</option>
       </select>
     </label>
 
@@ -56,8 +60,8 @@
           </div>
 
           <ng-container *ngFor="let group of dockGroups; trackBy: trackByGroupSize">
-            <div class="group-row" [class]="group.size.toLowerCase()">
-              <span>{{ group.size }} Docks</span>
+            <div class="group-row" [ngClass]="group.size.toLowerCase().replace(' ', '-')">
+              <span>{{ group.size }}{{ group.size.includes('Docks') || group.size === 'Occupied' || group.size === 'Available' ? '' : ' Docks' }}</span>
             </div>
 
             <ng-container *ngFor="let dock of group.docks; trackBy: trackByDockId">
@@ -105,9 +109,9 @@
         <header>
           <h2>Calendar</h2>
           <div>
-            <button type="button" aria-label="Previous month">&lt;</button>
+            <button type="button" aria-label="Previous month" (click)="prevMonth()">&lt;</button>
             <strong>{{ getMonthLabel() }}</strong>
-            <button type="button" aria-label="Next month">&gt;</button>
+            <button type="button" aria-label="Next month" (click)="nextMonth()">&gt;</button>
           </div>
         </header>
 

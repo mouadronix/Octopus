@@ -10,4 +10,10 @@ import { AppSidebarComponent } from '../app-sidebar/app-sidebar.component';
   templateUrl: './app-shell.component.html',
   styleUrl: './app-shell.component.scss'
 })
-export class AppShellComponent {}
+export class AppShellComponent {
+  sidebarCollapsed = false;
+
+  onSidebarCollapsed(collapsed: boolean): void {
+    this.sidebarCollapsed = collapsed;
+  }
+}

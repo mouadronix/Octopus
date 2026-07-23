@@ -1,8 +1,8 @@
 <section class="terminal-shell">
   <app-header />
 
-  <main class="app-body">
-    <app-sidebar />
+  <main class="app-body" [class.sidebar-collapsed]="sidebarCollapsed">
+    <app-sidebar (collapsedChange)="onSidebarCollapsed($event)" />
 
     <section class="content-area">
       <router-outlet />
