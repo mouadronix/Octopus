@@ -398,10 +398,10 @@ public class AssignmentServiceTests
     }
 
     // ---------------------------------------------------------------
-    // 16. AssignShip_ExceedsPlanningHorizon_ShouldReturnNull
+    // 16. AssignShip_ExceedsPlanningHorizon_ShouldStillAssign (no hard cap)
     // ---------------------------------------------------------------
     [Fact]
-    public void AssignShip_ExceedsPlanningHorizon_ShouldReturnNull()
+    public void AssignShip_ExceedsPlanningHorizon_ShouldStillAssign()
     {
         using var context = TestDbContextFactory.CreateDbContext();
         // PlanningHorizon = 5, CurrentDay = 1 → max day = 6
@@ -410,7 +410,8 @@ public class AssignmentServiceTests
 
         var service = new AssignmentService(new EfAssignmentRepository(context), context);
 
-        // Ship needs 10 days (days 1-10), but max allowed is day 6
+        // Ship needs 10 days (days 1-10), extending beyond the planning horizon.
+        // No hard cap — assignments can extend beyond the horizon.
         var ship = CreateShip(arrivalDay: 1, duration: 10);
         var dock = CreateDock(size: ShipSize.L);
         context.Ships.Add(ship);
@@ -419,6 +420,8 @@ public class AssignmentServiceTests
 
         var result = service.AssignShip(ship.Id, dock.Id);
 
-        Assert.Null(result);
+        Assert.NotNull(result);
+        Assert.Equal(1, result!.StartDay);
+        Assert.Equal(10, result.EndDay);
     }
 }

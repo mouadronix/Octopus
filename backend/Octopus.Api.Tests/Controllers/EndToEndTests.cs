@@ -152,8 +152,12 @@ public class EndToEndTests : IDisposable
         var assign1Resp = await _client.PostAsJsonAsync($"/api/docks/{dockId}/assign", new { shipId = ship1Id });
         Assert.Equal(HttpStatusCode.Created, assign1Resp.StatusCode);
 
-        // Assign ship 2 to same dock — must fail (dock occupied with overlapping dates)
+        // Assign ship 2 to same dock — succeeds but delayed (days 6-10) since days 1-5 are occupied.
+        // No hard cap on planning horizon, so the second ship is pushed to the next available slot.
         var assign2Resp = await _client.PostAsJsonAsync($"/api/docks/{dockId}/assign", new { shipId = ship2Id });
-        Assert.Equal(HttpStatusCode.BadRequest, assign2Resp.StatusCode);
+        Assert.Equal(HttpStatusCode.Created, assign2Resp.StatusCode);
+        var assign2Body = await assign2Resp.Content.ReadFromJsonAsync<JsonElement>(_jsonOptions);
+        Assert.Equal(6, assign2Body.GetProperty("startDay").GetInt32());
+        Assert.Equal(10, assign2Body.GetProperty("endDay").GetInt32());
     }
 }
