@@ -10,6 +10,7 @@ node_modules/
 dist/
 .angular/
 npm-debug.log*
+*.log
 yarn.lock
 package-lock.json
 
@@ -36,3 +37,7 @@ docker-compose.override.yml
 *.swp
 *.swo
 *~
+
+
+
+

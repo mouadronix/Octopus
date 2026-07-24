@@ -1,6 +1,6 @@
 services:
   api:
-    image: mcr.microsoft.com/dotnet/sdk:8.0
+    image: mcr.microsoft.com/dotnet/sdk:10.0-preview
     working_dir: /src/backend/Octopus.Api
     command: dotnet run --urls http://0.0.0.0:5000
     ports:
@@ -9,14 +9,23 @@ services:
       - ./:/src
     environment:
       ASPNETCORE_ENVIRONMENT: Development
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/swagger/index.html"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   ui:
     image: node:20
     working_dir: /src/frontend/octopus-ui
-    command: sh -c "npm install && npm start -- --host 0.0.0.0"
+    command: sh -c "npm install && node set-proxy.js && npm start -- --host 0.0.0.0"
     ports:
       - "4200:4200"
     volumes:
       - ./:/src
+    environment:
+      API_PROXY_TARGET: http://api:5000
     depends_on:
-      - api
+      api:
+        condition: service_healthy
