@@ -204,7 +204,18 @@ git push origin feature/my-thing
 
 ## CI
 
-Every push to `migration` or `main` triggers a GitHub Actions workflow that builds both Docker images (API + UI). It's build-only — no push to a registry, just verifies nothing is broken. Check the Actions tab on GitHub to see the results.
+Every push to `migration` or `main` triggers a GitHub Actions workflow that builds and pushes both Docker images to GitHub Container Registry:
+
+- `ghcr.io/mouadronix/octopus/api` — the .NET backend
+- `ghcr.io/mouadronix/octopus/ui` — the Angular frontend (served by nginx)
+
+Images are tagged with the branch name and commit SHA. The `latest` tag tracks `main`. Check the Actions tab on GitHub to see build status.
+
+Pull them with:
+```bash
+docker pull ghcr.io/mouadronix/octopus/api:latest
+docker pull ghcr.io/mouadronix/octopus/ui:latest
+```
 
 ## What's not here
 
