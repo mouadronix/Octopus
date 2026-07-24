@@ -5,7 +5,7 @@ COPY package.json package-lock.json* ./
 RUN npm ci
 
 COPY . .
-RUN npx ng build --configuration=production
+RUN npm run build
 
 FROM nginx:alpine AS runtime
 COPY --from=build /app/dist/octopus-ui/browser /usr/share/nginx/html
