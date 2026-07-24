@@ -1,7 +1,8 @@
 .sidebar {
-  background: rgba(4, 15, 31, 0.92);
-  border-right: 1px solid rgba(92, 140, 190, 0.26);
-  color: #dceeff;
+  background: linear-gradient(180deg, #17324a 0%, #0f1d2b 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 10px 0 32px rgba(0, 0, 0, 0.16);
+  color: #b8cfe0;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -21,20 +22,21 @@
   align-items: center;
   background: transparent;
   border: 1px solid transparent;
-  border-radius: 6px;
+  border-radius: 10px;
   color: #b7c9df;
   display: flex;
   gap: 16px;
   min-height: 54px;
   padding: 0 16px;
-  transition: background 0.18s, color 0.18s, border-color 0.18s;
+  transition: background 0.18s, color 0.18s, border-color 0.18s, transform 0.18s ease;
 }
 
 .nav-btn:hover,
 .nav-btn.active {
-  background: linear-gradient(90deg, rgba(35, 217, 255, 0.16), rgba(35, 217, 255, 0.04));
-  border-left-color: #23d9ff;
-  color: #23d9ff;
+  background: linear-gradient(90deg, rgba(46, 204, 113, 0.18), rgba(46, 204, 113, 0.05));
+  border-left-color: #00d084;
+  color: #00d084;
+  transform: translateX(2px);
 }
 
 .nav-icon {
@@ -134,7 +136,7 @@
 }
 
 .terminal-status h2 {
-  color: #23d9ff;
+  color: #00d084;
   font-family: var(--font-mono);
   font-size: 0.78rem;
   letter-spacing: 0.14em;
@@ -160,11 +162,11 @@
 }
 
 .dot.green {
-  background: #28df8e;
+  background: #00d084;
 }
 
 .dot.cyan {
-  background: #23d9ff;
+  background: #00d084;
 }
 
 .dot.blue {

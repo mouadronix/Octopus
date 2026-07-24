@@ -108,9 +108,9 @@ button {
 .outline-button,
 .export-button {
   background: linear-gradient(180deg, rgba(10, 55, 79, 0.9), rgba(4, 27, 49, 0.9));
-  border: 1px solid rgba(22, 200, 243, 0.8);
+  border: 1px solid rgba(0, 208, 132, 0.8);
   border-radius: 6px;
-  color: #23d9ff;
+  color: #00d084;
   font-family: var(--font-mono);
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -124,8 +124,8 @@ button {
 .icon-button:hover,
 .outline-button:hover,
 .export-button:hover {
-  background: linear-gradient(180deg, #2fe0ff, #12bfe6);
-  box-shadow: 0 0 26px rgba(35, 217, 255, 0.2);
+  background: linear-gradient(180deg, #00d084, #009e5a);
+  box-shadow: 0 0 26px rgba(0, 208, 132, 0.2);
   color: #03131f;
   transform: translateY(-1px);
 }
@@ -143,7 +143,7 @@ label {
 label > span,
 .side-panel h2,
 .group-row span {
-  color: #1ee7ff;
+  color: #00d084;
   font-family: var(--font-mono);
   font-size: 0.76rem;
   letter-spacing: 0.12em;
@@ -164,8 +164,8 @@ select {
 
 select:focus {
   background: rgba(9, 31, 56, 0.98);
-  border-color: rgba(34, 218, 255, 0.76);
-  box-shadow: 0 0 0 3px rgba(0, 204, 255, 0.1);
+  border-color: rgba(0, 208, 132, 0.76);
+  box-shadow: 0 0 0 3px rgba(0, 208, 132, 0.1);
 }
 
 .status-legend {
@@ -198,7 +198,7 @@ select:focus {
 
 .available,
 .s {
-  color: #20d9ff;
+  color: #00d084;
 }
 
 .xl {
@@ -302,7 +302,7 @@ select:focus {
 }
 
 .group-row.s span {
-  color: #20d9ff;
+  color: #00d084;
 }
 
 .dock-label {
@@ -353,7 +353,7 @@ select:focus {
   background: linear-gradient(135deg, rgba(12, 47, 76, 0.92), rgba(6, 21, 39, 0.92));
   border: 1px solid currentColor;
   box-shadow: 0 0 24px color-mix(in srgb, currentColor 14%, transparent);
-  color: #20d9ff;
+  color: #00d084;
   display: grid;
   grid-template-columns: 40px 1fr;
   padding: 6px 12px;
@@ -378,7 +378,7 @@ select:focus {
 }
 
 .assignment-bar.s {
-  color: #20d9ff;
+  color: #00d084;
 }
 
 .assignment-bar.pending {
@@ -418,8 +418,8 @@ select:focus {
 
 .available-bar {
   align-content: center;
-  border: 1px dashed rgba(32, 217, 255, 0.58);
-  color: #20d9ff;
+  border: 1px dashed rgba(0, 208, 132, 0.58);
+  color: #00d084;
   font-family: var(--font-mono);
   grid-column: 1 / -1;
   letter-spacing: 0.08em;
@@ -498,13 +498,13 @@ select:focus {
 }
 
 .month-grid button.in-week {
-  background: rgba(32, 217, 255, 0.08);
+  background: rgba(0, 208, 132, 0.08);
 }
 
 .month-grid button.active {
-  background: rgba(32, 217, 255, 0.24);
-  border-color: #20d9ff;
-  box-shadow: 0 0 18px rgba(32, 217, 255, 0.18);
+  background: rgba(0, 208, 132, 0.24);
+  border-color: #00d084;
+  box-shadow: 0 0 18px rgba(0, 208, 132, 0.18);
 }
 
 .filters-panel {
@@ -546,7 +546,7 @@ dd {
 }
 
 .progress-track span {
-  background: linear-gradient(90deg, #20d9ff, #28d982);
+  background: linear-gradient(90deg, #00d084, #009e5a);
   border-radius: inherit;
   display: block;
   height: 100%;

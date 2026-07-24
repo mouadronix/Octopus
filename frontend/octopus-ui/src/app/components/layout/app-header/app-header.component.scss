@@ -1,7 +1,8 @@
 .app-header {
   align-items: center;
-  background: rgba(2, 10, 22, 0.94);
-  border-bottom: 1px solid rgba(92, 140, 190, 0.26);
+  background: rgba(12, 24, 36, 0.94);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16);
   color: #dceeff;
   display: flex;
   flex-shrink: 0;
@@ -27,7 +28,7 @@
 .brand svg {
   fill: none;
   height: 56px;
-  stroke: #23d9ff;
+  stroke: #00d084;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 4;
@@ -35,7 +36,7 @@
 }
 
 .brand circle {
-  fill: #23d9ff;
+  fill: #00d084;
   stroke: none;
 }
 
@@ -93,10 +94,10 @@
 }
 
 .next-day {
-  background: rgba(0, 180, 216, 0.08);
-  border: 1px solid #16c8f3;
-  border-radius: 6px;
-  color: #23d9ff;
+  background: linear-gradient(135deg, rgba(0, 208, 132, 0.16), rgba(0, 208, 132, 0.08));
+  border: 1px solid rgba(0, 208, 132, 0.45);
+  border-radius: 999px;
+  color: #00d084;
   cursor: pointer;
   font-family: var(--font-mono);
   font-weight: 700;
@@ -106,11 +107,13 @@
   min-height: 46px;
   padding: 0 28px;
   text-transform: uppercase;
+  transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
 .next-day:hover {
-  background: rgba(35, 217, 255, 0.16);
-  box-shadow: 0 0 28px rgba(35, 217, 255, 0.14);
+  background: rgba(0, 208, 132, 0.22);
+  box-shadow: 0 8px 24px rgba(0, 208, 132, 0.16);
+  transform: translateY(-1px);
 }
 
 .notification {
@@ -129,7 +132,7 @@
 }
 
 .notification span {
-  background: #23d9ff;
+  background: #00d084;
   border-radius: 50%;
   color: #041221;
   font-size: 0.72rem;
@@ -185,8 +188,8 @@
 }
 
 .logout-button:hover {
-  border-color: rgba(35, 217, 255, 0.62);
-  color: #23d9ff;
+  border-color: rgba(0, 208, 132, 0.62);
+  color: #00d084;
 }
 
 .logout-button svg {
