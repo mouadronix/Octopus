@@ -171,7 +171,7 @@ SQLite, file-based. Connection string is in `appsettings.json`:
 
 The `.db` file is gitignored. In Development mode, the app auto-migrates and seeds on startup, so you never need to run `dotnet ef database update` manually.
 
-**Seed data:** 8 docks (1 XL, 1 L, 2 M, 4 S) and 35 ships spread across a 30-day window. Three ships come pre-assigned to docks so the dashboard isn't empty on first load.
+**Seed data:** 8 docks (1 XL, 1 L, 2 M, 4 S) and 39 ships spread across a 30-day window. Three ships come pre-assigned to docks so the dashboard isn't empty on first load.
 
 ## Auth model
 
@@ -204,7 +204,7 @@ git push origin feature/my-thing
 
 ## CI
 
-Every push to `migration` or `main` triggers a GitHub Actions workflow that builds both Docker images (API + UI). It's build-only — no push to a registry, just verifies nothing is broken. Check the Actions tab on GitHub to see the results.
+Every push to `migration` or `main` triggers a GitHub Actions workflow that builds and pushes both Docker images (API + UI) to GitHub Container Registry (`ghcr.io`). Images are tagged with branch name, commit SHA, and `latest` (for the default branch). Check the Actions tab on GitHub to see the results.
 
 ## What's not here
 
