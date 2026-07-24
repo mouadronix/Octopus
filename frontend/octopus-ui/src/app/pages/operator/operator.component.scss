@@ -92,7 +92,7 @@
 }
 
 .metric-card span {
-  color: #23d9ff;
+  color: #00d084;
   font-family: var(--font-mono);
   font-size: 0.78rem;
   letter-spacing: 0.16em;
@@ -136,7 +136,7 @@
 }
 
 .create-form h2 {
-  color: #23d9ff;
+  color: #00d084;
   font-family: var(--font-mono);
   font-size: 0.88rem;
   letter-spacing: 0.16em;
@@ -179,8 +179,8 @@
 
 .form-fields input:focus,
 .form-fields textarea:focus {
-  border-color: rgba(35, 217, 255, 0.72);
-  box-shadow: 0 0 0 3px rgba(35, 217, 255, 0.08);
+  border-color: rgba(0, 208, 132, 0.72);
+  box-shadow: 0 0 0 3px rgba(0, 208, 132, 0.08);
 }
 
 .form-fields input::placeholder,
@@ -189,7 +189,7 @@
 }
 
 .create-button {
-  background: linear-gradient(180deg, #28dcff, #12bce4);
+  background: linear-gradient(180deg, #00d084, #009e5a);
   border: 0;
   border-radius: 6px;
   color: #041221;
@@ -377,9 +377,9 @@
 
 .edit-button {
   background: transparent;
-  border: 1px solid rgba(35, 217, 255, 0.42);
+  border: 1px solid rgba(0, 208, 132, 0.42);
   border-radius: 6px;
-  color: #23d9ff;
+  color: #00d084;
   cursor: pointer;
   font-family: var(--font-mono);
   font-size: 0.78rem;
@@ -391,8 +391,8 @@
 }
 
 .edit-button:hover {
-  background: rgba(35, 217, 255, 0.1);
-  border-color: #23d9ff;
+  background: rgba(0, 208, 132, 0.1);
+  border-color: #00d084;
 }
 
 /* Edit Mode */
@@ -441,7 +441,7 @@
 }
 
 .save-button {
-  background: linear-gradient(180deg, #28dcff, #12bce4);
+  background: linear-gradient(180deg, #00d084, #009e5a);
   border: 0;
   border-radius: 6px;
   color: #041221;

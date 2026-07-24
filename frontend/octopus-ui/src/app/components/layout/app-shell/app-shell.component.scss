@@ -1,5 +1,5 @@
 .terminal-shell {
-  background: #020814;
+  background: linear-gradient(180deg, #152738 0%, #0d1723 100%);
   color: var(--c-text);
   display: flex;
   flex-direction: column;
@@ -19,6 +19,7 @@
   min-width: 0;
   overflow: auto;
   position: relative;
+  padding: 2px;
 }
 
 .app-body.sidebar-collapsed .content-area {

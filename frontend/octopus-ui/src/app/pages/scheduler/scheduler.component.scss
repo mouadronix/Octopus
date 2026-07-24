@@ -263,7 +263,7 @@ select:focus {
 }
 
 .ship-card::before {
-  background: linear-gradient(180deg, #23d9ff, rgba(35, 217, 255, 0));
+  background: linear-gradient(180deg, #00d084, rgba(0, 208, 132, 0));
   bottom: 14px;
   content: "";
   left: 0;
@@ -276,8 +276,8 @@ select:focus {
 
 .ship-card:hover,
 .ship-card.selected {
-  border-color: rgba(35, 217, 255, 0.58);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.055), 0 16px 40px rgba(0, 0, 0, 0.24), 0 0 24px rgba(35, 217, 255, 0.08);
+  border-color: rgba(0, 208, 132, 0.58);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.055), 0 16px 40px rgba(0, 0, 0, 0.24), 0 0 24px rgba(0, 208, 132, 0.08);
   transform: translateY(-2px);
 }
 
@@ -298,7 +298,7 @@ select:focus {
   border: 1px solid currentColor;
   border-radius: 7px;
   box-shadow: 0 0 20px color-mix(in srgb, currentColor 16%, transparent);
-  color: #20d9ff;
+  color: #00d084;
   display: grid;
   height: 58px;
   justify-items: center;
@@ -318,7 +318,7 @@ select:focus {
 }
 
 .ship-badge.S {
-  color: #23d9ff;
+  color: #00d084;
 }
 
 .ship-badge svg {
@@ -361,9 +361,9 @@ select:focus {
 .assign-shortcut,
 .confirm-button {
   background: linear-gradient(180deg, rgba(10, 55, 79, 0.9), rgba(4, 27, 49, 0.9));
-  border: 1px solid rgba(22, 200, 243, 0.86);
+  border: 1px solid rgba(0, 208, 132, 0.86);
   border-radius: 6px;
-  color: #23d9ff;
+  color: #00d084;
   cursor: pointer;
   font-family: var(--font-mono);
   font-weight: 700;
@@ -375,8 +375,8 @@ select:focus {
 
 .assign-shortcut:hover,
 .confirm-button:hover {
-  background: linear-gradient(180deg, #2fe0ff, #12bfe6);
-  box-shadow: 0 0 26px rgba(35, 217, 255, 0.2);
+  background: linear-gradient(180deg, #00d084, #009e5a);
+  box-shadow: 0 0 26px rgba(0, 208, 132, 0.2);
   color: #03131f;
   transform: translateY(-1px);
 }
@@ -405,7 +405,7 @@ select:focus {
 }
 
 .preview-panel::before {
-  background: linear-gradient(90deg, #23d9ff, rgba(181, 93, 255, 0.75), transparent);
+  background: linear-gradient(90deg, #00d084, rgba(0, 208, 132, 0.75), transparent);
   content: "";
   height: 3px;
   left: 0;
@@ -417,7 +417,7 @@ select:focus {
 .preview-panel h2,
 .compatible-list h3,
 .allocation-summary h3 {
-  color: #1ee7ff;
+  color: #00d084;
   margin: 0;
 }
 
@@ -464,7 +464,7 @@ select:focus {
 }
 
 .preview-ship h3 span.S {
-  color: #23d9ff;
+  color: #00d084;
 }
 
 .preview-details,
@@ -536,19 +536,19 @@ dd {
 }
 
 .dock-option.active {
-  border-color: #23d9ff;
-  box-shadow: 0 0 22px rgba(35, 217, 255, 0.12);
+  border-color: #00d084;
+  box-shadow: 0 0 22px rgba(0, 208, 132, 0.12);
 }
 
 .dock-option:hover {
-  border-color: rgba(35, 217, 255, 0.66);
+  border-color: rgba(0, 208, 132, 0.66);
   transform: translateX(2px);
 }
 
 .dock-icon {
   border: 1px solid currentColor;
   border-radius: 6px;
-  color: #23d9ff;
+  color: #00d084;
   font-family: var(--font-mono);
   padding: 8px 0;
   text-align: center;
@@ -567,12 +567,12 @@ dd {
 }
 
 .dock-icon.S {
-  color: #23d9ff;
+  color: #00d084;
 }
 
 .checkmark {
   align-items: center;
-  background: #23d9ff;
+  background: #00d084;
   border-radius: 50%;
   color: #041221;
   display: flex;
@@ -594,9 +594,9 @@ dd {
 }
 
 .confirm-button {
-  background: linear-gradient(180deg, #29dcff, #12bce4);
+  background: linear-gradient(180deg, #00d084, #009e5a);
   border: 0;
-  box-shadow: 0 12px 28px rgba(18, 188, 228, 0.18);
+  box-shadow: 0 12px 28px rgba(0, 208, 132, 0.18);
   color: #03131f;
   min-height: 54px;
 }
@@ -691,10 +691,10 @@ dd {
 }
 
 .current-day-badge {
-  background: rgba(35, 217, 255, 0.12);
-  border: 1px solid rgba(35, 217, 255, 0.32);
+  background: rgba(0, 208, 132, 0.12);
+  border: 1px solid rgba(0, 208, 132, 0.32);
   border-radius: 6px;
-  color: #23d9ff;
+  color: #00d084;
   font-family: var(--font-mono);
   font-size: 0.88rem;
   letter-spacing: 0.08em;
@@ -704,7 +704,7 @@ dd {
 
 .next-day-button {
   align-items: center;
-  background: linear-gradient(180deg, #28dcff, #12bce4);
+  background: linear-gradient(180deg, #00d084, #009e5a);
   border: 0;
   border-radius: 7px;
   color: #041221;
@@ -756,7 +756,7 @@ dd {
 }
 
 .timeline-section h2 {
-  color: #23d9ff;
+  color: #00d084;
   font-family: var(--font-mono);
   font-size: 0.88rem;
   letter-spacing: 0.16em;
@@ -793,8 +793,8 @@ dd {
 }
 
 .timeline-day-header.today {
-  background: rgba(35, 217, 255, 0.16);
-  color: #23d9ff;
+  background: rgba(0, 208, 132, 0.16);
+  color: #00d084;
   font-weight: 700;
 }
 
@@ -860,7 +860,7 @@ dd {
 }
 
 .timeline-ship.S {
-  color: #23d9ff;
+  color: #00d084;
 }
 
 .timeline-dot {

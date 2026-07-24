@@ -37,7 +37,7 @@
 }
 
 .login-page::after {
-  background: radial-gradient(circle at 58% 44%, rgba(35, 217, 255, 0.16), transparent 30%);
+  background: radial-gradient(circle at 58% 44%, rgba(0, 208, 132, 0.16), transparent 30%);
   mix-blend-mode: screen;
 }
 
@@ -103,7 +103,7 @@
 .brand-icon {
   fill: none;
   height: 56px;
-  stroke: #24d8ff;
+  stroke: #00d084;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 4;
@@ -111,7 +111,7 @@
 }
 
 .brand-icon circle {
-  fill: #24d8ff;
+  fill: #00d084;
   stroke: none;
 }
 
@@ -134,11 +134,11 @@
 }
 
 .hero-copy h1 strong {
-  color: #23d9ff;
+  color: #00d084;
 }
 
 .hero-copy p {
-  border-left: 2px solid #23d9ff;
+  border-left: 2px solid #00d084;
   color: #abc1dc;
   font-size: clamp(1rem, 1.35vw, 1.22rem);
   line-height: 1.6;
@@ -236,8 +236,8 @@
 }
 
 .role-option.scheduler .role-icon {
-  border-color: rgba(35, 217, 255, 0.45);
-  color: #23d9ff;
+  border-color: rgba(0, 208, 132, 0.45);
+  color: #00d084;
 }
 
 .role-icon svg {
