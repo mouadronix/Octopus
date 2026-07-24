@@ -28,6 +28,9 @@ Thumbs.db
 .claude/
 LEAN-CTX.md
 AGENTS.md
+CONTEXT.md
+PROJECT_REVIEW.md
+SPEC_VS_REVIEW.md
 
 # Docker
 docker-compose.override.yml
@@ -44,6 +47,7 @@ docs/prompts/
 docs/architecture.md
 docs/data-model.md
 docs/DATA_MODEL.md
+
 
 
 
