@@ -1,0 +1,13 @@
+**/node_modules
+**/bin
+**/obj
+**/.angular
+**/.git
+**/*.db
+**/*.db-shm
+**/*.db-wal
+**/dist
+**/.vs
+**/.vscode
+**/coverage
+**/TestResults

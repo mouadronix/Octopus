@@ -36,7 +36,7 @@ public static class SeedData
         context.Docks.AddRange(docks);
 
         // ────────────────────────────────────────────────────────────
-        // Full month of port traffic — 35 ships across 30 days
+        // Full month of port traffic — 39 ships across 30 days
         // ────────────────────────────────────────────────────────────
         var ships = new List<Ship>
         {

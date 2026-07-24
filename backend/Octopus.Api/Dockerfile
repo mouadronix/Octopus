@@ -12,6 +12,7 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 ENV ASPNETCORE_URLS=http://+:5000
+ENV ASPNETCORE_ENVIRONMENT=Development
 EXPOSE 5000
 
 ENTRYPOINT ["dotnet", "Octopus.Api.dll"]
