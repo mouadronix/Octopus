@@ -202,6 +202,10 @@ git push origin feature/my-thing
 # open PR on GitHub
 ```
 
+## CI
+
+Every push to `migration` or `main` triggers a GitHub Actions workflow that builds both Docker images (API + UI). It's build-only — no push to a registry, just verifies nothing is broken. Check the Actions tab on GitHub to see the results.
+
 ## What's not here
 
 - **Real auth** — no JWT, no passwords, no sessions

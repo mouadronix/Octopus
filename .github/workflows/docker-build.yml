@@ -1,0 +1,22 @@
+name: Docker Build
+
+on:
+  push:
+    branches: [migration, main]
+
+jobs:
+  build-api:
+    name: Build API image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build API Docker image
+        run: docker build -f backend/Octopus.Api/Dockerfile -t octopus-api backend/Octopus.Api
+
+  build-ui:
+    name: Build UI image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build UI Docker image
+        run: docker build -f frontend/octopus-ui/Dockerfile -t octopus-ui frontend/octopus-ui
