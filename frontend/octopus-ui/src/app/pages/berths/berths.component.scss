@@ -183,9 +183,12 @@ select:focus {
   width: 10px;
 }
 
-.assigned,
-.m {
+.assigned {
   color: #28d982;
+}
+
+.m {
+  color: #ffb547;
 }
 
 .pending {
@@ -298,7 +301,7 @@ select:focus {
 }
 
 .group-row.m span {
-  color: #28d982;
+  color: #ffb547;
 }
 
 .group-row.s span {
@@ -374,7 +377,7 @@ select:focus {
 }
 
 .assignment-bar.m {
-  color: #28d982;
+  color: #ffb547;
 }
 
 .assignment-bar.s {
