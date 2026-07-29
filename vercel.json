@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd frontend/octopus-ui && npm install && npm run build",
+  "outputDirectory": "frontend/octopus-ui/dist/octopus-ui/browser",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
