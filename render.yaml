@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: octopus-its-api
+    runtime: docker
+    rootDir: backend/Octopus.Api
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__OctopusDb
+        value: Data Source=/data/blueharbor.db
+    disk:
+      name: octopus-its-data
+      mountPath: /data
+      sizeGB: 1

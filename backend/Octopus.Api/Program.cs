@@ -56,10 +56,8 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Auto-migrate and seed only in Development
-if (app.Environment.IsDevelopment())
+using (var scope = app.Services.CreateScope())
 {
-    using var scope = app.Services.CreateScope();
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     context.Database.Migrate();
     SeedData.Initialize(context);

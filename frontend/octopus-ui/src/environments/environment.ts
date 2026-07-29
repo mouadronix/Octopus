@@ -1,4 +1,4 @@
 export const environment = {
-  production: false,
-  apiBaseUrl: 'http://localhost:5000/api'
+  production: true,
+  apiBaseUrl: 'https://octopus-its-api.onrender.com/api'
 };

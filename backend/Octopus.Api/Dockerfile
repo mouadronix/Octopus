@@ -11,8 +11,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:10.0-preview AS runtime
 WORKDIR /app
 COPY --from=build /app/publish .
 
-ENV ASPNETCORE_URLS=http://+:5000
-ENV ASPNETCORE_ENVIRONMENT=Development
-EXPOSE 5000
+ENV ASPNETCORE_ENVIRONMENT=Production
+EXPOSE 10000
 
-ENTRYPOINT ["dotnet", "Octopus.Api.dll"]
+ENTRYPOINT ["sh", "-c", "dotnet Octopus.Api.dll --urls http://0.0.0.0:${PORT:-10000}"]
